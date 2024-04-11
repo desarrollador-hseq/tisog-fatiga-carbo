@@ -12,6 +12,7 @@ interface DebouncedInput {
   placeholder?: string;
   list?: string;
   className?: string;
+  focus?: boolean;
 }
 
 function DebouncedInput({
@@ -21,6 +22,7 @@ function DebouncedInput({
   type,
   list,
   className,
+  focus,
   ...props
 }: DebouncedInput) {
   const [value, setValue] = useState(initialValue);
@@ -41,6 +43,7 @@ function DebouncedInput({
     <Input
       type={type}
       value={value}
+      autoFocus={focus}
       onChange={(e) => setValue(e.target.value)}
       className={cn("h-7 rounded-none placeholder:text-slate-400 placeholder:text-xs text-slate-700", className)}
       list={list}

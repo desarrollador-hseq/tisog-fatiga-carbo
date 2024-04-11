@@ -30,11 +30,13 @@ const ReportsPage = async () => {
 
   return (
     <CardPage
-      pageHeader={<TitleOnPage text="Listado de reportes" bcrumb={bcrumb} />}
-    >
-      <Link className={cn(buttonVariants())} href={`/dashboard/reportes/crear`}>
+      pageHeader={<TitleOnPage text="Listado de reportes" bcrumb={bcrumb} >
+        <Link className={cn(buttonVariants())} href={`/dashboard/reportes/crear`}>
         Crear
       </Link>
+      </TitleOnPage>}
+    >
+      
 
       <TableDefault
         data={reports}

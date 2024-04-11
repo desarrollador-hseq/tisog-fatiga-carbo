@@ -25,8 +25,23 @@ model City {
   realName String
   formated String
 
-  active    Boolean  @default(true)
-  
+  drivers Driver[]
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Position {
+  id String @id @default(uuid())
+
+  name String
+
+  drivers Driver[]
+
+  active Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -43,74 +58,28 @@ model User {
 
   FatigueSleepReports FatigueSleepReport[]
 
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
+
   active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([companyId])
 }
 
-model Driver {
-  id String @id @default(uuid())
-
-  fullname String?
-  numDoc   String?
-
-  reports FatigueSleepReport[]
-  // Otros campos relacionados con los conductores
-  // Por ejemplo:
-  // licenseNumber String
-  // vehicleNumber String
-  // etc.
-  active  Boolean              @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum FatigueSleepReportStatus {
-  PENDING
-  SEND
-  CANCELLED
-}
-
-model Symptoms {
+model BusinessUnit {
   id String @id @default(uuid())
 
   name String
 
-  active Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model FatigueSleepReport {
-  id String @id @default(uuid())
-
-  driverId String?
-  driver   Driver? @relation(fields: [driverId], references: [id])
-
-  logisticsCenterId String?
-  logisticsCenter   LogisticsCenter? @relation(fields: [logisticsCenterId], references: [id])
-
-  date DateTime?
-
-  supervisorId String?
-  supervisor   User?   @relation(fields: [supervisorId], references: [id])
-
-  symptoms      String?
-  sleepingHours Int?
-
-  state FatigueSleepReportStatus @default(PENDING)
+  companyId String
 
   active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([driverId])
-  @@index([supervisorId])
-  @@index([logisticsCenterId])
 }
 
 model Company {
@@ -121,6 +90,9 @@ model Company {
   logisticsCenters LogisticsCenter[]
 
   logoImage String?
+
+  supervisors User[]
+  drivers     Driver[]
 
   active Boolean @default(true)
 
@@ -144,6 +116,70 @@ model LogisticsCenter {
   updatedAt DateTime @updatedAt
 
   @@index([companyId])
+}
+
+model Driver {
+  id String @id @default(uuid())
+
+  fullname String?
+  numDoc   String?
+  licenseNumber String?
+
+  positionId String?
+  position   Position? @relation(fields: [positionId], references: [id])
+
+  reports FatigueSleepReport[]
+
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
+
+  cityId String?
+  city City? @relation(fields: [cityId], references: [id])
+  
+  
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([positionId])
+  @@index([companyId])
+  @@index([cityId])
+}
+
+enum FatigueSleepReportStatus {
+  PENDING
+  SEND
+  CANCELLED
+}
+
+model FatigueSleepReport {
+  id String @id @default(uuid())
+
+  driverId String?
+  driver   Driver? @relation(fields: [driverId], references: [id])
+
+  logisticsCenterId String?
+  logisticsCenter   LogisticsCenter? @relation(fields: [logisticsCenterId], references: [id])
+
+  date DateTime?
+
+  supervisorId String?
+  supervisor   User?   @relation(fields: [supervisorId], references: [id])
+
+  symptoms      String? @db.Text
+  sleepingHours Int?
+
+  state FatigueSleepReportStatus @default(PENDING)
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([driverId])
+  @@index([supervisorId])
+  @@index([logisticsCenterId])
 }
 
 model DefaultValue {

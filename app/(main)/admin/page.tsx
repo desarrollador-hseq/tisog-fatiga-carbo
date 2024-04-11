@@ -14,9 +14,22 @@ const AdminHomePage = async () => {
       createdAt: "desc",
     },
   });
+
+  const defaultsSymptoms = await db.defaultValue.findMany({
+    where: {
+      active: true,
+      parameters: {
+        name: "symptoms",
+      },
+    },
+  });
+
   return (
     <div>
-      <FatigueIndicators reports={reports} />
+      <FatigueIndicators
+        reports={reports}
+        defaultsSymptoms={defaultsSymptoms}
+      />
     </div>
   );
 };

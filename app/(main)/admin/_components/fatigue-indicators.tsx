@@ -1,17 +1,19 @@
 "use client";
 import React from "react";
-import { TableDefault } from "@/components/table-default";
 import { Fade } from "react-awesome-reveal";
+import { DefaultValue, FatigueSleepReport } from "@prisma/client";
+import { TableDefault } from "@/components/table-default";
 import { ReportSymptoms } from "./report-symptoms";
 import { reportsTableColumns } from "./reports-table-columns";
-import { FatigueSleepReport } from "@prisma/client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ReportSleepHours } from "./report-sleep-hours";
 
 export const FatigueIndicators = ({
   reports,
+  defaultsSymptoms
 }: {
   reports: FatigueSleepReport[];
+  defaultsSymptoms: DefaultValue[]
 }) => {
   return (
     <div
@@ -40,7 +42,7 @@ export const FatigueIndicators = ({
         <PercentagePie  collaborators={filteredCollaborators} />
       </div> */}
         <Fade delay={400} cascade triggerOnce>
-          <ReportSymptoms reports={reports} />
+          <ReportSymptoms reports={reports} defaultsSymptoms={defaultsSymptoms} />
         </Fade>
         <Fade delay={400} cascade triggerOnce>
           <ReportSleepHours reports={reports} />

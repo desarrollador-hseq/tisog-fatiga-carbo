@@ -1,12 +1,15 @@
-"use client"
+"use client";
 
 import { InputForm } from "@/components/input-form";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Driver } from "@prisma/client";
+import { City, Company, Driver, Position } from "@prisma/client";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,6 +18,9 @@ import { z } from "zod";
 
 interface AddDriverFormProps {
   driver?: Driver | null;
+  cities: City[] | null;
+  companies: Company[] | null;
+  positions: Position[] | null;
 }
 
 const formSchema = z.object({
@@ -24,9 +30,21 @@ const formSchema = z.object({
   numDoc: z.string().min(1, {
     message: "Número de documento requerido",
   }),
+  licenseNumber: z.string().min(1, {
+    message: "Número de licencia requerido",
+  }),
+  cityId: z.string().min(1, {
+    message: "Ciudad es requerida",
+  }),
+  companyId: z.string().min(1, {
+    message: "Empresa es requerida",
+  }),
+  positionId: z.string().min(1, {
+    message: "Cargo es requerido",
+  }),
 });
 
-export const AddDriverForm = ({ driver }: AddDriverFormProps) => {
+export const AddDriverForm = ({ driver, cities, companies, positions }: AddDriverFormProps) => {
   const router = useRouter();
   const isEdit = useMemo(() => !!driver, [driver]);
 
@@ -40,7 +58,10 @@ export const AddDriverForm = ({ driver }: AddDriverFormProps) => {
     defaultValues: {
       fullname: driver?.fullname || "",
       numDoc: driver?.numDoc || "",
-
+      cityId: driver?.cityId || "",
+      licenseNumber: driver?.licenseNumber || "",
+      companyId: driver?.companyId || "",
+      positionId: driver?.positionId || "",
     },
   });
   const { isSubmitting, isValid } = form.formState;
@@ -85,7 +106,7 @@ export const AddDriverForm = ({ driver }: AddDriverFormProps) => {
   };
   return (
     <div className="max-w-[1500px] w-[50%] h-full mx-auto bg-white  overflow-y-hidden p-3">
-      <Form {...form} >
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col items-center mt-8 p-2 w-full gap-4"
@@ -101,7 +122,195 @@ export const AddDriverForm = ({ driver }: AddDriverFormProps) => {
             label="Número de documento"
             name="numDoc"
             className="w-full"
-
+          />
+          <InputForm
+            control={form.control}
+            label="# Licencia"
+            name="licenseNumber"
+            className="w-full"
+          />
+          <FormField
+            control={form.control}
+            name="cityId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Ciudad:</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? cities?.find((city) => city.id === field.value)
+                              ?.realName
+                          : "Selecciona una ciudad"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command className="w-full">
+                      <CommandInput placeholder="Buscar conductor" />
+                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {cities?.map((city) => (
+                            <CommandItem
+                              value={`${city.realName}`}
+                              key={city.id}
+                              onSelect={() => {
+                                form.setValue("cityId", city.id, {
+                                  shouldValidate: true,
+                                });
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  city.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {city.realName}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="companyId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Empresa:</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? companies?.find((company) => company.id === field.value)
+                              ?.name
+                          : "Selecciona una empresa"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command className="w-full">
+                      <CommandInput placeholder="Buscar ciudad" />
+                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {companies?.map((company) => (
+                            <CommandItem
+                              value={`${company.name}`}
+                              key={company.id}
+                              onSelect={() => {
+                                form.setValue("companyId", company.id, {
+                                  shouldValidate: true,
+                                });
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  company.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {company.name}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="positionId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Cargo:</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? positions?.find((position) => position.id === field.value)
+                              ?.name
+                          : "Selecciona un cargo"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command className="w-full">
+                      <CommandInput placeholder="Buscar Cargo" />
+                      <CommandEmpty>Cargo no encontrada</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {positions?.map((position) => (
+                            <CommandItem
+                              value={`${position.name}`}
+                              key={position.id}
+                              onSelect={() => {
+                                form.setValue("positionId", position.id, {
+                                  shouldValidate: true,
+                                });
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  position.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {position.name}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
           <Button
@@ -109,7 +318,7 @@ export const AddDriverForm = ({ driver }: AddDriverFormProps) => {
             className="w-full max-w-[500px] gap-3"
           >
             {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-            {isEdit ? "Actualizar" :"Agregar"}
+            {isEdit ? "Actualizar" : "Agregar"}
           </Button>
         </form>
       </Form>

@@ -25,6 +25,11 @@ const adminRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
   {
     icon: ClipboardCheck,
+    label: "Ciudades",
+    href: "/ciudades",
+  },
+  {
+    icon: ClipboardCheck,
     label: "empresas",
     href: "/empresas",
   },

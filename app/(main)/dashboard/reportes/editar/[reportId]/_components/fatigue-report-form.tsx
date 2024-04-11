@@ -1,8 +1,7 @@
 "use client";
 
-import AutocompleteInput from "@/components/autocomplete-input";
+
 import { InputForm } from "@/components/input-form";
-import { SimpleModal } from "@/components/simple-modal";
 import { SubtitleSeparator } from "@/components/subtitle-separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +20,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { ModalAddSymptoms } from "./modal-add-symptoms";
 import { ListSymptoms } from "./list-symptoms";
 
 interface FatigueReportFormProps {
@@ -44,9 +42,8 @@ export const FatigueReportForm = ({
   defaultsSymptoms,
 }: FatigueReportFormProps) => {
   const router = useRouter();
-  const [inputSymptomsValue, setInputSymptomsValue] = useState("");
-  const [currentsItems, setCurrentsItems] = useState<string[]>(
-    fatigueSleepReport?.symptoms ? fatigueSleepReport?.symptoms.split("|") : []
+  const [currentsSymptoms, setCurrentsSymptoms] = useState<string[]>(
+    fatigueSleepReport?.symptoms ? fatigueSleepReport?.symptoms.split(",") : []
   );
 
   const isEdit = useMemo(
@@ -64,11 +61,11 @@ export const FatigueReportForm = ({
   });
 
   const { isSubmitting, isValid } = form.formState;
-  const { setValue, watch } = form;
+  const { setValue } = form;
 
   useEffect(() => {
-    setValue("symptoms", currentsItems.join("|"), { shouldValidate: true });
-  }, [currentsItems]);
+    setValue("symptoms", currentsSymptoms.join(","), { shouldValidate: true });
+  }, [currentsSymptoms]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -118,17 +115,10 @@ export const FatigueReportForm = ({
                       </FormLabel>
                       <FormLabel>SINTOMAS</FormLabel>
 
-                      <ModalAddSymptoms
-                        defaultsSymptoms={defaultsSymptoms}
-                        currentsItems={currentsItems}
-                        setCurrentsItems={setCurrentsItems}
-                        inputSymptomsValue={inputSymptomsValue}
-                        setInputSymptomsValue={setInputSymptomsValue}
-                      />
-
                       <ListSymptoms
-                        currentsItems={currentsItems}
-                        setCurrentsItems={setCurrentsItems}
+                        currentsSymptoms={currentsSymptoms}
+                        setCurrentsSymptoms={setCurrentsSymptoms}
+                        defaultsSymptoms={defaultsSymptoms}
                       />
                       <FormMessage />
                     </FormItem>
@@ -152,7 +142,7 @@ export const FatigueReportForm = ({
             className="w-full max-w-[500px] gap-3"
           >
             {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-           {isEdit ? "Actualizar reporte" : "Enviar reporte" } 
+            {isEdit ? "Actualizar reporte" : "Enviar reporte"}
           </Button>
         </form>
       </Form>

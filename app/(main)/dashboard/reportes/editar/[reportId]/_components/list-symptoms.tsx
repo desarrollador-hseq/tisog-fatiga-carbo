@@ -1,33 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import React, { Dispatch, SetStateAction } from "react";
+import { DefaultValue } from "@prisma/client";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { ToggleSelectItem } from "./toggle-select-item";
 
 export const ListSymptoms = ({
-  currentsItems,
-  setCurrentsItems
+  currentsSymptoms,
+  setCurrentsSymptoms,
+  defaultsSymptoms,
 }: {
-  currentsItems: string[];
-  setCurrentsItems: Dispatch<SetStateAction<string[]>>;
+  currentsSymptoms: string[];
+  defaultsSymptoms: DefaultValue[];
+  setCurrentsSymptoms: Dispatch<SetStateAction<string[]>>;
 }) => {
-  const handleDeleteItem = (del: string) => {
-    setCurrentsItems((prev) => prev.filter((item) => item !== del));
-  };
+  // const handleDeleteItem = (del: string) => {
+  //   setCurrentsSymptoms((prev) => prev.filter((item) => item !== del));
+  // };
   return (
-    <div className="flex gap-2">
-      {currentsItems.map((item, index) => (
-        <div
-          className=" w-fit bg-slate-100 border border-slate-300 p-1 rounded-sm flex gap-3 items-center"
-          key={index}
-        >
-          {item}
-          <Button
-            type="button"
-            onClick={() => handleDeleteItem(item)}
-            className="p-1 rounded-sm bg-red-500 hover:bg-red-700 w-5 h-5 flex items-center justify-center"
-          >
-            <X className="w-6 h-6 text-white" />
-          </Button>
-        </div>
+    <div className="flex gap-2 flex-wrap">
+      {defaultsSymptoms.map((symptom, index) => (
+        <ToggleSelectItem
+          symptom={symptom}
+          setCurrentsSymptoms={setCurrentsSymptoms}
+          currentsSymptoms={currentsSymptoms}
+        />
       ))}
     </div>
   );

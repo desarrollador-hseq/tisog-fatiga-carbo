@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DebouncedInput from "./debounced-input";
 import { Button } from "./ui/button";
 import { Search, SearchX } from "lucide-react";
@@ -18,6 +18,11 @@ function TableColumnFiltering({ column, table }: any) {
         : Array.from(column.getFacetedUniqueValues().keys()).sort(),
     [column.getFacetedUniqueValues(), firstValue]
   );
+
+  useEffect(() => {
+    if (openSearch) return;
+    column.setFilterValue("");
+  }, [openSearch]);
 
   return typeof firstValue === "number" ? (
     <div>
@@ -52,7 +57,7 @@ function TableColumnFiltering({ column, table }: any) {
         ))}
       </datalist>
       <div className="flex gap-0.5 relative">
-      <Button
+        <Button
           className="w-fit p-1 h-fit"
           onClick={() => setOpenSearch(!openSearch)}
         >
@@ -70,9 +75,9 @@ function TableColumnFiltering({ column, table }: any) {
             onChange={(value) => column.setFilterValue(value)}
             list={column.id + "list"}
             placeholder={`Buscar... `}
+            focus
           />
         )}
-       
       </div>
     </>
   );
