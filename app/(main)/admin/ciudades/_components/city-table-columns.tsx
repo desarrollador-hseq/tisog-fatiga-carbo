@@ -5,10 +5,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import { City } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-// import { formatDateOf } from "@/lib/utils";
-import { City, Driver } from "@prisma/client";
-
 
 
 export const cityTableColumns: ColumnDef<City>[] =
@@ -30,7 +28,7 @@ export const cityTableColumns: ColumnDef<City>[] =
       },
       cell: ({ row }) => {
         const name = row.original?.realName;
-        return <div className="capitalize">{name}</div>;
+        return <div className="">{name}</div>;
       },
     },
     // {

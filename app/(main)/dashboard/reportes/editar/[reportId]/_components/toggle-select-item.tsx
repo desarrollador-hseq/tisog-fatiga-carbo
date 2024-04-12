@@ -10,10 +10,12 @@ export const ToggleSelectItem = ({
   symptom,
   setCurrentsSymptoms,
   currentsSymptoms,
+  disabled
 }: {
   symptom: DefaultValue;
   setCurrentsSymptoms: Dispatch<SetStateAction<string[]>>;
   currentsSymptoms: string[];
+  disabled: boolean
 }) => {
   const isSelected = currentsSymptoms.includes(symptom.id);
 
@@ -30,9 +32,11 @@ export const ToggleSelectItem = ({
       pressed={isSelected}
       onPressedChange={handleToggle}
       aria-label="Toggle symptom"
+      disabled={disabled}
       className={cn(
+        "border-2 border-slate-700",
         isSelected &&
-          "data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground"
+          "data-[state=on]:bg-secondary/80 data-[state=on]:text-secondary-foreground data-[state=on]:border-secondary"
       )}
     >
       {symptom.name}

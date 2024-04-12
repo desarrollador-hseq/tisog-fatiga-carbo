@@ -1,7 +1,6 @@
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
-import React from "react";
 import { AddDriverForm } from "../_components/add-driver-form";
 
 const bcrumb = [

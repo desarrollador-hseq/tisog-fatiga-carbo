@@ -6,10 +6,12 @@ export const ListSymptoms = ({
   currentsSymptoms,
   setCurrentsSymptoms,
   defaultsSymptoms,
+  disabled
 }: {
   currentsSymptoms: string[];
   defaultsSymptoms: DefaultValue[];
   setCurrentsSymptoms: Dispatch<SetStateAction<string[]>>;
+  disabled: boolean
 }) => {
   // const handleDeleteItem = (del: string) => {
   //   setCurrentsSymptoms((prev) => prev.filter((item) => item !== del));
@@ -18,9 +20,11 @@ export const ListSymptoms = ({
     <div className="flex gap-2 flex-wrap">
       {defaultsSymptoms.map((symptom, index) => (
         <ToggleSelectItem
+          key={symptom.id}
           symptom={symptom}
           setCurrentsSymptoms={setCurrentsSymptoms}
           currentsSymptoms={currentsSymptoms}
+          disabled={disabled}
         />
       ))}
     </div>

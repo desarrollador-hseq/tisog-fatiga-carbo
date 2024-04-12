@@ -1,20 +1,20 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { City, Company, Driver, Position } from "@prisma/client";
+import axios from "axios";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { InputForm } from "@/components/input-form";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { City, Company, Driver, Position } from "@prisma/client";
-import axios from "axios";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 interface AddDriverFormProps {
   driver?: Driver | null;
@@ -156,7 +156,7 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
                     <Command className="w-full">
-                      <CommandInput placeholder="Buscar conductor" />
+                      <CommandInput placeholder="Buscar ciudad" />
                       <CommandEmpty>Ciudad no encontrada</CommandEmpty>
                       <CommandGroup>
                         <CommandList>

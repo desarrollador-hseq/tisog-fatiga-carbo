@@ -8,7 +8,7 @@ export async function PATCH(req: Request, { params }: { params: { driverId: stri
   try {
     const values = await req.json();
 
-    // if(!session) return new NextResponse("Unauthorized", {status: 401})
+    if(!session) return new NextResponse("Unauthorized", {status: 401})
 
     const existingDriver = await db.driver.findUnique({
       where: { id: params.driverId, active: true },
@@ -33,6 +33,6 @@ export async function PATCH(req: Request, { params }: { params: { driverId: stri
     return NextResponse.json(driver);
   } catch (error) {
     console.log("[DRIVER-CREATE]", error);
-    return new NextResponse("Internal Errorr", { status: 500 });
+    return new NextResponse("Internal Errorr" + error, { status: 500 });
   }
 }

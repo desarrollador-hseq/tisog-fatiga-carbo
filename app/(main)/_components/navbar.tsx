@@ -87,7 +87,7 @@ export const Navbar = ({ isAdmin }: { isAdmin: boolean }) => {
           </div>
 
           <div className="flex gap-5 items-center">
-            {isAdmin && <span>Administrador</span>}
+            {isAdmin && <span className="font-bold uppercase">Administrador</span>}
           </div>
 
           <div className="flex gap-4 items-center">

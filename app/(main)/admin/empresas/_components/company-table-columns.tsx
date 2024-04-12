@@ -4,10 +4,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { Company } from "@prisma/client";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import { formatDateOf } from "@/lib/utils";
-import { Company } from "@prisma/client";
 
 
 
