@@ -16,6 +16,7 @@ datasource db {
 
 enum Role {
   ADMIN
+  LEADER
   USER
 }
 
@@ -176,7 +177,16 @@ model FatigueSleepReport {
 
   symptoms      String? @db.Text
   sleepingHours Int?
+  sleepingHours48 Int?
   medicine String? @db.Text
+  signs String? @db.Text
+  appearances String? @db.Text
+  moods String? @db.Text
+  performances String? @db.Text
+  drivingModes String? @db.Text
+  strategy String? @db.Text
+  fatigueCauseDescription String? @db.Text
+  
 
   state FatigueSleepReportStatus @default(PENDING)
 

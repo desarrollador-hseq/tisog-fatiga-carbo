@@ -7,6 +7,7 @@ import { TitleOnPage } from "@/components/title-on-page";
 import { authOptions } from "@/lib/authOptions";
 import { CreateReportForm } from "./_components/create-report-form";
 import { CardPage } from "@/components/card-page";
+import { NotAuthorized } from "@/components/not-authorized";
 
 const bcrumb = [
   { label: "Reportes", path: "/dashboard/reportes" },
@@ -15,11 +16,17 @@ const bcrumb = [
 
 const CreateReportPage = async () => {
   const session = await getServerSession(authOptions);
+
+  if (!session || session?.user?.role !== "USER") {
+    return <NotAuthorized />;
+  }
+
   const drivers = await db.driver.findMany({
-    where: { active: true },
+    where: { active: true, companyId: session.user.companyId },
+
   });
   const logisticsCenters = await db.logisticsCenter.findMany({
-    where: { active: true },
+    where: { active: true, companyId: session.user.companyId },
   });
 
 

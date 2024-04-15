@@ -1,14 +1,24 @@
 "use client";
 import { useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { ClipboardCheck, Home, Menu, ScrollText } from "lucide-react";
 import { Sidebar } from "./sidebar";
 import { Button } from "@/components/ui/button";
 import { LogoMain } from "@/components/logo-main";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { ModalLogout } from "@/app/(auth)/_components/modal-logout";
+import { useLoading } from "@/components/providers/loading-provider";
 
 const dashRoutes = [
+  { icon: Home, label: "Inicio", href: "/" },
+  {
+    icon: ClipboardCheck,
+    label: "reportes",
+    href: "/reportes",
+  },
+];
+const leaderRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
   {
     icon: ClipboardCheck,
@@ -50,16 +60,30 @@ const adminRoutes = [
   },
 ];
 
-export const Navbar = ({ isAdmin }: { isAdmin: boolean }) => {
+export const Navbar = ({
+  isLeader,
+}: {
+  isLeader: boolean;
+}) => {
   const [openSidebar, setOpenSidebar] = useState(false);
+  const { userRole } = useLoading();
 
-  const routes = useMemo(() => (isAdmin ? adminRoutes : dashRoutes), [isAdmin]);
+  const { data: session } = useSession();
+
+  const routes = useMemo(
+    () =>
+      userRole === "ADMIN"
+        ? adminRoutes
+        : userRole === "LEADER"
+        ? leaderRoutes
+        : dashRoutes,
+    [userRole]
+  );
 
   return (
     <div
       className={cn(
         `fixed top-0 z-50 p-1 min-h-[60px] max-h-[60px] text-white w-full bg-slate-200 shadow-sm flex items-center`,
-        isAdmin && "bg-slate-400"
       )}
     >
       <div className="mx-auto w-full mt-1">
@@ -74,7 +98,6 @@ export const Navbar = ({ isAdmin }: { isAdmin: boolean }) => {
             </Button>
 
             <Sidebar
-              isAdmin={isAdmin}
               openSidebar={openSidebar}
               setOpenSidebar={setOpenSidebar}
               routes={routes}
@@ -87,7 +110,13 @@ export const Navbar = ({ isAdmin }: { isAdmin: boolean }) => {
           </div>
 
           <div className="flex gap-5 items-center">
-            {isAdmin && <span className="font-bold uppercase">Administrador</span>}
+            {userRole === "ADMIN" ? (
+              <span className="font-bold uppercase">Administrador</span>
+            ) : userRole === "LEADER" ? (
+              <span className="font-bold uppercase">Lider</span>
+            ) : (
+              <span className="font-bold uppercase">Supervisor</span>
+            )}
           </div>
 
           <div className="flex gap-4 items-center">
@@ -95,8 +124,8 @@ export const Navbar = ({ isAdmin }: { isAdmin: boolean }) => {
               {routes.map((route) => (
                 <div key={route.href}>
                   <Link
-                  className="text-slate-700" 
-                    href={`${isAdmin ? "/admin" : "/dashboard"}/${route.href}`}
+                    className="text-slate-700"
+                    href={`${userRole === "ADMIN" ? "/admin" : userRole === "LEADER" ? "/lider" : "/dashboard"}/${route.href}`}
                   >
                     {route.label}
                   </Link>

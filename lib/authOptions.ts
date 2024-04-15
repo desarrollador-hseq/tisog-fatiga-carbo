@@ -1,4 +1,4 @@
-import  { AuthOptions, DefaultSession } from "next-auth"
+import { AuthOptions, DefaultSession } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
@@ -11,16 +11,18 @@ declare module 'next-auth' {
         name: string | null;
         email: string;
         role: Role;
+        companyId: string | null;
         createdAt: Date;
         updatedAt: Date;
     }
-    
+
     interface Session {
         user: {
             id?: string;
             name?: string | null;
             email: string;
             role?: Role;
+            companyId?: string | null;
         } & DefaultSession['user'];
     }
 }
@@ -70,7 +72,7 @@ export const authOptions: AuthOptions = {
 
                 const { password: pass, ...userWithoutPass } = user;
 
-                return {...userWithoutPass}
+                return { ...userWithoutPass }
             }
         })
     ],
@@ -105,7 +107,7 @@ export const authOptions: AuthOptions = {
         strategy: "jwt",
         maxAge: 7 * 24 * 60 * 60,
         updateAge: 24 * 60 * 60,
-        
+
     },
     callbacks: {
         async jwt({ token, account, user }) {

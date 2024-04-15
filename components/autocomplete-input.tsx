@@ -6,13 +6,15 @@ const AutocompleteInput = ({
   setInputValue,
   inputValue,
   label,
-  placeholder
+  placeholder,
+  className
 }: {
   options?: any;
   setInputValue: any;
   inputValue: string;
   label?: string;
   placeholder?: string;
+  className?: string;
 }) => {
   // component state
 
@@ -52,6 +54,7 @@ const AutocompleteInput = ({
         value={inputValue}
         onChange={handleInputChange}
         placeholder={placeholder}
+        className={className}
         // onBlur={handleInputBlur}
       />
       {suggestions && (

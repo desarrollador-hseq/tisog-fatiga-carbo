@@ -20,7 +20,7 @@ export const TitleOnPage = ({
   return (
     <Card
       className={cn(
-        "w-full min-h-20 h-fit flex items-center justify-between my-2 bg-red-800 rounded-sm",
+        "w-full min-h-20 h-fit flex items-center justify-between my-2 bg-primary rounded-sm opacity-100",
         className
       )}
     >

@@ -10,6 +10,8 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   if (session) {
     if (session.user.role === "ADMIN") {
       redirect("/admin/");
+    } else if (session.user.role === "LEADER") {
+      redirect("/lider/");
     } else if (session.user.role === "USER") {
       redirect("/dashboard/");
     } else {

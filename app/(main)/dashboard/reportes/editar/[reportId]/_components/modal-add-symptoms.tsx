@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DefaultValue } from "@prisma/client";
 import { X } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
-import { ListSymptoms } from "./list-symptoms";
+
 
 interface ModalAddSymptomsProps {
   defaultsSymptoms: DefaultValue[];
@@ -43,10 +43,10 @@ export const ModalAddSymptoms = ({
           Agregar
         </Button>
       </div>
-        <ListSymptoms
+        {/* <ListSymptoms
          currentsItems={currentsItems}
          setCurrentsItems={setCurrentsItems}
-        />
+        /> */}
      
     </SimpleModal>
   );

@@ -18,13 +18,13 @@ import { SidebarContent } from "./sidebar-content";
 
 interface SidebarProps {
   openSidebar: boolean;
-  isAdmin: boolean;
+
   setOpenSidebar: Dispatch<SetStateAction<boolean>>;
   routes: {icon: LucideIcon, label: string, href: string}[],
 }
 
 export const Sidebar = ({
-  isAdmin,
+
   openSidebar,
   routes,
   setOpenSidebar,

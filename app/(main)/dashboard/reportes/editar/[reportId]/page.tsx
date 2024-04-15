@@ -30,17 +30,17 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
         select: {
           company: {
             select: {
-              logoImgUrl: true
-            }
-          }
-        }
+              logoImgUrl: true,
+            },
+          },
+        },
       },
       driver: {
         select: {
-          fullname: true
-        }
-      }
-    }
+          fullname: true,
+        },
+      },
+    },
   });
 
   const defaultsSymptoms = await db.parameter.findUnique({
@@ -56,11 +56,88 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
       },
     },
   });
+  const defaultsSigns = await db.parameter.findUnique({
+    where: {
+      active: true,
+      name: "signs",
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
+  const defaultsAppearance = await db.parameter.findUnique({
+    where: {
+      active: true,
+      name: "appearances",
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
+  const defaultsMoods = await db.parameter.findUnique({
+    where: {
+      active: true,
+      name: "moods",
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
+  const defaultsPerformances = await db.parameter.findUnique({
+    where: {
+      active: true,
+      name: "performances",
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
+  const defaultsDrivingModes = await db.parameter.findUnique({
+    where: {
+      active: true,
+      name: "drivingModes",
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
+  const defaultsStrategies = await db.parameter.findUnique({
+    where: {
+      active: true,
+      name: "strategies",
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
 
   if (!report) {
     return <div>Sin datos</div>;
   }
-
 
   return (
     <CardPage
@@ -81,6 +158,12 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
         isAdmin={isAdmin}
         fatigueSleepReport={report}
         defaultsSymptoms={defaultsSymptoms?.defaultValues || []}
+        defaultsSigns={defaultsSigns?.defaultValues || []}
+        defaultsAppearances={defaultsAppearance?.defaultValues || []}
+        defaultsMoods={defaultsMoods?.defaultValues || []}
+        defaultsPerformances={defaultsPerformances?.defaultValues || []}
+        defaultsDrivingModes={defaultsDrivingModes?.defaultValues || []}
+        defaultsStrategies={defaultsStrategies?.defaultValues || []}
       />
     </CardPage>
   );

@@ -2,9 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import { Driver, FatigueSleepReport } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 // import { formatDateOf } from "@/lib/utils";
-import { Driver, FatigueSleepReport } from "@prisma/client";
 import { formatDate } from "@/lib/utils";
 
 export const reportsTableColumns: ColumnDef<
