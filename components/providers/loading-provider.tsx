@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { LoaderFullpage } from "../loader-fullpage";
 import { useSession } from "next-auth/react";
 import { Role, User } from "@prisma/client";
+import { DateRange } from "react-day-picker";
 
 const roboto = Roboto({
   weight: "400",
@@ -24,6 +25,10 @@ interface LoadingProps {
   setLoadingApp: Dispatch<SetStateAction<boolean | undefined>>;
   loadingApp: boolean | undefined;
   userRole: Role | undefined;
+  dateFilter: DateRange | undefined;
+  setDateFilter: Dispatch<SetStateAction<DateRange | undefined>>;
+  cityFilter: string | undefined;
+  setCityFilter: Dispatch<SetStateAction<string | undefined>>;
 }
 
 interface Props {
@@ -31,13 +36,25 @@ interface Props {
 }
 
 export const LoadingContext = createContext<LoadingProps>({
+  // loading
   setLoadingApp: () => {},
   loadingApp: false,
+  // role user
   userRole: undefined,
+  // date picker
+  dateFilter: undefined,
+  setDateFilter: (date) => {},
+  // city id
+  cityFilter: undefined,
+  setCityFilter: (cityId) => {},
 });
 
 export const LoadingProvider = ({ children }: Props) => {
   const [loadingApp, setLoadingApp] = useState<boolean | undefined>(true);
+  const [dateFilter, setDateFilter] = useState<DateRange | undefined>(
+    undefined
+  );
+  const [cityFilter, setCityFilter] = useState<string | undefined>(undefined);
   const [userRole, setUserRole] = useState<Role | undefined>();
 
   const { data: session, status, update } = useSession();
@@ -69,7 +86,17 @@ export const LoadingProvider = ({ children }: Props) => {
   }, []);
 
   return (
-    <LoadingContext.Provider value={{ setLoadingApp, loadingApp, userRole }}>
+    <LoadingContext.Provider
+      value={{
+        setLoadingApp,
+        loadingApp,
+        userRole,
+        dateFilter,
+        setDateFilter,
+        setCityFilter,
+        cityFilter,
+      }}
+    >
       <body
         className={cn(roboto.className, loadingApp && "overflow-hidden")}
         style={{

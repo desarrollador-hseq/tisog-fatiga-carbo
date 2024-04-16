@@ -30,7 +30,7 @@ export default async function MainLayout({
           roboto.className
         )}
       >
-        <Navbar isAdmin={session?.user.role === "ADMIN" || false} />
+        <Navbar isLeader />
         {/* <div className="mt-1 md:pl-[223px] min-h-screen xl:flex justify-center items-start xl:w-full relative"> */}
         <div className="mt-1 min-h-screen justify-center items-start xl:w-full relative bg-transparent">
           <div className="min-h-full mt-[60px] max-w-[1200px] w-full mx-auto">

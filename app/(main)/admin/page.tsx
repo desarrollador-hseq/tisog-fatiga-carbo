@@ -1,6 +1,7 @@
 import React from "react";
-import { FatigueIndicators } from "./_components/fatigue-indicators";
 import { db } from "@/lib/db";
+import { FatigueIndicators } from "./_components/fatigue-indicators";
+import { HeaderDateFilter } from "../_components/header-date-filter";
 
 const AdminHomePage = async () => {
   const reports = await db.fatigueSleepReport.findMany({
@@ -9,27 +10,45 @@ const AdminHomePage = async () => {
     },
     include: {
       driver: true,
+      supervisor: {
+        select: {
+          name: true,
+        },
+      },
+      city: {
+        select: {
+          realName: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  const defaultsSymptoms = await db.defaultValue.findMany({
+  const defaultsValues = await db.defaultValue.findMany({
     where: {
       active: true,
+    },
+    include: {
       parameters: {
-        name: "symptoms",
+        select: {
+          name: true,
+        },
       },
     },
   });
 
+  const cities = await db.city.findMany({
+    where: {
+      active: true,
+    },
+  });
+
   return (
-    <div>
-      <FatigueIndicators
-        reports={reports}
-        defaultsSymptoms={defaultsSymptoms}
-      />
+    <div className="">
+      <HeaderDateFilter cities={cities} />
+      <FatigueIndicators reports={reports} defaultsValues={defaultsValues} />
     </div>
   );
 };

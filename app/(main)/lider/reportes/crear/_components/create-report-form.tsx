@@ -27,7 +27,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
@@ -44,9 +43,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 interface AdminCreateTrainingFormProps {
-  drivers: Driver[] ;
-  logisticsCenters: LogisticsCenter[] ;
-  cities: City[] 
+  drivers: Driver[];
+  logisticsCenters: LogisticsCenter[];
+  cities: City[];
 }
 
 const formSchema = z.object({
@@ -54,19 +53,18 @@ const formSchema = z.object({
     message: "Conductor es requerido",
   }),
   logisticsCenterId: z.string().min(1, {
-    message: "centro logístico es requerido",
+    message: "Curso es requerido",
   }),
   cityId: z.string().min(1, {
-    message: "ciudad es requerido",
+    message: "Curso es requerido",
   }),
 });
 
 export const CreateReportForm = ({
   drivers,
-  cities,
   logisticsCenters,
+  cities,
 }: AdminCreateTrainingFormProps) => {
-
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,7 +86,7 @@ export const CreateReportForm = ({
   }, [drivers]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log({values})
+    console.log({ values });
     try {
       const { data } = await axios.post("/api/reports", values);
       router.push(`/dashboard/reportes/editar/${data.id}`);
@@ -107,7 +105,6 @@ export const CreateReportForm = ({
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-start h-full p-6">
       <div className="w-full">
-     
         {/* <p className="text-sm text-slate-600">
           El primer paso es elegir el tipo de entrenamiento, posteriormente
           deberá seleccionar los colaboradores y adjuntar sus documentos
@@ -149,26 +146,28 @@ export const CreateReportForm = ({
                           <CommandInput placeholder="Buscar conductor" />
                           <CommandEmpty>Conductor no encontrado</CommandEmpty>
                           <CommandGroup>
-                          <CommandList>
-                            {drivers?.map((driver) => (
-                              <CommandItem
-                                value={`${driver.fullname}`}
-                                key={driver.id}
-                                onSelect={() => {
-                                  form.setValue("driverId", driver.id, {shouldValidate: true});
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    driver.id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {driver.fullname}
-                              </CommandItem>
-                            ))}
+                            <CommandList>
+                              {drivers?.map((driver) => (
+                                <CommandItem
+                                  value={`${driver.fullname}`}
+                                  key={driver.id}
+                                  onSelect={() => {
+                                    form.setValue("driverId", driver.id, {
+                                      shouldValidate: true,
+                                    });
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      driver.id === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {driver.fullname}
+                                </CommandItem>
+                              ))}
                             </CommandList>
                           </CommandGroup>
                         </Command>
@@ -179,6 +178,68 @@ export const CreateReportForm = ({
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="cityId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col w-full">
+                  <FormLabel>Ciudad:</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? cities?.find((city) => city.id === field.value)
+                                ?.realName
+                            : "Selecciona una ciudad"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command className="w-full">
+                        <CommandInput placeholder="Buscar ciudad" />
+                        <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                        <CommandGroup>
+                          <CommandList>
+                            {cities?.map((city) => (
+                              <CommandItem
+                                value={`${city.realName}`}
+                                key={city.id}
+                                onSelect={() => {
+                                  form.setValue("cityId", city.id, {
+                                    shouldValidate: true,
+                                  });
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    city.id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {city.realName}
+                              </CommandItem>
+                            ))}
+                          </CommandList>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div>
               <FormField
                 control={form.control}
@@ -210,69 +271,6 @@ export const CreateReportForm = ({
                   </FormItem>
                 )}
               />
-            </div>
-            <div>
-            <FormField
-            control={form.control}
-            name="cityId"
-            render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
-                <FormLabel>Ciudad:</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? cities?.find((city) => city.id === field.value)
-                              ?.realName
-                          : "Selecciona una ciudad"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command className="w-full">
-                      <CommandInput placeholder="Buscar ciudad" />
-                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {cities?.map((city) => (
-                            <CommandItem
-                              value={`${city.realName}`}
-                              key={city.id}
-                              onSelect={() => {
-                                form.setValue("cityId", city.id, {
-                                  shouldValidate: true,
-                                });
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  city.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {city.realName}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
             </div>
 
             <div className="flex items-center gap-x-2 w-full">

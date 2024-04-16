@@ -18,6 +18,7 @@ const dashRoutes = [
     href: "/reportes",
   },
 ];
+
 const leaderRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
   {
@@ -31,6 +32,7 @@ const leaderRoutes = [
     href: "/conductores",
   },
 ];
+
 const adminRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
   {

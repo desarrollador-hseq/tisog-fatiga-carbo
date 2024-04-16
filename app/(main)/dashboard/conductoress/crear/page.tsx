@@ -18,8 +18,8 @@ const CreateDriver = () => {
       <TitleOnPage text={`Agregar conductor`} bcrumb={bcrumb} />
      }
     >
-      <AddDriverForm  />
-
+      {/* <AddDriverForm  /> */}
+     create driver
     </CardPage>
   )
 }

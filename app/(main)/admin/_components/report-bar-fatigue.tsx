@@ -1,40 +1,60 @@
-"use client";
-
 import { Chart } from "@/components/chart";
-import { DefaultValue, Driver, FatigueSleepReport } from "@prisma/client";
+import {
+  DefaultValue,
+  Driver,
+  FatigueSleepReport,
+  Parameter,
+} from "@prisma/client";
+import React from "react";
 
+interface fatigueWithDriver extends FatigueSleepReport {
+  driver?: Driver | null;
+  parameters: { name: string | null } | null;
+}
+interface valuesWithParameter extends DefaultValue {
+  parameters?: { name: string | null }  | null;
+}
 
 interface CollaboratorsReportsProps {
   reports: FatigueSleepReport[];
-  defaultsSymptoms: DefaultValue[];
+  defaultsItems: valuesWithParameter[];
+  field:
+    | "symptoms"
+    | "signs"
+    | "appearances"
+    | "moods"
+    | "performances"
+    | "drivingModes";
+  title: string;
 }
 
-export const ReportSymptoms = ({
+export const ReportBarFatigue = ({
   reports,
-  defaultsSymptoms,
+  defaultsItems,
+  field,
+  title,
 }: CollaboratorsReportsProps) => {
   const processDataForBarChart = () => {
-    const symptomsData: { [key: string]: number } = {};
+    const SignsData: { [key: string]: number } = {};
 
-    reports.forEach((report) => {
-      report?.symptoms &&
-        report?.symptoms?.split(",")?.forEach((symptomId) => {
-          const symptom = defaultsSymptoms.find(
-            (item) => item.id === symptomId
-          );
-          if (symptom) {
-            symptomsData[symptom.name] = (symptomsData[symptom.name] || 0) + 1;
+    reports?.forEach((report) => {
+      report?.[field] &&
+        defaultsItems &&
+        report?.[field]?.split(",")?.forEach((itemId: string) => {
+          const Sign = defaultsItems.find((item) => item.id === itemId);
+          if (Sign) {
+            SignsData[Sign.name] = (SignsData[Sign.name] || 0) + 1;
           }
         });
     });
 
-    const nameSymptoms = Object.keys(symptomsData);
-    const counts = Object.values(symptomsData);
+    const nameSigns = Object.keys(SignsData);
+    const counts = Object.values(SignsData);
 
-    return { nameSymptoms, counts };
+    return { nameSigns, counts };
   };
 
-  const { nameSymptoms, counts } = processDataForBarChart();
+  const { nameSigns, counts } = processDataForBarChart();
 
   const col = [
     "#1DACD6",
@@ -79,17 +99,17 @@ export const ReportSymptoms = ({
     grid: {
       left: "3%",
       right: "4%",
-      bottom: nameSymptoms.length > 5 ? "6%" : "3%",
+      bottom: nameSigns.length > 2 ? "6%" : "3%",
       containLabel: true,
     },
     xAxis: {
       type: "category",
-      data: nameSymptoms,
+      data: nameSigns,
       axisTick: {
         alignWithLabel: true,
       },
       axisLabel: {
-        rotate: nameSymptoms.length > 3 ? 20 : 0,
+        rotate: nameSigns.length > 2 ? 18 : 0,
       },
     },
     yAxis: {
@@ -105,12 +125,12 @@ export const ReportSymptoms = ({
         label: {
           show: false,
         },
-        data: nameSymptoms.map((city, index) => ({
+        data: nameSigns.map((city, index) => ({
           value: counts[index],
           itemStyle: { color: col[index] },
           name: city,
         })),
-        barMaxWidth: nameSymptoms.length > 3 ? "" : "40%",
+        barMaxWidth: nameSigns.length > 3 ? "" : "40%",
         type: "bar",
         color: "#fff",
       },
@@ -127,5 +147,5 @@ export const ReportSymptoms = ({
     },
   };
 
-  return <Chart option={option} title="Síntomas más frecuentes" />;
+  return <Chart option={option} title={title} />;
 };

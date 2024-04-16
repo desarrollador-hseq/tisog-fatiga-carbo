@@ -28,6 +28,7 @@ model City {
 
   drivers Driver[]
   companies Company[]
+  fatigueSleepReports FatigueSleepReport[]
 
   active Boolean @default(true)
 
@@ -175,6 +176,9 @@ model FatigueSleepReport {
   supervisorId String?
   supervisor   User?   @relation(fields: [supervisorId], references: [id])
 
+  cityId String?
+  city   City?   @relation(fields: [cityId], references: [id])
+
   symptoms      String? @db.Text
   sleepingHours Int?
   sleepingHours48 Int?
@@ -196,6 +200,7 @@ model FatigueSleepReport {
   updatedAt DateTime @updatedAt
 
   @@index([driverId])
+  @@index([cityId])
   @@index([supervisorId])
   @@index([logisticsCenterId])
 }

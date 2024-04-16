@@ -1,20 +1,68 @@
 "use client";
 import React from "react";
 import { Fade } from "react-awesome-reveal";
-import { DefaultValue, FatigueSleepReport } from "@prisma/client";
+import { DefaultValue, FatigueSleepReport, Parameter } from "@prisma/client";
 import { TableDefault } from "@/components/table-default";
 import { ReportSymptoms } from "./report-symptoms";
 import { reportsTableColumns } from "./reports-table-columns";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ReportSleepHours } from "./report-sleep-hours";
+import { useLoading } from "@/components/providers/loading-provider";
+import { endOfDay } from "date-fns";
+
+import { ReportBarFatigue } from "./report-bar-fatigue";
+
+interface valuesWithParameter extends DefaultValue {
+  parameters?: {name: string | null} | null;
+}
 
 export const FatigueIndicators = ({
   reports,
-  defaultsSymptoms
+  defaultsValues,
 }: {
   reports: FatigueSleepReport[];
-  defaultsSymptoms: DefaultValue[]
+  defaultsValues: valuesWithParameter[];
 }) => {
+  const { dateFilter, cityFilter } = useLoading();
+
+  const defaultsSymptoms = defaultsValues.filter(
+    (def) => def?.parameters?.name === "symptoms"
+  );
+  const defaultsSigns = defaultsValues.filter(
+    (def) => def?.parameters?.name === "signs"
+  );
+  const defaultsDrivingModes = defaultsValues.filter(
+    (def) => def?.parameters?.name === "drivingModes"
+  );
+  const defaultsAppearances = defaultsValues.filter(
+    (def) => def?.parameters?.name === "appearances"
+  );
+  const defaultsPerformances = defaultsValues.filter(
+    (def) => def?.parameters?.name === "performances"
+  );
+  const defaultsMoods = defaultsValues.filter(
+    (def) => def?.parameters?.name === "moods"
+  );
+
+  let filteredReports =
+    !dateFilter || (!dateFilter.from && !dateFilter.to)
+      ? reports
+      : reports.filter((report) => {
+          const startDate = report.createdAt;
+          return (
+            (!dateFilter.from || startDate >= dateFilter.from) &&
+            (!dateFilter.to || startDate <= endOfDay(dateFilter.to))
+          );
+        });
+
+  if (cityFilter) {
+    filteredReports = filteredReports.filter(
+      (report) => report.cityId === cityFilter
+    );
+  }
+
+  console.log({ defaultsSigns });
+
   return (
     <div
       className="w-full flex flex-col justify-center mb-6 "
@@ -42,10 +90,55 @@ export const FatigueIndicators = ({
         <PercentagePie  collaborators={filteredCollaborators} />
       </div> */}
         <Fade delay={400} cascade triggerOnce>
-          <ReportSymptoms reports={reports} defaultsSymptoms={defaultsSymptoms} />
+          <ReportBarFatigue
+            defaultsItems={defaultsSymptoms}
+            field="symptoms"
+            reports={filteredReports}
+            title="Síntomas más frecuentes"
+          />
         </Fade>
         <Fade delay={400} cascade triggerOnce>
-          <ReportSleepHours reports={reports} />
+          <ReportSleepHours reports={filteredReports} />
+        </Fade>
+        <Fade delay={400} cascade triggerOnce>
+          <ReportBarFatigue
+            defaultsItems={defaultsSigns}
+            field="signs"
+            reports={filteredReports}
+            title="Signos más frecuentes"
+          />
+        </Fade>
+
+        <Fade>
+          <div className="flex flex-col ">
+            <h3>Comportamiento</h3>
+            <div className="grid md:grid-cols-2 md:grid-rows-2 gap-2 ">
+              <ReportBarFatigue
+                defaultsItems={defaultsAppearances}
+                field="appearances"
+                reports={filteredReports}
+                title="appearances"
+              />
+              <ReportBarFatigue
+                defaultsItems={defaultsPerformances}
+                field="performances"
+                reports={filteredReports}
+                title="performances"
+              />
+              <ReportBarFatigue
+                defaultsItems={defaultsMoods}
+                field="moods"
+                reports={filteredReports}
+                title="moods"
+              />
+              <ReportBarFatigue
+                defaultsItems={defaultsDrivingModes}
+                field="drivingModes"
+                reports={filteredReports}
+                title="drivingModes"
+              />
+            </div>
+          </div>
         </Fade>
         {/* <div className="lg:col-span-2">
           <Fade delay={600} cascade triggerOnce>
@@ -70,7 +163,10 @@ export const FatigueIndicators = ({
             </h2>
           </CardHeader>
           <CardContent>
-            <TableDefault columns={reportsTableColumns} data={reports} />
+            <TableDefault
+              columns={reportsTableColumns}
+              data={filteredReports}
+            />
           </CardContent>
         </Card>
       </Fade>

@@ -1,27 +1,24 @@
 "use client";
 
 import { Chart } from "@/components/chart";
-import {
-  Driver,
-  FatigueSleepReport,
-  FatigueSleepReportStatus,
-} from "@prisma/client";
+import { FatigueSleepReport } from "@prisma/client";
 
-
-
-
-export const ReportSleepHours = ({ reports }: {reports: FatigueSleepReport[]}) => {
+export const ReportSleepHours = ({
+  reports,
+}: {
+  reports: FatigueSleepReport[];
+}) => {
   const processDataForPieChart = () => {
     const hoursData: { [key: number]: number } = {};
 
-    // Contar las ocurrencias de cada número de horas de sueño
+    
     reports.forEach((report) => {
       const hours = report.sleepingHours;
       if (!hours) return;
       hoursData[hours] = (hoursData[hours] || 0) + 1;
     });
 
-    // Extraer los números de horas y sus recuentos del objeto hoursData
+    
     const hours = Object.keys(hoursData);
     const counts = Object.values(hoursData);
 
@@ -33,7 +30,7 @@ export const ReportSleepHours = ({ reports }: {reports: FatigueSleepReport[]}) =
   const option = {
     tooltip: {
       trigger: "item",
-      formatter: "{a} <br/>{b} : {c} ({d}%)",
+      formatter: "<strong>{b} Horas</strong> </br >{d}%: ({c})",
     },
     legend: {
       orient: "horizontal",

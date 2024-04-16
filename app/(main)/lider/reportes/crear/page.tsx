@@ -23,8 +23,8 @@ const CreateReportPage = async () => {
 
   const drivers = await db.driver.findMany({
     where: { active: true, companyId: session.user.companyId },
-
   });
+
   const logisticsCenters = await db.logisticsCenter.findMany({
     where: { active: true, companyId: session.user.companyId },
   });
@@ -32,14 +32,17 @@ const CreateReportPage = async () => {
     where: { active: true },
   });
 
-
   return (
     <CardPage
       pageHeader={
         <TitleOnPage text="Crear Reporte de fatiga y sueño" bcrumb={bcrumb} />
       }
     >
-      <CreateReportForm drivers={drivers} logisticsCenters={logisticsCenters} cities={cities} />
+      <CreateReportForm
+        drivers={drivers}
+        logisticsCenters={logisticsCenters}
+        cities={cities}
+      />
     </CardPage>
   );
 };
