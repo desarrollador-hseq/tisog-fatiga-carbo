@@ -30,7 +30,7 @@ import { DefaultValue } from "@prisma/client";
 
 interface ModalRecommendationsProps {
   open: boolean;
-  fatigueLevel: "HIGH" | "MEDIUM" | "LOW" | "";
+  fatigueLevel: "HIGH" | "MEDIUM" | "LOW";
   strategy: string;
   fatigueSleepReportId: string;
   defaultsStrategies: DefaultValue[];
@@ -106,11 +106,11 @@ export const ModalRecommendations = ({
                     <div
                       className={cn(
                         "w-full h-11 flex justify-center items-center  border-2 border-slate-600 rounded-l-lg",
-                        fatigueLevel !== "" &&
+                        (fatigueLevel === "LOW" || fatigueLevel == "MEDIUM" || fatigueLevel == "HIGH") &&
                           "bg-gray-400 text-white font-semibold"
                       )}
                     >
-                      {fatigueLevel === "LOW" && "Bajo"}
+                      {fatigueLevel === "LOW" && "BAJO"}
                     </div>
                     <div
                       className={cn(
@@ -137,10 +137,9 @@ export const ModalRecommendations = ({
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Voluptatum nihil
                 </span>
-             
               </AlertDialogDescription>
               <div className="flex items-center justify-center mt-5 bg-accent text-white gap-4 p-2 rounded-md border ">
-              <div>
+                <div>
                   <Form {...form}>
                     <form
                       onSubmit={form.handleSubmit(onSubmit)}
@@ -177,12 +176,11 @@ export const ModalRecommendations = ({
                         {isSubmitting && (
                           <Loader2 className="w-4 h-4 animate-spin" />
                         )}
-                        { "Enviar"}
+                        {"Enviar"}
                       </Button>
                     </form>
                   </Form>
                 </div>
-               
               </div>
             </AlertDialogHeader>
           </AlertDialogContent>

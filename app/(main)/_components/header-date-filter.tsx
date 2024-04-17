@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 
+import { City } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { DateFilter } from "@/components/date-filter";
 import SelectCityFilter from "./select-city-filter";
-import { City } from "@prisma/client";
 import { useLoading } from "@/components/providers/loading-provider";
 
 export const HeaderDateFilter = ({ cities }: { cities: City[] }) => {
@@ -14,13 +14,11 @@ export const HeaderDateFilter = ({ cities }: { cities: City[] }) => {
 
   const { cityFilter, dateFilter } = useLoading();
 
-  // new function:
   const handleScroll = () => {
     setPrevScrollPos(window.scrollY);
     setVisible(prevScrollPos > 100);
   };
 
-  // new useEffect:
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { ReactNode, useState } from "react";
+import { TableProperties, X } from "lucide-react";
 
-import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 import {
   AlertDialog,
   AlertDialogFooter,
@@ -13,7 +13,6 @@ import {
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { TableProperties, X } from "lucide-react";
 
 interface ConfirmModalProps {
   children: ReactNode;

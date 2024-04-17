@@ -29,6 +29,7 @@ import { ListToggleItems } from "@/components/list-toggle-items";
 import { ModalRecommendations } from "./modal-recommendations";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { format } from "date-fns";
 
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
@@ -118,12 +119,13 @@ export const FatigueReportForm = ({
     [fatigueSleepReport]
   );
 
-  const disabled = useMemo(
+  const wasSent = useMemo(
     () => fatigueSleepReport.state !== "PENDING" && !isAdmin,
     [isEdit, isAdmin]
   );
 
   const [openRecommendations, setOpenRecommendations] = useState(false);
+  const [reportData, setReportData] = useState(fatigueSleepReport);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -184,11 +186,16 @@ export const FatigueReportForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/reports/${fatigueSleepReport?.id}`, {
-        state: "SEND",
-        ...values,
-      });
+      const { data } = await axios.patch(
+        `/api/reports/${fatigueSleepReport?.id}`,
+        {
+          state: "SEND",
+          ...values,
+        }
+      );
       toast.success("Reporte enviado correctamente");
+
+      setReportData(data);
 
       // router.push(`/dashboard/reportes`);
       router.refresh();
@@ -218,7 +225,7 @@ export const FatigueReportForm = ({
 
   return (
     <div className="max-w-[1500px] w-full h-full mx-auto bg-slate-100 rounded-none overflow-y-hidden p-0  ">
-      <div className="grid grid-cols-3 bg-slate-200 border-b-4 border-slate-500 p-2 place-items-center">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 bg-slate-200 border-b-4 border-slate-500 p-2 place-items-center">
         <div className="max-h-[150px] overflow-hidden">
           <Image
             src={logo}
@@ -229,20 +236,38 @@ export const FatigueReportForm = ({
               width: 200,
               height: "auto",
             }}
-       
             object-fit="cover"
             priority
           />
         </div>
-        <span className="flex flex-col">
+        <span className="flex flex-col text-center">
           <span className="font-bold text-lg">Conductor:</span>
           {fatigueSleepReport.driver?.fullname}
         </span>
-        <div className="flex flex-col">
-          <span className="font-bold text-lg">Creado el:</span>
-          {fatigueSleepReport.createdAt
-            ? formatDate(fatigueSleepReport.createdAt)
-            : "No registra"}
+        <div className="flex flex-col  text-center">
+          {wasSent ? (
+            <>
+              <span className="font-bold text-lg">Enviado el:</span>
+              {fatigueSleepReport.date
+                ? formatDate(fatigueSleepReport.date)
+                : "No registra"}{" "}
+              -{" "}
+              {fatigueSleepReport.createdAt
+                ? format(fatigueSleepReport.createdAt, "HH:mm")
+                : "No registra"}
+            </>
+          ) : (
+            <>
+              <span className="font-bold text-lg">Creado el:</span>
+              {fatigueSleepReport.createdAt
+                ? formatDate(fatigueSleepReport.createdAt)
+                : "No registra"}{" "}
+              -{" "}
+              {fatigueSleepReport.createdAt
+                ? format(fatigueSleepReport.createdAt, "HH:mm")
+                : "No registra"}
+            </>
+          )}
         </div>
       </div>
       <Form {...form}>
@@ -281,7 +306,7 @@ export const FatigueReportForm = ({
                           currents={currentsSymptoms}
                           setCurrents={setCurrentsSymptoms}
                           defaults={defaultsSymptoms}
-                          disabled={disabled}
+                          disabled={wasSent}
                         />
                       </div>
                       <FormMessage />
@@ -359,7 +384,7 @@ export const FatigueReportForm = ({
               </div>
               <div className="flex flex-col">
                 <h4 className="font-semibold text-lg uppercase">
-                  3. Horas de sueño
+                  3. Horas de sueño:
                 </h4>
                 <div className="flex border bg-slate-200 border-slate-400  p-2">
                   <InputForm
@@ -368,7 +393,7 @@ export const FatigueReportForm = ({
                     name="sleepingHours"
                     type="number"
                     className="w-[100px] text-lg bg-slate-100 border border-primary"
-                    // disabled={disabled}
+                    // disabled={wasSent}
                   />
                   <InputForm
                     control={form.control}
@@ -376,7 +401,7 @@ export const FatigueReportForm = ({
                     name="sleepingHours48"
                     type="number"
                     className="w-[100px] text-lg bg-slate-100 border border-primary"
-                    // disabled={disabled}
+                    // disabled={wasSent}
                   />
                 </div>
               </div>
@@ -391,7 +416,7 @@ export const FatigueReportForm = ({
                         <div className="flex justify-between">
                           <div className="flex flex-col gap-2">
                             <FormLabel className="font-semibold text-lg">
-                              4. SIGNOS:
+                              4. COMPORTAMIENTO:
                               <p className="font-normal text-slate-500 text-sm p-0 m-0">
                                 Selecciona los signos que observa en el
                                 comportamiento del colaborador
@@ -407,7 +432,7 @@ export const FatigueReportForm = ({
                             currents={currentsSigns}
                             setCurrents={setCurrentsSigns}
                             defaults={defaultsSigns}
-                            // disabled={disabled}
+                            // disabled={wasSent}
                           />
                         </div>
                         <FormMessage />
@@ -418,8 +443,8 @@ export const FatigueReportForm = ({
               </div>
 
               <div className="flex flex-col">
-                <h4 className="font-semibold text-lg uppercase">
-                  5. Comportamiento
+                <h4 className="font-semibold text-lg ">
+                  5. SIGNOS:
                 </h4>
 
                 <div className="border-4 border-slate-400">
@@ -449,7 +474,7 @@ export const FatigueReportForm = ({
                                 currents={currentsAppearances}
                                 setCurrents={setCurrentsAppearances}
                                 defaults={defaultsAppearances}
-                                // disabled={disabled}
+                                // disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -479,7 +504,7 @@ export const FatigueReportForm = ({
                                 currents={currentsMoods}
                                 setCurrents={setCurrentsMoods}
                                 defaults={defaultsMoods}
-                                // disabled={disabled}
+                                // disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -512,7 +537,7 @@ export const FatigueReportForm = ({
                                 currents={currentsPerformances}
                                 setCurrents={setCurrentsPerformances}
                                 defaults={defaultsPerformances}
-                                // disabled={disabled}
+                                // disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -542,7 +567,7 @@ export const FatigueReportForm = ({
                                 currents={currentsDrivingModes}
                                 setCurrents={setCurrentsDrivingModes}
                                 defaults={defaultsDrivingModes}
-                                // disabled={disabled}
+                                // disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -594,7 +619,7 @@ export const FatigueReportForm = ({
           <ModalRecommendations
             open={openRecommendations}
             defaultsStrategies={defaultsStrategies}
-            fatigueLevel={"HIGH"}
+            fatigueLevel={reportData.riskLevel}
             fatigueSleepReportId={fatigueSleepReport.id}
             strategy={fatigueSleepReport.strategy || ""}
           />

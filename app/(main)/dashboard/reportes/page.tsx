@@ -7,6 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { CardPage } from "@/components/card-page";
 import { cn } from "@/lib/utils";
 import { TitleOnPage } from "@/components/title-on-page";
+import { Banner } from "@/components/banner";
 
 const bcrumb = [{ label: "Reportes", path: "/dashboard/reportes" }];
 
@@ -27,16 +28,21 @@ const ReportsPage = async () => {
       createdAt: "desc",
     },
   });
-
+  const therePending = reports.some((report) => report.state === "PENDING");
   return (
     <CardPage
-      pageHeader={<TitleOnPage text="Listado de reportes" bcrumb={bcrumb} >
-        <Link className={cn(buttonVariants())} href={`/dashboard/reportes/crear`}>
-        Crear
-      </Link>
-      </TitleOnPage>}
+      pageHeader={
+        <TitleOnPage text="Listado de reportes" bcrumb={bcrumb}>
+          <Link
+            className={cn(buttonVariants())}
+            href={`/dashboard/reportes/crear`}
+          >
+            Crear
+          </Link>
+        </TitleOnPage>
+      }
     >
-      
+      {therePending && <Banner label="Tienes uno o más reportes sin enviar" />}
 
       <TableDefault
         data={reports}

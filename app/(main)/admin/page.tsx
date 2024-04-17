@@ -1,12 +1,13 @@
 import React from "react";
 import { db } from "@/lib/db";
-import { FatigueIndicators } from "./_components/fatigue-indicators";
+import { FatigueIndicators } from "../_components/indicators/fatigue-indicators";
 import { HeaderDateFilter } from "../_components/header-date-filter";
 
 const AdminHomePage = async () => {
   const reports = await db.fatigueSleepReport.findMany({
     where: {
       active: true,
+      state: "SEND"
     },
     include: {
       driver: true,
@@ -20,6 +21,16 @@ const AdminHomePage = async () => {
           realName: true,
         },
       },
+      logisticsCenter: {
+        select: {
+          name: true,
+          company: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
     },
     orderBy: {
       createdAt: "desc",
@@ -29,6 +40,7 @@ const AdminHomePage = async () => {
   const defaultsValues = await db.defaultValue.findMany({
     where: {
       active: true,
+      
     },
     include: {
       parameters: {

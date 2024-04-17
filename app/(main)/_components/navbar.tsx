@@ -52,8 +52,8 @@ const adminRoutes = [
   },
   {
     icon: ScrollText,
-    label: "conduuctores",
-    href: "/conduuctores",
+    label: "conductores",
+    href: "/conductores",
   },
   {
     icon: ScrollText,
@@ -127,7 +127,7 @@ export const Navbar = ({
                 <div key={route.href}>
                   <Link
                     className="text-slate-700"
-                    href={`${userRole === "ADMIN" ? "/admin" : userRole === "LEADER" ? "/lider" : "/dashboard"}/${route.href}`}
+                    href={`${userRole === "ADMIN" ? "/admin" : userRole === "LEADER" ? "/lider" : "/dashboard"}${route.href}`}
                   >
                     {route.label}
                   </Link>

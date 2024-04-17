@@ -23,11 +23,11 @@ enum Role {
 model City {
   id String @id @default(uuid())
 
-  realName String
+  realName  String
   formatted String?
 
-  drivers Driver[]
-  companies Company[]
+  drivers             Driver[]
+  companies           Company[]
   fatigueSleepReports FatigueSleepReport[]
 
   active Boolean @default(true)
@@ -89,10 +89,10 @@ model Company {
   id String @id @default(uuid())
 
   name String
-  nit String?
+  nit  String?
 
   cityId String?
-  city City? @relation(fields: [cityId], references: [id])
+  city   City?   @relation(fields: [cityId], references: [id])
 
   logoImgUrl String?
 
@@ -130,8 +130,8 @@ model LogisticsCenter {
 model Driver {
   id String @id @default(uuid())
 
-  fullname String?
-  numDoc   String?
+  fullname      String?
+  numDoc        String?
   licenseNumber String?
 
   positionId String?
@@ -143,9 +143,8 @@ model Driver {
   company   Company? @relation(fields: [companyId], references: [id])
 
   cityId String?
-  city City? @relation(fields: [cityId], references: [id])
-  
-  
+  city   City?   @relation(fields: [cityId], references: [id])
+
   active Boolean @default(true)
 
   createdAt DateTime @default(now())
@@ -160,6 +159,13 @@ enum FatigueSleepReportStatus {
   PENDING
   SEND
   CANCELLED
+}
+
+enum RiskLevel {
+  NO
+  LOW
+  MEDIUM
+  HIGH
 }
 
 model FatigueSleepReport {
@@ -179,18 +185,19 @@ model FatigueSleepReport {
   cityId String?
   city   City?   @relation(fields: [cityId], references: [id])
 
-  symptoms      String? @db.Text
-  sleepingHours Int?
-  sleepingHours48 Int?
-  medicine String? @db.Text
-  signs String? @db.Text
-  appearances String? @db.Text
-  moods String? @db.Text
-  performances String? @db.Text
-  drivingModes String? @db.Text
-  strategy String? @db.Text
+  symptoms                String? @db.Text
+  sleepingHours           Int?
+  sleepingHours48         Int?
+  medicine                String? @db.Text
+  signs                   String? @db.Text
+  appearances             String? @db.Text
+  moods                   String? @db.Text
+  performances            String? @db.Text
+  drivingModes            String? @db.Text
+  strategy                String? @db.Text
   fatigueCauseDescription String? @db.Text
-  
+
+  riskLevel RiskLevel? @default(NO)
 
   state FatigueSleepReportStatus @default(PENDING)
 
