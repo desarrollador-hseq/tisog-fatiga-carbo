@@ -23,7 +23,8 @@ const DashboardHomePage = async () => {
       },
     },
     orderBy: {
-      date: "desc",
+      createdAt: "desc",
+
     },
   });
 

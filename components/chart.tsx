@@ -20,6 +20,8 @@ export const Chart = ({
     setTimeout(() => {
       setIsChartLoaded(true);
     }, 500);
+
+    
   };
 
   return (

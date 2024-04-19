@@ -2,13 +2,14 @@
 import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { ClipboardCheck, Home, Menu, ScrollText } from "lucide-react";
+import { ClipboardCheck, Home, Menu, ScrollText, Settings } from "lucide-react";
 import { Sidebar } from "./sidebar";
 import { Button } from "@/components/ui/button";
 import { LogoMain } from "@/components/logo-main";
 import { cn } from "@/lib/utils";
 import { ModalLogout } from "@/app/(auth)/_components/modal-logout";
 import { useLoading } from "@/components/providers/loading-provider";
+
 
 const dashRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
@@ -133,8 +134,11 @@ export const Navbar = ({
                   </Link>
                 </div>
               ))}
+              {/* <NavbarMenuItem></NavbarMenuItem> */}
             </div>
-
+            <Link href="/admin/parametros" className="ml-6 w-fit h-fit p-2  bg-inherit hover:bg-accent rounded-full flex items-center">
+              <Settings className="w-5 h-5" /> 
+            </Link>
             <ModalLogout />
           </div>
         </div>

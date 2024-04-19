@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 import { formatInTimeZone } from "date-fns-tz";
 import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
+import { transporter, mailOptions } from "@/lib/nodemailer";
 
 export async function PATCH(
   req: Request,
@@ -21,12 +22,27 @@ export async function PATCH(
     const report = await db.fatigueSleepReport.findUnique({
       where: {
         id: params.reportId
+      },
+      include: {
+        city: {
+          select: {
+            realName: true,
+          }
+        },
+        driver: {
+          select: {
+            fullname: true,
+            position: {
+              select: {
+                name: true
+              }
+            },
+          }
+        },
       }
     })
     if (!report) return new NextResponse("Bad request", { status: 400 })
 
-    // Calcula el nivel de riesgo de fatiga
-    const { appearances, moods, performances, drivingModes } = values;
     let totalItems = 0;
     if (values.appearances && values.appearances.trim() !== "") totalItems += values.appearances.split(",").length;
     if (values.moods && values.moods.trim() !== "") totalItems += values.moods.split(",").length;
@@ -41,7 +57,23 @@ export async function PATCH(
       riskLevel = "HIGH";
     }
 
-    console.log({ totalItems, apa: appearances.split(",").length, moods: moods.split(",").length, per: performances.split(",").length, driving: drivingModes.split(",").length , appearances })
+
+    if (riskLevel === "HIGH") {
+      try {
+        await transporter.sendMail({
+          ...mailOptions,
+          // to: email,
+          to: "kingj3su@gmail.com",
+          text: "Correo de reporte de fatiga nivel crítico",
+          subject: `Correo de reporte de fatiga nivel crítico`,
+        });
+        //  NextResponse.json({ message: "ok", status: 200 });
+      } catch (error) {
+        console.log("[SEND-EMAIL-CRITICAL-REPORT", error);
+        //  new NextResponse("Internal Errorr", { status: 500 });
+      }
+    }
+
 
     if (report.state === "PENDING") {
       const reportUpdated = await db.fatigueSleepReport.update({

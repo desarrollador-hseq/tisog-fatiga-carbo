@@ -17,7 +17,7 @@ import {
 
 interface ConfirmModalProps {
   children: ReactNode;
-  title: JSX.Element;
+  title: JSX.Element | string;
   onConfirm: () => void;
 }
 

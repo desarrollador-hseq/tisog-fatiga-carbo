@@ -4,9 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogHeader,
-  AlertDialogTitle,
+
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -96,10 +95,9 @@ export const ModalRecommendations = ({
         <AlertDialog open={openModal}>
           <AlertDialogContent className="w-full max-w-[700px]">
             <AlertDialogHeader>
-              <AlertDialogTitle>
-                <h2 className="text-2xl text-bold">Nivel Riesgo de Fatiga</h2>
-              </AlertDialogTitle>
-              <AlertDialogDescription className="mt-5 text-slate-700 text-lg flex flex-col gap-2 ">
+             
+              <div className="mt-5 text-slate-700 text-lg flex flex-col gap-2 border-4 border-primary bg-primary/30 rounded-md p-2">
+              <h2 className="text-2xl font-bold text-center ">Nivel Riesgo de Fatiga</h2>
                 <div className="flex flex-col p-4">
                   <span></span>
                   <div className="grid grid-cols-3">
@@ -137,7 +135,7 @@ export const ModalRecommendations = ({
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Voluptatum nihil
                 </span>
-              </AlertDialogDescription>
+              </div>
               <div className="flex items-center justify-center mt-5 bg-accent text-white gap-4 p-2 rounded-md border ">
                 <div>
                   <Form {...form}>

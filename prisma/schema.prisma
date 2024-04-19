@@ -233,6 +233,7 @@ model Parameter {
   id String @id @default(uuid())
 
   name String @unique
+  desc   String?
 
   defaultValues DefaultValue[]
 

@@ -329,7 +329,7 @@ export const FatigueReportForm = ({
                           </p>
                         </FormLabel>
                         <div className="flex flex-col md:flex-row gap-2 justify-center border bg-slate-200 border-slate-400">
-                          <div className="w-1/2 h-fit p-4 flex flex-col gap-4 bg-slate-200 border ">
+                          <div className="w-full md:w-1/2 h-fit p-4 flex flex-col gap-4 bg-slate-200 border ">
                             <AutocompleteInput
                               inputValue={inputMedicineValue}
                               setInputValue={setInputMedicineValue}
@@ -345,7 +345,7 @@ export const FatigueReportForm = ({
                               Agregar
                             </Button>
                           </div>
-                          <div className="flex flex-col  w-1/2  bg-slate-300 self-start">
+                          <div className="flex flex-col w-full md:w-1/2 bg-slate-300 self-start">
                             <span className="w-full h-fit p-1 bg-slate-400 text-white">
                               Medicamentos:{" "}
                             </span>
