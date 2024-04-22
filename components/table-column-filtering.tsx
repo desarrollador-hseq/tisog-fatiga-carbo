@@ -36,6 +36,7 @@ function TableColumnFiltering({ column, table }: any) {
             column.setFilterValue((old: any) => [value, old?.[1]])
           }
           placeholder="min"
+          className="max-w-[50%] absolute -top-1 left-7 rounded-sm"
         />
         <DebouncedInput
           type="number"
@@ -46,6 +47,7 @@ function TableColumnFiltering({ column, table }: any) {
             column.setFilterValue((old: any) => [old?.[0], value])
           }
           placeholder="max"
+          className="max-w-[50%] absolute -top-1 left-7 rounded-sm"
         />
       </div>
     </div>
@@ -60,6 +62,7 @@ function TableColumnFiltering({ column, table }: any) {
         <Button
           className="w-fit p-1 h-fit"
           onClick={() => setOpenSearch(!openSearch)}
+          variant="secondary"
         >
           {openSearch ? (
             <SearchX className="w-3.5 h-3.5" />

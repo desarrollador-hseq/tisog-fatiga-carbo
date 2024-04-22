@@ -13,11 +13,11 @@ import { useLoading } from "@/components/providers/loading-provider";
 
 const dashRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
-  {
-    icon: ClipboardCheck,
-    label: "reportes",
-    href: "/reportes",
-  },
+  // {
+  //   icon: ClipboardCheck,
+  //   label: "reportes",
+  //   href: "/reportes",
+  // },
 ];
 
 const leaderRoutes = [
@@ -36,30 +36,40 @@ const leaderRoutes = [
 
 const adminRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
+  // {
+  //   icon: ClipboardCheck,
+  //   label: "Ciudades",
+  //   href: "/ciudades",
+  // },
   {
     icon: ClipboardCheck,
-    label: "Ciudades",
-    href: "/ciudades",
-  },
-  {
-    icon: ClipboardCheck,
-    label: "empresas",
+    label: "Empresas",
     href: "/empresas",
   },
+  // {
+  //   icon: ScrollText,
+  //   label: "Reportes",
+  //   href: "/reportes",
+  // },
   {
     icon: ScrollText,
-    label: "reportes",
-    href: "/reportes",
-  },
-  {
-    icon: ScrollText,
-    label: "conductores",
+    label: "Conductores",
     href: "/conductores",
   },
   {
     icon: ScrollText,
-    label: "supervisores",
+    label: "Supervisores",
     href: "/supervisores",
+  },
+  {
+    icon: ScrollText,
+    label: "Líderes",
+    href: "/lideres",
+  },
+  {
+    icon: ScrollText,
+    label: "Centros",
+    href: "/centros",
   },
 ];
 
@@ -107,8 +117,8 @@ export const Navbar = ({
             />
 
             <LogoMain goRoot />
-            <span className="text-lg text-slate-600 font-semibold">
-              Fatiga y sueño
+            <span className="hidden md:flex text-lg text-slate-600 font-semibold">
+              Gestión de fatiga y sueño
             </span>
           </div>
 

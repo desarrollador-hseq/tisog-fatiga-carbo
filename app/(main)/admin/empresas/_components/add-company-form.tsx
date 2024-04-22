@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +36,6 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { useLoading } from "@/components/providers/loading-provider";
-import Image from "next/image";
 
 interface AddCompanyFormProps {
   company?: Company | null;
@@ -111,10 +111,13 @@ export const AddCompanyForm = ({ company, cities }: AddCompanyFormProps) => {
       name: company?.name || "",
       nit: company?.nit || "",
       cityId: company?.cityId || "",
+      logoImgUrl: company?.logoImgUrl || "",
     },
   });
   const { isSubmitting, isValid } = form.formState;
   const { setValue, setError, getValues } = form;
+
+
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let urlImage: string | null;

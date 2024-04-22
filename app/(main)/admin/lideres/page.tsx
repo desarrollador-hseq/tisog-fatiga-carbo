@@ -1,17 +1,17 @@
 import React from "react";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
 import { TableDefault } from "@/components/table-default";
 import { db } from "@/lib/db";
 import { buttonVariants } from "@/components/ui/button";
 import { CardPage } from "@/components/card-page";
 import { cn } from "@/lib/utils";
-import { driverTableColumns } from "./_components/driver-table-columns";
+import { leaderTableColumns } from "./_components/leader-table-columns";
 import { TitleOnPage } from "@/components/title-on-page";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { NotAuthorized } from "@/components/not-authorized";
 
-const bcrumb = [{ label: "Conductores", path: "/dashboard/conductores" }];
+const bcrumb = [{ label: "Líderes", path: "/admin/lideres" }];
 
 const DriversPage = async () => {
   const session = await getServerSession(authOptions);
@@ -20,10 +20,10 @@ const DriversPage = async () => {
     return <NotAuthorized />;
   }
 
-  const drivers = await db.driver.findMany({
+  const leaders = await db.user.findMany({
     where: {
       active: true,
-      companyId: session?.user?.companyId,
+      role: "LEADER",
     },
     orderBy: {
       createdAt: "desc",
@@ -32,16 +32,21 @@ const DriversPage = async () => {
 
   return (
     <CardPage
-      pageHeader={<TitleOnPage text="Listado de conductores" bcrumb={bcrumb} />}
+      pageHeader={
+        <TitleOnPage text="Listado de líderes" bcrumb={bcrumb}>
+          <Link
+            className={cn(buttonVariants({variant: "secondary"}))}
+            href={`/admin/lideres/crear`}
+          >
+            Crear
+          </Link>
+        </TitleOnPage>
+      }
     >
-      <Link className={cn(buttonVariants())} href={`/lider/conductores/crear`}>
-        Crear
-      </Link>
-
       <TableDefault
-        data={drivers}
-        columns={driverTableColumns}
-        editHref={{ btnText: "editar", href: `/lider/conductores` }}
+        data={leaders}
+        columns={leaderTableColumns}
+        editHref={{ btnText: "editar", href: `/admin/lideres` }}
       />
     </CardPage>
   );

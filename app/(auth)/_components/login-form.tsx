@@ -110,7 +110,7 @@ export const LoginForm = () => {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <Link
-                        href={`/`}
+                       href="/recuperar-contrasena"
                         className="w-full block text-sm text-blue-600 decoration-2 hover:underline font-medium text-end"
                       >
                         Olvidé la contraseña

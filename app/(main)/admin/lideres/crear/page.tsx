@@ -1,16 +1,16 @@
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
-import { AddDriverForm } from "../_components/add-driver-form";
+import { AddLeaderForm } from "../_components/add-leader-form";
 import { db } from "@/lib/db";
 import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 // import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 
 const bcrumb = [
-  { label: "Conductores", path: "/lider/conductores" },
-  { label: "Agregar", path: "/lider/crear" },
+  { label: "Líderes", path: "/admin/lideres" },
+  { label: "Agregar", path: "/admin/crear" },
 ];
 
-const CreateDriver = async () => {
+const CreateSupervisorPage = async () => {
   const cities = await db.city.findMany({
     where: {
       active: true,
@@ -19,13 +19,13 @@ const CreateDriver = async () => {
       realName: "desc",
     },
   });
-  
 
   const companies = await db.company.findMany({
     where: {
       active: true,
     },
   });
+
   const positions = await db.position.findMany({
     where: {
       active: true,
@@ -35,18 +35,14 @@ const CreateDriver = async () => {
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text={`Agregar conductor`} bcrumb={bcrumb}>
-          <ButtonDownloadTemplateExcel name="plantilla-subir-conductores" />
+        <TitleOnPage text={`Agregar Líder`} bcrumb={bcrumb}>
+          {/* <ButtonDownloadTemplateExcel name="plantilla-subir-conductores" /> */}
         </TitleOnPage>
       }
     >
-      <AddDriverForm
-        cities={cities}
-        companies={companies}
-        positions={positions}
-      />
+      <AddLeaderForm cities={cities} companies={companies} />
     </CardPage>
   );
 };
 
-export default CreateDriver;
+export default CreateSupervisorPage;

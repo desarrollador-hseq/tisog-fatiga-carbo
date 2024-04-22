@@ -19,11 +19,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-export const SidebarItems = ({
-  icon: Icon,
-  label,
-  href,
-}: SidebarItemProps) => {
+export const SidebarItems = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -33,6 +29,8 @@ export const SidebarItems = ({
       (href !== "/dashboard" &&
         pathname?.startsWith(`${href}`) &&
         href !== "/admin" &&
+        pathname?.startsWith(`${href}`) &&
+        href !== "/lider" &&
         pathname?.startsWith(`${href}`)),
     [pathname, href]
   );
@@ -58,11 +56,14 @@ export const SidebarItems = ({
           <div className="flex items-center gap-x-2 py-4">
             <Icon
               size={22}
-              className={cn("text-slate-400", isActive && "text-slate-200")}
+              className={cn("text-slate-500", isActive && "text-primary")}
             />
 
             <span
-              className={cn("text-slate-400", isActive && "text-slate-200")}
+              className={cn(
+                "text-slate-500",
+                isActive && "text-primary font-semibold"
+              )}
             >
               {label}
             </span>
@@ -76,13 +77,16 @@ export const SidebarItems = ({
         </button>
       </ContextMenuTrigger>
       <ContextMenuContent className="w-full h-full">
-        {!isAdmin && href !== "/dashboard" && href !== "/dashboard/entrenamiento/certificados" && (
-          <ContextMenuItem asChild className="bg-slate-100 hover:bg-slate-200">
-            <Link href={`${href}/crear`} >
-              Crear
-            </Link>
-          </ContextMenuItem>
-        )}
+        {!isAdmin &&
+          href !== "/dashboard" &&
+          href !== "/dashboard/entrenamiento/certificados" && (
+            <ContextMenuItem
+              asChild
+              className="bg-slate-100 hover:bg-slate-200"
+            >
+              <Link href={`${href}/crear`}>Crear</Link>
+            </ContextMenuItem>
+          )}
         <ContextMenuItem className="bg-slate-100 hover:bg-slate-200">
           <a target="_blank" href={href} rel="noopener noreferrer">
             Abrir en otra pestaña

@@ -1,19 +1,19 @@
 
 "use client";
 
+import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 // import { formatDateOf } from "@/lib/utils";
-import { Driver } from "@prisma/client";
 
 
 
-export const driverTableColumns: ColumnDef<Driver>[] =
+export const leaderTableColumns: ColumnDef<User>[] =
   [
     {
-      accessorKey: "fullname",
-      accessorFn: (value) => value.fullname,
+      accessorKey: "name",
+      accessorFn: (value) => value.name,
       header: ({ column }) => {
         return (
           <Button
@@ -27,13 +27,13 @@ export const driverTableColumns: ColumnDef<Driver>[] =
         );
       },
       cell: ({ row }) => {
-        const name = row.original?.fullname;
-        return <div className="capitalize">{name}</div>;
+        const name = row.original?.name;
+        return <div className="">{name}</div>;
       },
     },
     {
-      accessorKey: "numDoc",
-      accessorFn: (value) => value.numDoc,
+      accessorKey: "email",
+      accessorFn: (value) => value.email,
       header: ({ column }) => {
         return (
           <Button
@@ -41,13 +41,13 @@ export const driverTableColumns: ColumnDef<Driver>[] =
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
           >
-            N° documento
+            Correo electrónico
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         );
       },
       cell: ({ row }) => {
-        const numDoc = row.original?.numDoc;
+        const numDoc = row.original?.email;
         return <div className="">{numDoc}</div>;
       },
     },

@@ -34,7 +34,7 @@ const EditCompanyPage = async ({
     <CardPage
       pageHeader={
         <TitleOnPage text="Editar empresa" bcrumb={bcrumb}>
-          <DeleteCompany company={company} />
+          {/* <DeleteCompany company={company} /> */}
         </TitleOnPage>
       }
     >

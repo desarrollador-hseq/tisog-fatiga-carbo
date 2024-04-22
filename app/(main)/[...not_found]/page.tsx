@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+
+
 export default function NotFound() {
   return (
     <div className="w-full  min-h-[calc(100vh-60px)] flex flex-col justify-center items-center gap-1">

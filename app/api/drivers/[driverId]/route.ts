@@ -8,18 +8,30 @@ export async function PATCH(req: Request, { params }: { params: { driverId: stri
   try {
     const values = await req.json();
 
-    if(!session) return new NextResponse("Unauthorized", {status: 401})
+    if (!session) return new NextResponse("Unauthorized", { status: 401 })
 
     const existingDriver = await db.driver.findUnique({
       where: { id: params.driverId, active: true },
     });
 
- 
     if (!existingDriver) {
       return new NextResponse("Conductor no encontrado", {
         status: 400,
       });
     }
+
+    if (values.numDoc) {
+      if (existingDriver.numDoc !== values.numDoc) {
+        const result = await db.driver.findFirst({
+          where: {
+            numDoc: values.numDoc,
+            active: true,
+          }
+        })
+        if (result) return new NextResponse("Número de documento ya registrado en un conductor activo", { status: 400 })
+      }
+    }
+
 
     const driver = await db.driver.update({
       where: {

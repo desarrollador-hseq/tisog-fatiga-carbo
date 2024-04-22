@@ -1,17 +1,19 @@
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
-import { AddDriverForm } from "../_components/add-driver-form";
+import { AddSupervisorForm } from "../_components/add-supervisor-form";
 
 const bcrumb = [
   { label: "Conductores", path: "/dashboard/conductores" },
   { label: "Editar", path: "/dashboard/conductores/editar" },
 ];
 
-const EditDriverPage = async ({ params }: { params: { driverId: string } }) => {
-  const driver = await db.driver.findUnique({
+const EditSupervisorPage = async ({ params }: { params: { supervisorId: string } }) => {
+  const supervisor = await db.user.findUnique({
     where: {
-      id: params.driverId,
+      id: params.supervisorId,
+      role: "USER",
+      active: true,
     },
   });
 
@@ -29,16 +31,13 @@ const EditDriverPage = async ({ params }: { params: { driverId: string } }) => {
       active: true
     }
   })
-  const positions = await db.position.findMany({
-    where: {
-      active: true
-    }
-  })
+
+  console.log({supervisor})
 
   return (
-    <CardPage pageHeader={<TitleOnPage text={`Editar conductor`} bcrumb={bcrumb} />}>
-      <AddDriverForm driver={driver} cities={cities} companies={companies} positions={positions} />
+    <CardPage pageHeader={<TitleOnPage text={`Editar supervisor`} bcrumb={bcrumb} />}>
+      <AddSupervisorForm supervisor={supervisor} cities={cities} companies={companies} />
     </CardPage>
   );
 };
-export default EditDriverPage;
+export default EditSupervisorPage;

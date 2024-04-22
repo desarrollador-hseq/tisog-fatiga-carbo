@@ -45,7 +45,7 @@ function DebouncedInput({
       value={value}
       autoFocus={focus}
       onChange={(e) => setValue(e.target.value)}
-      className={cn("h-7 rounded-none placeholder:text-slate-400 placeholder:text-xs text-slate-700", className)}
+      className={cn("h-7 rounded-none placeholder:text-slate-400 placeholder:text-xs text-slate-700 border", className)}
       list={list}
       {...props}
     />

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { City, Company, Driver, Position } from "@prisma/client";
+import { City, Company, User } from "@prisma/client";
 import axios from "axios";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,57 +11,74 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { InputForm } from "@/components/input-form";
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-interface AddDriverFormProps {
-  driver?: Driver | null;
+interface AddLeaderFormProps {
+  leader?: User | null;
   cities: City[] | null;
   companies: Company[] | null;
-  positions: Position[] | null;
 }
 
 const formSchema = z.object({
-  fullname: z.string().min(1, {
+  name: z.string().min(1, {
     message: "Nombre requerido",
   }),
   numDoc: z.string().min(1, {
     message: "Número de documento requerido",
   }),
-  licenseNumber: z.string().min(1, {
-    message: "Número de licencia requerido",
-  }),
-  cityId: z.string().min(1, {
-    message: "Ciudad es requerida",
-  }),
   companyId: z.string().min(1, {
     message: "Empresa es requerida",
   }),
-  positionId: z.string().min(1, {
-    message: "Cargo es requerido",
-  }),
+  email: z.string().email({
+    message: "Ingrese un correo electrónico válido"
+  })
+  // cityId: z.string().min(1, {
+  //   message: "Ciudad es requerida",
+  // }),
 });
 
-export const AddDriverForm = ({ driver, cities, companies, positions }: AddDriverFormProps) => {
+export const AddLeaderForm = ({
+  leader,
+  cities,
+  companies,
+}: AddLeaderFormProps) => {
   const router = useRouter();
-  const isEdit = useMemo(() => !!driver, [driver]);
+  const isEdit = useMemo(() => !!leader, [leader]);
 
-  if (isEdit && !driver) {
-    router.replace("/dashboard/conductores/");
-    toast.error("Colaborador no encontrado, redirigiendo...");
+  if (isEdit && !leader) {
+    router.replace("/admin/lideres/");
+    toast.error("Lider no encontrado, redirigiendo...");
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullname: driver?.fullname || "",
-      numDoc: driver?.numDoc || "",
-      cityId: driver?.cityId || "",
-      licenseNumber: driver?.licenseNumber || "",
-      companyId: driver?.companyId || "",
-      positionId: driver?.positionId || "",
+      name: leader?.name || "",
+      numDoc: leader?.numDoc || "",
+      companyId: leader?.companyId || "",
+      email: leader?.email
+      // cityId: driver?.cityId || "",
     },
   });
   const { isSubmitting, isValid } = form.formState;
@@ -70,12 +87,12 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isEdit) {
-        await axios.patch(`/api/drivers/${driver?.id}`, values);
-        toast.success("Conductor actualizado");
+        await axios.patch(`/api/leaders/${leader?.id}`, values);
+        toast.success("Líder actualizado");
       } else {
-        const { data } = await axios.post(`/api/drivers/`, values);
-        router.push(`/dashboard/conductores/`);
-        toast.success("Conductor creado");
+        const { data } = await axios.post(`/api/leaders/`, values);
+        router.push(`/admin/lideres/`);
+        toast.success("Líder creado correctamente");
       }
       // router.push(`/admin/colaboradores`);
       router.refresh();
@@ -114,7 +131,7 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
           <InputForm
             control={form.control}
             label="Nombre completo"
-            name="fullname"
+            name="name"
             className="w-full"
           />
           <InputForm
@@ -125,11 +142,73 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
           />
           <InputForm
             control={form.control}
-            label="# Licencia"
-            name="licenseNumber"
+            label="Correo electrónico"
+            name="email"
             className="w-full"
           />
           <FormField
+            control={form.control}
+            name="companyId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Empresa:</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? companies?.find(
+                              (company) => company.id === field.value
+                            )?.name
+                          : "Selecciona una empresa"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command className="w-full">
+                      <CommandInput placeholder="Buscar ciudad" />
+                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {companies?.map((company) => (
+                            <CommandItem
+                              value={`${company.name}`}
+                              key={company.id}
+                              onSelect={() => {
+                                form.setValue("companyId", company.id, {
+                                  shouldValidate: true,
+                                });
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  company.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {company.name}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <FormField
             control={form.control}
             name="cityId"
             render={({ field }) => (
@@ -189,69 +268,8 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
                 <FormMessage />
               </FormItem>
             )}
-          />
-          <FormField
-            control={form.control}
-            name="companyId"
-            render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
-                <FormLabel>Empresa:</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? companies?.find((company) => company.id === field.value)
-                              ?.name
-                          : "Selecciona una empresa"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command className="w-full">
-                      <CommandInput placeholder="Buscar ciudad" />
-                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {companies?.map((company) => (
-                            <CommandItem
-                              value={`${company.name}`}
-                              key={company.id}
-                              onSelect={() => {
-                                form.setValue("companyId", company.id, {
-                                  shouldValidate: true,
-                                });
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  company.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {company.name}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
+          /> */}
+          {/* <FormField
             control={form.control}
             name="positionId"
             render={({ field }) => (
@@ -311,7 +329,7 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <Button
             disabled={isSubmitting || !isValid}

@@ -19,7 +19,8 @@ const CreateCompanyPage = async () => {
     <CardPage
       pageHeader={<TitleOnPage text="Agregar empresa" bcrumb={bcrumb} />}
     >
-      <AddCompanyForm cities={cities} />
+      {/* <AddCompanyForm cities={cities} /> */}
+      <div></div>
     </CardPage>
   );
 };

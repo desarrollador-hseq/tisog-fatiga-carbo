@@ -15,15 +15,22 @@ const CompanyPage = async () => {
     where: {
       active: true,
     },
+    include: {
+      city: {
+        select: {
+          realName: true,
+        },
+      },
+    },
   });
 
   return (
     <CardPage
       pageHeader={
         <TitleOnPage text="Listado de empresas" bcrumb={bcrumb}>
-          <Link className={cn(buttonVariants())} href={`/admin/empresas/crear`}>
+          {/* <Link className={cn(buttonVariants({variant: "secondary"}))} href={`/admin/empresas/crear`}>
             Agregar
-          </Link>
+          </Link> */}
         </TitleOnPage>
       }
     >
