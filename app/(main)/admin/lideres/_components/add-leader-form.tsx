@@ -91,6 +91,7 @@ export const AddLeaderForm = ({
         toast.success("Líder actualizado");
       } else {
         const { data } = await axios.post(`/api/leaders/`, values);
+         await axios.post(`/api/user/first-password`, values);
         router.push(`/admin/lideres/`);
         toast.success("Líder creado correctamente");
       }

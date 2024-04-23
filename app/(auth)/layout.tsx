@@ -22,7 +22,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     <div className="w-full">
       {/* <AuthNavbar /> */}
 
-      <div className=" w-full bg-white ">{children}</div>
+      <div className=" w-full">{children}</div>
     </div>
   );
 };

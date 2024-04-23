@@ -10,7 +10,7 @@ import { CardPage } from "@/components/card-page";
 import { NotAuthorized } from "@/components/not-authorized";
 
 const bcrumb = [
-  { label: "Reportes", path: "/dashboard/reportes" },
+  { label: "Reportes", path: "/lider/reportes" },
   { label: "Crear", path: "crear" },
 ];
 

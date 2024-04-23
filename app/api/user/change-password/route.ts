@@ -30,6 +30,7 @@ export async function PATCH(req: Request) {
         status: 400,
       });
     }
+    
     if (!password || !actualPassword || typeof password !== "string") {
       return new NextResponse("Por favor verifique la contraseñas enviada", {
         status: 400,

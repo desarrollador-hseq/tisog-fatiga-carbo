@@ -10,6 +10,7 @@ import axios from "axios";
 import { Info, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { format } from "date-fns";
 import { InputForm } from "@/components/input-form";
 import { SubtitleSeparator } from "@/components/subtitle-separator";
 import { Button } from "@/components/ui/button";
@@ -28,8 +29,6 @@ import AutocompleteInput from "@/components/autocomplete-input";
 import { ListToggleItems } from "@/components/list-toggle-items";
 import { ModalRecommendations } from "./modal-recommendations";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
 
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
@@ -63,6 +62,7 @@ const formSchema = z.object({
   performances: z.string(),
   drivingModes: z.string(),
   fatigueCauseDescription: z.string().optional(),
+  strategy: z.string().optional(),
 });
 
 export const FatigueReportForm = ({
@@ -102,6 +102,9 @@ export const FatigueReportForm = ({
       ? fatigueSleepReport?.drivingModes.split(",")
       : []
   );
+  const [currentsStrategies, setCurrentsStrategies] = useState<string[]>(
+    fatigueSleepReport?.strategy ? fatigueSleepReport?.strategy.split(",") : []
+  );
   const [currentsMedicineItems, setCurrentsMedicineItems] = useState<string[]>(
     fatigueSleepReport?.medicine ? fatigueSleepReport?.medicine.split("|") : []
   );
@@ -140,6 +143,7 @@ export const FatigueReportForm = ({
       medicine: fatigueSleepReport?.medicine || "",
       fatigueCauseDescription:
         fatigueSleepReport?.fatigueCauseDescription || "",
+      strategy: fatigueSleepReport.strategy || "",
     },
   });
 
@@ -179,6 +183,11 @@ export const FatigueReportForm = ({
   }, [currentsDrivingModes]);
 
   useEffect(() => {
+    setValue("strategy", currentsStrategies.join(","), {
+      shouldValidate: true,
+    });
+  }, [currentsMedicineItems]);
+  useEffect(() => {
     setValue("medicine", currentsMedicineItems.join("|"), {
       shouldValidate: true,
     });
@@ -193,7 +202,7 @@ export const FatigueReportForm = ({
           ...values,
         }
       );
-      toast.success("Reporte enviado correctamente");
+      // toast.success("Reporte enviado correctamente");
 
       setReportData(data);
 
@@ -335,12 +344,14 @@ export const FatigueReportForm = ({
                               setInputValue={setInputMedicineValue}
                               placeholder="Nombre del medicamento"
                               className="bg-slate-100 border border-primary"
+                              disabled={wasSent}
                             />
                             <Button
                               type="button"
                               onClick={() =>
                                 handleAddMedicineItem(inputMedicineValue)
                               }
+                              disabled={wasSent}
                             >
                               Agregar
                             </Button>
@@ -357,15 +368,17 @@ export const FatigueReportForm = ({
                                     key={index}
                                   >
                                     {item}
-                                    <Button
-                                      type="button"
-                                      onClick={() =>
-                                        handleDeleteMedicineItem(item)
-                                      }
-                                      className="p-0.5 rounded-sm bg-red-500 hover:bg-red-700 w-5 h-5 flex items-center justify-center"
-                                    >
-                                      <X className="w-4 h-4 text-white" />
-                                    </Button>
+                                    {!wasSent && (
+                                      <Button
+                                        type="button"
+                                        onClick={() =>
+                                          handleDeleteMedicineItem(item)
+                                        }
+                                        className="p-0.5 rounded-sm bg-red-500 hover:bg-red-700 w-5 h-5 flex items-center justify-center"
+                                      >
+                                        <X className="w-4 h-4 text-white" />
+                                      </Button>
+                                    )}
                                   </div>
                                 ))
                               ) : (
@@ -393,7 +406,7 @@ export const FatigueReportForm = ({
                     name="sleepingHours"
                     type="number"
                     className="w-[100px] text-lg bg-slate-100 border border-primary"
-                    // disabled={wasSent}
+                    disabled={wasSent}
                   />
                   <InputForm
                     control={form.control}
@@ -401,7 +414,7 @@ export const FatigueReportForm = ({
                     name="sleepingHours48"
                     type="number"
                     className="w-[100px] text-lg bg-slate-100 border border-primary"
-                    // disabled={wasSent}
+                    disabled={wasSent}
                   />
                 </div>
               </div>
@@ -432,7 +445,7 @@ export const FatigueReportForm = ({
                             currents={currentsSigns}
                             setCurrents={setCurrentsSigns}
                             defaults={defaultsSigns}
-                            // disabled={wasSent}
+                            disabled={wasSent}
                           />
                         </div>
                         <FormMessage />
@@ -443,9 +456,7 @@ export const FatigueReportForm = ({
               </div>
 
               <div className="flex flex-col">
-                <h4 className="font-semibold text-lg ">
-                  5. SIGNOS:
-                </h4>
+                <h4 className="font-semibold text-lg ">5. SIGNOS:</h4>
 
                 <div className="border-4 border-slate-400">
                   <SubtitleSeparator
@@ -474,7 +485,7 @@ export const FatigueReportForm = ({
                                 currents={currentsAppearances}
                                 setCurrents={setCurrentsAppearances}
                                 defaults={defaultsAppearances}
-                                // disabled={wasSent}
+                                disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -504,7 +515,7 @@ export const FatigueReportForm = ({
                                 currents={currentsMoods}
                                 setCurrents={setCurrentsMoods}
                                 defaults={defaultsMoods}
-                                // disabled={wasSent}
+                                disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -537,7 +548,7 @@ export const FatigueReportForm = ({
                                 currents={currentsPerformances}
                                 setCurrents={setCurrentsPerformances}
                                 defaults={defaultsPerformances}
-                                // disabled={wasSent}
+                                disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -567,7 +578,7 @@ export const FatigueReportForm = ({
                                 currents={currentsDrivingModes}
                                 setCurrents={setCurrentsDrivingModes}
                                 defaults={defaultsDrivingModes}
-                                // disabled={wasSent}
+                                disabled={wasSent}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -602,6 +613,7 @@ export const FatigueReportForm = ({
                           placeholder="Escriba aquí"
                           className="bg-slate-50 border border-primary"
                           {...field}
+                          disabled={wasSent}
                         />
                       </FormControl>
                       <FormDescription>
@@ -616,21 +628,57 @@ export const FatigueReportForm = ({
             </div>
           </div>
 
+          {fatigueSleepReport.state === "SEND" && (
+            <div className="space-y-4 w-full">
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="strategy"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <div className="flex justify-between">
+                        <div className="flex flex-col gap-2">
+                          <FormLabel className="text-lg">
+                            Estrategias tomadas:
+                          </FormLabel>
+                        </div>
+                      </div>
+                      <div className="border bg-slate-200 border-slate-400 w-full">
+                        <ListToggleItems
+                          isCheck
+                          currents={currentsStrategies}
+                          setCurrents={setCurrentsStrategies}
+                          defaults={defaultsStrategies}
+                          disabled={wasSent}
+                        />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          )}
+
           <ModalRecommendations
             open={openRecommendations}
             defaultsStrategies={defaultsStrategies}
-            fatigueLevel={reportData.riskLevel}
-            fatigueSleepReportId={fatigueSleepReport.id}
+            fatigueLevel={reportData.riskLevel || "LOW"}
+            fatigueSleepReport={fatigueSleepReport}
             strategy={fatigueSleepReport.strategy || ""}
           />
+          {
+            !wasSent && (
+            <Button
+              disabled={isSubmitting || !isValid || wasSent}
+              className="w-full max-w-[500px] gap-3 mt-5"
+            >
+              {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+              {isEdit ? "Actualizar reporte" : "Enviar reporte"}
+            </Button>
 
-          <Button
-            disabled={isSubmitting || !isValid}
-            className="w-full max-w-[500px] gap-3"
-          >
-            {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-            {isEdit ? "Actualizar reporte" : "Enviar reporte"}
-          </Button>
+            )
+          }
         </form>
       </Form>
     </div>

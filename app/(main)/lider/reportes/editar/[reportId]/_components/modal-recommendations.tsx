@@ -1,6 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { toast } from "sonner";
+import { Info, Loader2 } from "lucide-react";
+import { DefaultValue } from "@prisma/client";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { TooltipInfo } from "@/components/tooltip-info";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -10,23 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { TooltipInfo } from "@/components/tooltip-info";
-import { Info, Loader2 } from "lucide-react";
 import { ListToggleItems } from "@/components/list-toggle-items";
-import { DefaultValue } from "@prisma/client";
 
 interface ModalRecommendationsProps {
   open: boolean;
@@ -134,8 +134,7 @@ export const ModalRecommendations = ({
                   </div>
                 </div>
                 <span className="text-sm text-secondary my-2">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Voluptatum nihil
+                  
                 </span>
              
               </AlertDialogDescription>
@@ -153,7 +152,7 @@ export const ModalRecommendations = ({
                           <FormItem className="flex flex-col">
                             <div className="flex justify-between">
                               <div className="flex flex-col gap-2">
-                                <FormLabel>estrategias a tomar:</FormLabel>
+                                <FormLabel className="text-slate-700">Estrategias a tomar:</FormLabel>
                               </div>
                               <TooltipInfo text="Seleccione todos los síntomas que presenta el colaborador">
                                 <Info className="text-blue-600" />

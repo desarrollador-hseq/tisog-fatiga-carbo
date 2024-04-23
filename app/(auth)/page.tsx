@@ -6,8 +6,8 @@ import React from "react";
 
 const LoginPage = () => {
   return (
-    <div className="bg-slate-50 h-screen">
-      <div className="relative p-1 border-b h-[55px] max-h-[70px] w-full bg-slate-300 shadow-sm flex items-center">
+    <div className="bg-slate-5 h-screen">
+      <div className="relative p-1 border-b h-[55px] max-h-[70px] w-full bg-slate-200 shadow-sm flex items-center">
         <div className="mx-auto w-full max-w-[1500px] mt-1">
           <div className="mx-3 flex items-center justify-between">
             <div className="p-2 flex gap-1">

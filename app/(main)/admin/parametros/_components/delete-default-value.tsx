@@ -47,7 +47,7 @@ export const DeleteDefaultParameter = ({
         <Button
           disabled={isLoading}
           variant="destructive"
-          className="bg-red-700"
+          className="bg-red-700 p-1 h-fit"
         >
           <Trash2 className="w-5 h-5" />
         </Button>

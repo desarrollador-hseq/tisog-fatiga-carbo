@@ -7,7 +7,8 @@ const AutocompleteInput = ({
   inputValue,
   label,
   placeholder,
-  className
+  className,
+  disabled
 }: {
   options?: any;
   setInputValue: any;
@@ -15,6 +16,7 @@ const AutocompleteInput = ({
   label?: string;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
 }) => {
   // component state
 
@@ -55,6 +57,7 @@ const AutocompleteInput = ({
         onChange={handleInputChange}
         placeholder={placeholder}
         className={className}
+        disabled={disabled}
         // onBlur={handleInputBlur}
       />
       {suggestions && (

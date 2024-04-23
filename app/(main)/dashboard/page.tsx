@@ -10,7 +10,7 @@ import { TitleOnPage } from "@/components/title-on-page";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const bcrumb = [{ label: "Empresas", path: "/admin/empresas", click: false }];
+const bcrumb = [{ label: "Reportes", path: "/admin/reportes", click: false }];
 
 const DashboardHomePage = async () => {
   const session = await getServerSession(authOptions);
@@ -57,7 +57,7 @@ const DashboardHomePage = async () => {
           <TableDefault
             data={reports}
             columns={reportsTableColumns}
-            editHref={{ btnText: ``, href: `` }}
+            editHref={{ btnText: `Editar`, href: `/dashboard/reportes/editar` }}
           />
         </div>
       </CardPage>

@@ -48,19 +48,19 @@ export const HandleParameters = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <Card
         className={`mt-1 border ${
           disabled ? "bg-slate-50" : "bg-blue-50"
-        } p-1  relative`}
+        } p-1 relative`}
       >
         <CardHeader className="p-1"></CardHeader>
         <CardContent className="p-1">
           {!disabled && <AddParametersForm />}
         </CardContent>
       </Card>
-      <div className="h- flex justify-between items-center bg-slate-300 px-4">
-        <Table className="m-5">
+      <div className="flex justify-between items-center bg-slate-300 px-4">
+        <Table className="">
           <TableHeader>
             <TableRow>
               <TableHead>parametro</TableHead>
@@ -79,6 +79,7 @@ export const HandleParameters = ({
                       title="Editar parametro"
                       large={false}
                       textBtn={<Edit className="w-5 h-5" />}
+                      btnClass=" p-1 h-fit"
                     >
                       <AddParametersForm parameter={par} />
                     </SimpleModal>
@@ -89,7 +90,7 @@ export const HandleParameters = ({
                       <Button
                         disabled={loadingApp}
                         variant="destructive"
-                        className="bg-red-700"
+                        className="bg-red-700 p-1 h-fit"
                       >
                         <Trash2 className="w-5 h-5" />
                       </Button>

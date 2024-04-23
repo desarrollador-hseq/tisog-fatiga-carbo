@@ -63,8 +63,8 @@ export async function PATCH(
         await transporter.sendMail({
           ...mailOptions,
           // to: email,
-          // to: "kingj3su@gmail.com",
-          to: "gerencia@grupohseq.com",
+           to: "kingj3su@gmail.com",
+          // to: "gerencia@grupohseq.com",
           text: "Correo de reporte de fatiga nivel crítico",
           subject: `Correo de reporte de fatiga nivel crítico`,
         });

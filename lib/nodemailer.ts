@@ -4,14 +4,15 @@ const email = process.env.EMAILSENDER;
 const pass = process.env.TOKENEMAILSENDER;
 
 export const transporter = nodemailer.createTransport({
-  service: "Godaddy",
-  host: "smtpout.secureserver.net",
-  port: 465,
-  secure: false,
-  debug: true,
   tls: {
     ciphers:'SSLv3'
-},
+  },
+  host: "smtpout.secureserver.net",  
+  secureConnection: false, // TLS requires secureConnection to be false
+  secure: true,
+  requireTLS:true,
+  port: 465,
+  debug: true,
   auth: {
     user: email,
     pass,

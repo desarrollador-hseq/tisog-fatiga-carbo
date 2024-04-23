@@ -126,7 +126,7 @@ export const DateFilter = () => {
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
-            className="text-white bg-accent"
+            className="text-slate-500 bg-slate-50"
             onClick={() => onOpenFiltering()}
           >
             <CalendarSearch className="w-5 h-5" />

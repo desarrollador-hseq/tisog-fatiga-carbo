@@ -3,6 +3,36 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { defaultValueId: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    const { defaultValueId } = params;
+    const values = await req.json();
+
+    console.log({defaultValueId})
+
+    if (!session) return new NextResponse("Unauthorized", { status: 401 });
+
+    const defaultValueUpdated = await db.defaultValue.update({
+      where: {
+        id: defaultValueId,
+      },
+      data: {
+        ...values,
+      },
+    });
+
+    return NextResponse.json(defaultValueUpdated);
+  } catch (error) {
+    console.log("[DEFAULT-VALUE-PATCH-ID]", error);
+    return new NextResponse("Internal Errorr" + error, { status: 500 });
+  }
+}
+
 export async function DELETE(
   req: Request,
   { params }: { params: { defaultValueId: string } }

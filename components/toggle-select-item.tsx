@@ -37,6 +37,7 @@ export const ToggleSelectItem = ({
           checked={isSelected}
           onCheckedChange={handleToggle}
           id="isCheck"
+          disabled={disabled}
         />
       )}
       <Toggle
