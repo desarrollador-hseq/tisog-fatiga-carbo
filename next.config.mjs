@@ -14,6 +14,12 @@ const nextConfig = {
           },
         ],
       },
+      // webpack: (config, { buildId, def, isServer, defaultLoaders, webpack }) => {
+      //   config.resolve.alias.canvas = false;
+      //   config.resolve.fallback = { fs: false, os: false, path: false };
+      //   config.resolve.alias.encodig = false;
+      //   return config;
+      // },
 };
 
 export default nextConfig;

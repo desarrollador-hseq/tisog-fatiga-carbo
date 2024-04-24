@@ -29,13 +29,16 @@ import AutocompleteInput from "@/components/autocomplete-input";
 import { ListToggleItems } from "@/components/list-toggle-items";
 import { ModalRecommendations } from "./modal-recommendations";
 import { Textarea } from "@/components/ui/textarea";
+import { PDFViewer } from "@react-pdf/renderer";
+import { FatigueReportTemplate } from "@/app/(main)/_components/fatigue-report-template";
+import { GenerateFatigueReportPdf } from "./generate-fatigue-report-pdf";
 
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
     logisticsCenter: {
       company: { logoImgUrl: string | null } | null;
     } | null;
-    driver: { fullname: string | null } | null;
+    driver: { fullname: string | null; numDoc: string | null } | null;
   };
   defaultsSymptoms: DefaultValue[];
   defaultsSigns: DefaultValue[];
@@ -77,6 +80,9 @@ export const FatigueReportForm = ({
   isAdmin,
 }: FatigueReportFormProps) => {
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+  const [openRecommendations, setOpenRecommendations] = useState(false);
+  const [reportData, setReportData] = useState(fatigueSleepReport);
   const [currentsSymptoms, setCurrentsSymptoms] = useState<string[]>(
     fatigueSleepReport?.symptoms ? fatigueSleepReport?.symptoms.split(",") : []
   );
@@ -127,8 +133,9 @@ export const FatigueReportForm = ({
     [isEdit, isAdmin]
   );
 
-  const [openRecommendations, setOpenRecommendations] = useState(false);
-  const [reportData, setReportData] = useState(fatigueSleepReport);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -234,6 +241,15 @@ export const FatigueReportForm = ({
 
   return (
     <div className="max-w-[1500px] w-full h-full mx-auto bg-slate-100 rounded-none overflow-y-hidden p-0  ">
+      <GenerateFatigueReportPdf
+        report={reportData}
+        defaultsSymptoms={defaultsSymptoms}
+        defaultsSigns={defaultsSigns}
+        defaultsAppearances={defaultsAppearances}
+        defaultsMoods={defaultsMoods}
+        defaultsPerformances={defaultsPerformances}
+        defaultsDrivingModes={defaultsDrivingModes}
+      />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3 bg-slate-200 border-b-4 border-slate-500 p-2 place-items-center">
         <div className="max-h-[150px] overflow-hidden">
           <Image
@@ -667,8 +683,7 @@ export const FatigueReportForm = ({
             fatigueSleepReport={fatigueSleepReport}
             strategy={fatigueSleepReport.strategy || ""}
           />
-          {
-            !wasSent && (
+          {!wasSent && (
             <Button
               disabled={isSubmitting || !isValid || wasSent}
               className="w-full max-w-[500px] gap-3 mt-5"
@@ -676,9 +691,7 @@ export const FatigueReportForm = ({
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               {isEdit ? "Actualizar reporte" : "Enviar reporte"}
             </Button>
-
-            )
-          }
+          )}
         </form>
       </Form>
     </div>

@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
 import { FatigueReportForm } from "./_components/fatigue-report-form";
 import { redirect } from "next/navigation";
+import { getArraySymptomsByIds } from "@/lib/utils";
 
 const bcrumb = [
   { label: "Reportes", path: "/dashboard/reportes" },
@@ -38,8 +39,20 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
       driver: {
         select: {
           fullname: true,
+          numDoc: true,
         },
       },
+      supervisor: {
+        select: {
+          name: true,
+          numDoc: true,
+        }
+      },
+      city: {
+        select: {
+          realName: true
+        }
+      }
     },
   });
 
@@ -138,6 +151,9 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
   if (!report) {
     return <div>Sin datos</div>;
   }
+
+  const symptomsArray = await getArraySymptomsByIds(report.symptoms?.split(",") || []);
+  console.log({symptomsArray})
 
   return (
     <CardPage

@@ -58,22 +58,22 @@ export async function PATCH(
     }
 
 
-    if (riskLevel === "HIGH") {
-      try {
-        await transporter.sendMail({
-          ...mailOptions,
-          // to: email,
-           to: "kingj3su@gmail.com",
-          // to: "gerencia@grupohseq.com",
-          text: "Correo de reporte de fatiga nivel crítico",
-          subject: `Correo de reporte de fatiga nivel crítico`,
-        });
-        //  NextResponse.json({ message: "ok", status: 200 });
-      } catch (error) {
-        console.log("[SEND-EMAIL-CRITICAL-REPORT", error);
-        //  new NextResponse("Internal Errorr", { status: 500 });
-      }
-    }
+    // if (riskLevel === "HIGH") {
+    //   try {
+    //     await transporter.sendMail({
+    //       ...mailOptions,
+    //       // to: email,
+    //        to: "kingj3su@gmail.com",
+    //       // to: "gerencia@grupohseq.com",
+    //       text: "Correo de reporte de fatiga nivel crítico",
+    //       subject: `Correo de reporte de fatiga nivel crítico`,
+    //     });
+    //     //  NextResponse.json({ message: "ok", status: 200 });
+    //   } catch (error) {
+    //     console.log("[SEND-EMAIL-CRITICAL-REPORT", error);
+    //     //  new NextResponse("Internal Errorr", { status: 500 });
+    //   }
+    // }
 
 
     if (report.state === "PENDING") {
