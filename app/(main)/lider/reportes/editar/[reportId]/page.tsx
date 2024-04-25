@@ -3,11 +3,13 @@ import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
-import { FatigueReportForm } from "./_components/fatigue-report-form";
+
 import { redirect } from "next/navigation";
+import { FatigueReportForm } from "@/app/(main)/_components/fatigue-report-form";
+import { GenerateFatigueReportPdf } from "@/app/(main)/_components/generate-fatigue-report-pdf";
 
 const bcrumb = [
-  { label: "Reportes", path: "/dashboard/reportes" },
+  { label: "Reportes", path: "/lider/reportes" },
   { label: "Editar", path: "editar" },
 ];
 
@@ -15,10 +17,10 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user?.role) {
-    return redirect("/dashboard");
+    return redirect("/lider");
   }
 
-  const isAdmin = session.user?.role === "ADMIN";
+  const isAdmin = session.user?.role === "LEADER";
 
   const report = await db.fatigueSleepReport.findUnique({
     where: {
@@ -38,6 +40,18 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
       driver: {
         select: {
           fullname: true,
+          numDoc: true,
+        },
+      },
+      supervisor: {
+        select: {
+          name: true,
+          numDoc: true,
+        },
+      },
+      city: {
+        select: {
+          realName: true,
         },
       },
     },
@@ -143,7 +157,17 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
     <CardPage
       pageHeader={
         <>
-          <TitleOnPage text="Reporte de fatiga y sueño" bcrumb={bcrumb} />
+          <TitleOnPage text="Reporte de fatiga y sueño" bcrumb={bcrumb}>
+            <GenerateFatigueReportPdf
+              report={report}
+              defaultsSymptoms={defaultsSymptoms?.defaultValues || []}
+              defaultsSigns={defaultsSigns?.defaultValues || []}
+              defaultsAppearances={defaultsAppearance?.defaultValues || []}
+              defaultsMoods={defaultsMoods?.defaultValues || []}
+              defaultsPerformances={defaultsPerformances?.defaultValues || []}
+              defaultsDrivingModes={defaultsDrivingModes?.defaultValues || []}
+            />
+          </TitleOnPage>
           {/* <div className="p-5 mx-5 text-gray-700 font-normal bg-slate-300 rounded-md">
             Este formulario debe diligenciarlo el Supervisor del colaborador
             cuando sienta una condición de salud que impide desarrollar sus

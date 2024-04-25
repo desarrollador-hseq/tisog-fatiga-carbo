@@ -11,6 +11,7 @@ declare module 'next-auth' {
         name: string | null;
         email: string;
         role: Role;
+        isMaster: boolean | null;
         companyId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -22,6 +23,7 @@ declare module 'next-auth' {
             name?: string | null;
             email: string;
             role?: Role;
+            isMaster: boolean | null;
             companyId?: string | null;
         } & DefaultSession['user'];
     }

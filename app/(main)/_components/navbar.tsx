@@ -1,15 +1,14 @@
 "use client";
 import { useMemo, useState } from "react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { ClipboardCheck, Home, Menu, ScrollText, Settings } from "lucide-react";
+import { Role } from "@prisma/client";
 import { Sidebar } from "./sidebar";
 import { Button } from "@/components/ui/button";
 import { LogoMain } from "@/components/logo-main";
 import { cn } from "@/lib/utils";
 import { ModalLogout } from "@/app/(auth)/_components/modal-logout";
-import { useLoading } from "@/components/providers/loading-provider";
-
 
 const dashRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
@@ -41,11 +40,6 @@ const adminRoutes = [
   //   label: "Ciudades",
   //   href: "/ciudades",
   // },
-  {
-    icon: ClipboardCheck,
-    label: "Empresas",
-    href: "/empresas",
-  },
   // {
   //   icon: ScrollText,
   //   label: "Reportes",
@@ -74,29 +68,31 @@ const adminRoutes = [
 ];
 
 export const Navbar = ({
-  isLeader,
+  isMaster,
+  role,
 }: {
-  isLeader: boolean;
+  isMaster: boolean;
+  role: Role;
 }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
-  const { userRole } = useLoading();
+  // const { userRole } = useLoading();
 
   const { data: session } = useSession();
 
   const routes = useMemo(
     () =>
-      userRole === "ADMIN"
+      role === "ADMIN"
         ? adminRoutes
-        : userRole === "LEADER"
+        : role === "LEADER"
         ? leaderRoutes
         : dashRoutes,
-    [userRole]
+    [role]
   );
 
   return (
     <div
       className={cn(
-        `fixed top-0 z-50 p-1 min-h-[60px] max-h-[60px] text-white w-full bg-slate-200 shadow-sm flex items-center`,
+        `fixed top-0 z-50 p-1 min-h-[60px] max-h-[60px] text-white w-full bg-slate-200 shadow-sm flex items-center`
       )}
     >
       <div className="mx-auto w-full mt-1">
@@ -123,9 +119,9 @@ export const Navbar = ({
           </div>
 
           <div className="flex gap-5 items-center">
-            {userRole === "ADMIN" ? (
+            {role === "ADMIN" ? (
               <span className="font-bold uppercase">Administrador</span>
-            ) : userRole === "LEADER" ? (
+            ) : role === "LEADER" ? (
               <span className="font-bold uppercase">Lider</span>
             ) : (
               <span className="font-bold uppercase">Supervisor</span>
@@ -138,7 +134,13 @@ export const Navbar = ({
                 <div key={route.href}>
                   <Link
                     className="text-slate-700"
-                    href={`${userRole === "ADMIN" ? "/admin" : userRole === "LEADER" ? "/lider" : "/dashboard"}${route.href}`}
+                    href={`${
+                      role === "ADMIN"
+                        ? "/admin"
+                        : role === "LEADER"
+                        ? "/lider"
+                        : "/dashboard"
+                    }${route.href}`}
                   >
                     {route.label}
                   </Link>
@@ -146,9 +148,14 @@ export const Navbar = ({
               ))}
               {/* <NavbarMenuItem></NavbarMenuItem> */}
             </div>
-            <Link href="/admin/parametros" className="ml-6 w-fit h-fit p-2  bg-inherit hover:bg-accent rounded-full flex items-center">
-              <Settings className="w-5 h-5" /> 
-            </Link>
+            {role === "ADMIN" && isMaster && (
+              <Link
+                href="/admin/parametros"
+                className="ml-6 w-fit h-fit p-2  bg-inherit hover:bg-accent rounded-full flex items-center"
+              >
+                <Settings className="w-5 h-5" />
+              </Link>
+            )}
             <ModalLogout />
           </div>
         </div>

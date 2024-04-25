@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate, formatDateCert, getArraySymptomsByIds } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { FatigueSleepReport } from "@prisma/client";
 import {
   Document,
@@ -10,8 +10,6 @@ import {
   View,
   Image,
   Font,
-  Link,
-  PDFDownloadLink,
 } from "@react-pdf/renderer";
 
 Font.register({
@@ -47,12 +45,10 @@ Font.register({
 
 interface FatigueReportTemplateProps {
   report: FatigueSleepReport & {
-    logisticsCenter: {
-      company: { logoImgUrl: string | null } | null;
-    };
-    driver: { fullname: string | null; numDoc: string | null };
-    supervisor: { name: string | null; numDoc: string | null };
-    city: { realName: string | null };
+    logisticsCenter: { company: { logoImgUrl: string | null } | null } | null;
+    driver: { fullname: string | null; numDoc: string | null } | null;
+    supervisor: { name: string | null; numDoc: string | null } | null;
+    city: { realName: string } | null;
   };
   symptomsArray: string[];
   behaviorsArray: string[];
@@ -102,7 +98,7 @@ export const FatigueReportTemplate = ({
                   }}
                 >
                   <Image
-                    src={`${logisticsCenter.company?.logoImgUrl}`}
+                    src={`${logisticsCenter?.company?.logoImgUrl}`}
                     style={{ width: "130px", height: "auto" }}
                   />
                 </View>{" "}
@@ -191,7 +187,7 @@ export const FatigueReportTemplate = ({
                   }}
                 >
                   <Text style={{ fontWeight: "semibold" }}>Ciudad:</Text>
-                  <Text style={{ fontWeight: "normal" }}>{city.realName}</Text>
+                  <Text style={{ fontWeight: "normal" }}>{city?.realName}</Text>
                 </View>
               </View>
             </View>
@@ -210,7 +206,7 @@ export const FatigueReportTemplate = ({
                   <Text style={{ fontSize: 10, fontWeight: "semibold" }}>
                     CONDUCTOR:
                   </Text>
-                  <Text style={{ fontSize: 12 }}>{driver.fullname}</Text>
+                  <Text style={{ fontSize: 12 }}>{driver?.fullname}</Text>
                 </View>
               </View>
               <View style={{ ...styles.tableCol, width: "33.3%" }}>
@@ -226,7 +222,7 @@ export const FatigueReportTemplate = ({
                   <Text style={{ fontSize: 10, fontWeight: "semibold" }}>
                     DOCUMENTO:
                   </Text>
-                  <Text style={{ fontSize: 12 }}>{driver.numDoc}</Text>
+                  <Text style={{ fontSize: 12 }}>{driver?.numDoc}</Text>
                 </View>
               </View>
             </View>
@@ -245,7 +241,7 @@ export const FatigueReportTemplate = ({
                   <Text style={{ fontSize: 10, fontWeight: "semibold" }}>
                     SUPERVISOR:
                   </Text>
-                  <Text style={{ fontSize: 12 }}>{supervisor.name}</Text>
+                  <Text style={{ fontSize: 12 }}>{supervisor?.name}</Text>
                 </View>
               </View>
               <View style={{ ...styles.tableCol, width: "33.3%" }}>
@@ -261,7 +257,7 @@ export const FatigueReportTemplate = ({
                   <Text style={{ fontSize: 10, fontWeight: "semibold" }}>
                     DOCUMENTO:
                   </Text>
-                  <Text style={{ fontSize: 12 }}>{supervisor.numDoc}</Text>
+                  <Text style={{ fontSize: 12 }}>{supervisor?.numDoc}</Text>
                 </View>
               </View>
             </View>
@@ -295,9 +291,10 @@ export const FatigueReportTemplate = ({
                   padding: 8,
                 }}
               >
-                {symptomsArray.map((symptom) => (
-                  <Text style={styles.itemRow}>{symptom}</Text>
-                ))}
+                {symptomsArray.map((item) => {
+                  if (!item || item === "") return;
+                  return <Text style={styles.itemRow}>{item}</Text>;
+                })}
               </View>
             </View>
 
@@ -319,15 +316,16 @@ export const FatigueReportTemplate = ({
                   padding: 8,
                 }}
               >
-                {medicines.map((medicine) => (
-                  <Text style={styles.itemRow}>{medicine}</Text>
-                ))}
+                {medicines.map((item) => {
+                  if (!item || item === "") return;
+                  return <Text style={styles.itemRow}>{item}</Text>;
+                })}
               </View>
             </View>
             {/* HOURS */}
             <View style={{ marginTop: 7 }}>
               <Text style={{ fontSize: 13, fontWeight: "bold" }}>
-                2. HORAS DE SUEÑO:
+                3. HORAS DE SUEÑO:
               </Text>
 
               <View
@@ -376,9 +374,10 @@ export const FatigueReportTemplate = ({
                   padding: 8,
                 }}
               >
-                {behaviorsArray.map((behavior) => (
-                  <Text style={styles.itemRow}>{behavior}</Text>
-                ))}
+                {behaviorsArray.map((item) => {
+                  if (!item || item === "") return;
+                  return <Text style={styles.itemRow}>{item}</Text>;
+                })}
               </View>
             </View>
 
@@ -496,7 +495,7 @@ export const FatigueReportTemplate = ({
                     padding: 8,
                   }}
                 >
-                  <Text style={{ fontSize: 12 }}>
+                  <Text style={{ fontSize: 10 }}>
                     {report.fatigueCauseDescription}
                   </Text>
                 </View>

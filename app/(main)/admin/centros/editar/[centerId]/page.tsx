@@ -30,7 +30,7 @@ const EditCenterPage = async ({ params }: { params: { centerId: string } }) => {
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text="Editar ciudad" bcrumb={bcrumb}>
+        <TitleOnPage text="Editar Centro logístico" bcrumb={bcrumb}>
           <DeleteCenter center={center} />
         </TitleOnPage>
       }

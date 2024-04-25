@@ -1,10 +1,10 @@
+import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
-import { FatigueReportForm } from "./_components/fatigue-report-form";
-import { redirect } from "next/navigation";
+import { FatigueReportForm } from "../../../../_components/fatigue-report-form";
 import { getArraySymptomsByIds } from "@/lib/utils";
 
 const bcrumb = [

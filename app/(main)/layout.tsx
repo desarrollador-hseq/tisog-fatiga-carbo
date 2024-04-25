@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Navbar } from "./_components/navbar";
 import { Roboto } from "next/font/google";
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { ScrollUp } from "@/components/scroll-up";
+import { NotAuthorized } from "@/components/not-authorized";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -19,8 +19,10 @@ export default async function MainLayout({
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user?.role) {
-    //   redirect("/");
+    return <NotAuthorized />
   }
+
+  const {user} = await session
 
   return (
     <div>
@@ -30,10 +32,10 @@ export default async function MainLayout({
           roboto.className
         )}
       >
-        <Navbar isLeader />
+        <Navbar isMaster={user.isMaster || false} role={user.role || "USER"} />
         {/* <div className="mt-1 md:pl-[223px] min-h-screen xl:flex justify-center items-start xl:w-full relative"> */}
-        <div className="mt-1 min-h-screen justify-center items-start xl:w-full relative bg-transparent">
-          <div className="min-h-full mt-[60px] max-w-[1200px] w-full mx-auto">
+        <div className="mt-1 min-h-screen justify-center items-start xl:w-full relative">
+          <div className=" min-h-full mt-[60px] max-w-[1200px] w-full mx-auto">
             {children}
           </div>
         </div>

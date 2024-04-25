@@ -6,8 +6,8 @@ import { ButtonDownloadTemplateExcel } from "@/components/button-download-templa
 // import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 
 const bcrumb = [
-  { label: "Conductores", path: "/lider/conductores" },
-  { label: "Agregar", path: "/lider/crear" },
+  { label: "Conductores", path: "/admin/conductores" },
+  { label: "Agregar", path: "/admin/crear" },
 ];
 
 const CreateDriver = async () => {

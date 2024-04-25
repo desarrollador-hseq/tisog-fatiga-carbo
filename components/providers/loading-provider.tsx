@@ -100,15 +100,18 @@ export const LoadingProvider = ({ children }: Props) => {
       <body
         className={cn(roboto.className, loadingApp && "overflow-hidden")}
         style={{
-          background: `url('/blob-scene.svg'), linear-gradient(180deg, rgba(3, 120, 124, 0.2) 0%, rgba(3, 120, 124, 0.8) 100%)`, // Gradiente lineal + imagen de fondo
+          background: `url('/blob-scene.svg')`,
           backgroundAttachment: "fixed",
           backgroundSize: "cover",
           height: "100vh",
           overflow: loadingApp ? "hidden" : "auto",
         }}
       >
-        {loadingApp && <LoaderFullpage />}
-        {children}
+        {loadingApp ? (
+          <LoaderFullpage />
+        ) : (
+          <div className="fadeIn">{children}</div>
+        )}
       </body>
     </LoadingContext.Provider>
   );

@@ -85,6 +85,9 @@ export async function PATCH(
           ...values,
         },
       });
+
+
+
       return NextResponse.json(reportUpdated);
     } else {
       const reportUpdated = await db.fatigueSleepReport.update({
@@ -92,6 +95,31 @@ export async function PATCH(
 
         data: { riskLevel: riskLevel, ...values },
       });
+
+
+      values.state == "SEND" ? (
+
+        await db.fatigueReportEvent.create({
+          data: {
+            eventType: "SENT",
+            userId: session.user.id!,
+            fatigueReportId: report.id,
+            reportData: JSON.stringify(report),
+          }
+        })): (
+          await db.fatigueReportEvent.create({
+            data: {
+              eventType: "UPDATED",
+              userId: session.user.id!,
+              fatigueReportId: report.id,
+              reportData: JSON.stringify(report),
+            }
+          })
+        )
+
+
+
+
       return NextResponse.json(reportUpdated);
     }
 

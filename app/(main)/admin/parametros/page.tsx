@@ -6,6 +6,9 @@ import { DeleteDefaultParameter } from "./_components/delete-default-value";
 import { AddDefaultValueForm } from "./_components/add-default-value-form";
 import { SimpleModal } from "@/components/simple-modal";
 import { Edit } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 const ParametersPage = async () => {
   const parametersDefaults = await db.parameter.findMany({
@@ -23,6 +26,11 @@ const ParametersPage = async () => {
 
   return (
     <CardPage className="flex flex-col gap-2">
+      <div>
+        <div className="flex w-full justify-center mb-4">
+          <Link className={cn(buttonVariants())} href="/admin/empresas">Empresas</Link>
+        </div>
+      </div>
       <div className="p-2 w-full h-full border border-slate-400 flex flex-col rounded-sm gap-3 bg-slate-300 mb-3">
         <h3 className="text-2xl text-center font-bold mb-2">Parametros</h3>
 

@@ -129,7 +129,7 @@ export const AddCentersForm = ({ center, companies }: AddCompanyFormProps) => {
             name="companyId"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full">
-                <FormLabel>Ciudad:</FormLabel>
+                <FormLabel className="text-primary font-semibold">Empresa:</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -145,15 +145,15 @@ export const AddCentersForm = ({ center, companies }: AddCompanyFormProps) => {
                           ? companies?.find(
                               (company) => company.id === field.value
                             )?.name
-                          : "Selecciona una ciudad"}
+                          : "Selecciona una empresa"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
                     <Command className="w-full">
-                      <CommandInput placeholder="Buscar Ciudad" />
-                      <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                      <CommandInput placeholder="Buscar empresa" />
+                      <CommandEmpty>Empresa no encontrada</CommandEmpty>
                       <CommandGroup>
                         <CommandList>
                           {companies?.map((company) => (

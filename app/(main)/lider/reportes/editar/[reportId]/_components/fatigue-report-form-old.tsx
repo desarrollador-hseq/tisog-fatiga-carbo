@@ -64,7 +64,7 @@ const formSchema = z.object({
   fatigueCauseDescription: z.string().optional(),
 });
 
-export const FatigueReportForm = ({
+export const Fatigu = ({
   fatigueSleepReport,
   defaultsSymptoms,
   defaultsSigns,
@@ -592,11 +592,11 @@ export const FatigueReportForm = ({
           </div>
 
           <ModalRecommendations
-            open={openRecommendations}
-            defaultsStrategies={defaultsStrategies}
-            fatigueLevel={"HIGH"}
-            fatigueSleepReportId={fatigueSleepReport.id}
-            strategy={fatigueSleepReport.strategy || ""}
+              open={openRecommendations}
+              defaultsStrategies={defaultsStrategies}
+              fatigueLevel={fatigueSleepReport.riskLevel || "LOW"}
+              fatigueSleepReport={fatigueSleepReport}
+              strategy={fatigueSleepReport.strategy || ""}
           />
 
           <Button

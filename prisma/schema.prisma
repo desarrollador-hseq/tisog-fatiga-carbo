@@ -244,7 +244,7 @@ enum EventReportType {
 model FatigueReportEvent{
   id              String    @id @default(uuid())
   eventType       EventReportType
-  certificateData String?   @db.Text
+  reportData String?   @db.Text
 
   fatigueReportId String
   fatiqueReport   FatigueSleepReport @relation(fields: [fatigueReportId], references: [id])

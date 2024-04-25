@@ -6,7 +6,7 @@ import { TitleOnPage } from "@/components/title-on-page";
 import { AddCentersForm } from "../_components/add-centers-form";
 
 const bcrumb = [
-  { label: "Empresas", path: "/admin/empresas" },
+  { label: "Centros", path: "/admin/centros" },
   { label: "Agregar", path: "/admin/agregar" },
 ];
 
@@ -18,7 +18,7 @@ const CreateCompanyPage = async () => {
   });
   return (
     <CardPage
-      pageHeader={<TitleOnPage text="Agregar empresa" bcrumb={bcrumb} />}
+      pageHeader={<TitleOnPage text="Agregar centro logístico" bcrumb={bcrumb} />}
     >
       <AddCentersForm companies={companies} />
     </CardPage>

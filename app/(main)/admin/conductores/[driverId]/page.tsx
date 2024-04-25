@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 import { AddDriverForm } from "../_components/add-driver-form";
 
 const bcrumb = [
-  { label: "Conductores", path: "/dashboard/conductores" },
-  { label: "Editar", path: "/dashboard/conductores/editar" },
+  { label: "Conductores", path: "/admin/conductores" },
+  { label: "Editar", path: "/admin/conductores/editar" },
 ];
 
 const EditDriverPage = async ({ params }: { params: { driverId: string } }) => {
