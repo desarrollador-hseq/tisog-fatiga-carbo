@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-export const DriversTableExcel = ({
+export const SupervisorsTableExcel = ({
   setUsersLoaded,
   usersLoaded,
 }: {
@@ -47,16 +47,15 @@ export const DriversTableExcel = ({
         const {
           "Nombre completo": fullname,
           "# Documento": numDoc,
+          "Correo electrónico": email,
           "Empresa": company,
-          "Cargo": position,
-          "Ciudad": city,
         } = row;
         // Verificar campos obligatorios
-        if (!fullname || !company || !numDoc || !city) {
+        if (!email || !fullname || !company || !numDoc ) {
           return false; // No pasar el filtro si falta un campo obligatorio
         }
         const companynew = (company || "").toString().trim();
-        const positionnew = (position || "").toString().trim();
+        const emailnew = (email || "").toString().trim();
         // Guardar datos filtrados
         setUsersLoaded((prevUsers) => [
           ...prevUsers,
@@ -64,8 +63,7 @@ export const DriversTableExcel = ({
             fullname: (fullname as string).trim(),
             numDoc: ("" + numDoc).replace(/[.,]/g, "").trim(),
             company: companynew,
-            position: positionnew,
-            city: city,
+            email: emailnew,
           },
         ]);
         return true;

@@ -118,7 +118,7 @@ export const Navbar = ({
             </span>
           </div>
 
-          <div className="flex gap-5 items-center">
+          <div className="flex gap-5 items-center text-slate-500">
             {role === "ADMIN" ? (
               <span className="font-bold uppercase">Administrador</span>
             ) : role === "LEADER" ? (

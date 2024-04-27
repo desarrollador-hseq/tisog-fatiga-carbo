@@ -92,7 +92,8 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
       pageHeader={
         <>
           <TitleOnPage text="Reporte de fatiga y sueño" bcrumb={bcrumb}>
-            <GenerateFatigueReportPdf
+           <div className="flex gap-2">
+           <GenerateFatigueReportPdf
               report={report}
               defaultsSymptoms={
                 defaults.find((def) => def.name === "symptoms")
@@ -115,7 +116,7 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
                   ?.defaultValues || []
               }
               defaultsDrivingModes={
-                defaults.find((def) => def.name === "drivingmodess")
+                defaults.find((def) => def.name === "drivingModes")
                   ?.defaultValues || []
               }
             />
@@ -133,6 +134,7 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
                 </ol>
               </div>
             </SimpleModal>
+           </div>
           </TitleOnPage>
           {/* <div className="p-5 mx-5 text-gray-700 font-normal bg-slate-300 rounded-md">
             Este formulario debe diligenciarlo el Supervisor del colaborador
@@ -165,7 +167,7 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
           []
         }
         defaultsDrivingModes={
-          defaults.find((def) => def.name === "drivingModess")?.defaultValues ||
+          defaults.find((def) => def.name === "drivingModes")?.defaultValues ||
           []
         }
         defaultsStrategies={

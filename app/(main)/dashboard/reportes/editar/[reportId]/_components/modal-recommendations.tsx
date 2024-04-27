@@ -69,7 +69,7 @@ export const ModalRecommendations = ({
   const defaultsStrategyByLevel = useMemo(
     () =>
       defaultsStrategies.filter((def) =>
-        fatigueLevel === "MEDIUM" ? def.desc === "medio" : def.desc === "bajo"
+      fatigueLevel === "HIGH" ? def.desc === "alto" : fatigueLevel === "MEDIUM" ? def.desc === "medio" : def.desc === "bajo"
       ),
     [defaultsStrategies]
   );
@@ -80,7 +80,7 @@ export const ModalRecommendations = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      strategy: strategy || "",
+      strategy:  undefined,
     },
   });
 
@@ -96,12 +96,12 @@ export const ModalRecommendations = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/reports/${fatigueSleepReport.id}`, {
-        state: "SEND",
         ...values,
+        state: "SEND",
       });
       toast.success("Reporte enviado correctamente");
 
-      // router.push(`/dashboard/reportes`);
+      router.push(`/dashboard/reportes`);
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -161,7 +161,7 @@ export const ModalRecommendations = ({
               </div>
               <div className="flex items-center justify-center mt-5 bg-accent text-white gap-4 p-2 rounded-md border ">
                 <div>
-                  {fatigueLevel !== "HIGH" ? (
+                 
                     <Form {...form}>
                       <form
                         onSubmit={form.handleSubmit(onSubmit)}
@@ -174,7 +174,7 @@ export const ModalRecommendations = ({
                             <FormItem className="flex flex-col">
                               <div className="flex justify-between">
                                 <div className="flex flex-col gap-2">
-                                  <FormLabel className="text-slate-500">
+                                  <FormLabel className="text-slate-500 text-lg">
                                     Estrategias a tomar:
                                   </FormLabel>
                                 </div>
@@ -200,18 +200,11 @@ export const ModalRecommendations = ({
                           {isSubmitting && (
                             <Loader2 className="w-4 h-4 animate-spin" />
                           )}
-                          {"Enviar"}
+                          {"Enviar reporte"}
                         </Button>
                       </form>
                     </Form>
-                  ) : (
-                    <div>
-                      suspender actividades
-                      <Button onClick={() => setOpenModal(false)}>
-                        Cerrar
-                      </Button>
-                    </div>
-                  )}
+                  
                 </div>
               </div>
             </AlertDialogHeader>

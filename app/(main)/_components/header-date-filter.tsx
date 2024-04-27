@@ -2,17 +2,25 @@
 
 import React, { useEffect, useState } from "react";
 
-import { City } from "@prisma/client";
+import { City, Company } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { DateFilter } from "@/components/date-filter";
 import SelectCityFilter from "./select-city-filter";
 import { useLoading } from "@/components/providers/loading-provider";
+import { SelectCompanyFilter } from "./select-company-filter";
+import { SelectLevelFilter } from "./select-level-filter";
 
-export const HeaderDateFilter = ({ cities }: { cities: City[] }) => {
+export const HeaderDateFilter = ({
+  cities,
+  companies,
+}: {
+  cities: City[];
+  companies: Company[];
+}) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  const { cityFilter, dateFilter } = useLoading();
+  const { cityFilter, dateFilter, companyFilter, levelFilter } = useLoading();
 
   const handleScroll = () => {
     setPrevScrollPos(window.scrollY);
@@ -34,11 +42,13 @@ export const HeaderDateFilter = ({ cities }: { cities: City[] }) => {
     >
       <h2 className=" text-3xl font-bold text-white self-center">Panel</h2>
 
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center flex-col md:flex-row">
         <span className="text-white text-sm text-right mx-2 leading-3">
-          {!!dateFilter || !!cityFilter ? "Filtrando por:" : <span></span>}
+          {!!dateFilter || !!cityFilter || !!companyFilter || !!levelFilter ? "Filtrando por:" : <span></span>}
         </span>
         <SelectCityFilter cities={cities} />
+        <SelectCompanyFilter companies={companies} />
+        <SelectLevelFilter />
         <DateFilter />
       </div>
     </div>

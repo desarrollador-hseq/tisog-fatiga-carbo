@@ -24,7 +24,7 @@ export const ListCriticalReports = ({
     <div className="bg-orange-600 p-3 mt-2 rounded-md">
       <h4 className="text-2xl font-bold text-center my-2 text-white">Alertas de reportes criticos</h4>
       <Table className="text-white border">
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        {/* <TableCaption>A list of</TableCaption> */}
         <TableHeader className="text-white">
           <TableRow className="text-white bg-orange-700">
             <TableHead className="text-white ">Conductor</TableHead>

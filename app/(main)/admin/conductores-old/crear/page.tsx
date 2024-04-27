@@ -3,9 +3,6 @@ import { TitleOnPage } from "@/components/title-on-page";
 import { AddDriverForm } from "../_components/add-driver-form";
 import { db } from "@/lib/db";
 import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 // import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 
 const bcrumb = [
@@ -39,13 +36,7 @@ const CreateDriver = async () => {
     <CardPage
       pageHeader={
         <TitleOnPage text={`Agregar conductor`} bcrumb={bcrumb}>
-          {/* <ButtonDownloadTemplateExcel name="plantilla-subir-conductores" /> */}
-          <Link
-            className={cn(buttonVariants({variant: "secondary"}))}
-            href={`/admin/conductores/cargar`}
-          >
-            Cargar
-          </Link>
+          <ButtonDownloadTemplateExcel name="plantilla_colaboradores" />
         </TitleOnPage>
       }
     >

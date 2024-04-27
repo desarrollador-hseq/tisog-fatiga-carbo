@@ -2,7 +2,7 @@
 
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { City } from "@prisma/client";
+import {  Company } from "@prisma/client";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -33,27 +33,27 @@ import { cn } from "@/lib/utils";
 
 
 const formSchema = z.object({
-  cityId: z.string().optional(),
+  companyId: z.string().optional(),
 });
 
-const SelectCityFilter = ({ cities }: { cities: City[] }) => {
-  const { setCityFilter, cityFilter } = useLoading();
+export const SelectCompanyFilter = ({ companies }: { companies: Company[] }) => {
+  const { setCompanyFilter, companyFilter } = useLoading();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cityId: cityFilter,
+      companyId: companyFilter,
     },
   });
   const { watch, setValue } = form;
 
   const handleClearInput = () => {
-    setValue("cityId", "", { shouldValidate: true });
+    setValue("companyId", "", { shouldValidate: true });
   };
 
   useEffect(() => {
-    setCityFilter(watch("cityId"));
-  }, [watch("cityId")]);
+    setCompanyFilter(watch("companyId"));
+  }, [watch("companyId")]);
 
   
 
@@ -66,14 +66,14 @@ const SelectCityFilter = ({ cities }: { cities: City[] }) => {
           type="button"
           className={cn(
             `absolute top-3 right-1 w-4 h-4 p-0 rounded-sm bg-red-700 hover:bg-red-800`,
-            !!!cityFilter && "hidden"
+            !!!companyFilter && "hidden"
           )}
         >
           <X className="w-3 h-3" />
         </Button>
         <FormField
           control={form.control}
-          name="cityId"
+          name="companyId"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
               <Popover>
@@ -88,25 +88,25 @@ const SelectCityFilter = ({ cities }: { cities: City[] }) => {
                       )}
                     >
                       {field.value
-                        ? cities?.find((city) => city.id === field.value)
-                            ?.realName
-                        : "Ciudad"}
+                        ? companies?.find((company) => company.id === field.value)
+                            ?.name
+                        : "Empresa"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command className="w-full">
-                    <CommandInput placeholder="Buscar ciudad" />
-                    <CommandEmpty>Ciudad no encontrada</CommandEmpty>
+                    <CommandInput placeholder="Buscar empresa" />
+                    <CommandEmpty>Empresa no encontrada</CommandEmpty>
                     <CommandGroup>
                       <CommandList>
-                        {cities?.map((city) => (
+                        {companies?.map((company) => (
                           <CommandItem
-                            value={`${city.realName}`}
-                            key={city.id}
+                            value={`${company.name}`}
+                            key={company.id}
                             onSelect={() => {
-                              form.setValue("cityId", city.id, {
+                              form.setValue("companyId", company.id, {
                                 shouldValidate: true,
                               });
                             }}
@@ -114,12 +114,12 @@ const SelectCityFilter = ({ cities }: { cities: City[] }) => {
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                city.id === field.value
+                                company.id === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
                             />
-                            {city.realName}
+                            {company.name}
                           </CommandItem>
                         ))}
                       </CommandList>
@@ -135,5 +135,3 @@ const SelectCityFilter = ({ cities }: { cities: City[] }) => {
     </Form>
   );
 };
-
-export default SelectCityFilter;

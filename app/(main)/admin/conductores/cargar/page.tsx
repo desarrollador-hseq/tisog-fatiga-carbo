@@ -14,7 +14,7 @@ import { useLoading } from "@/components/providers/loading-provider";
 import { cn } from "@/lib/utils";
 
 const bcrumbs = [
-  { label: "conductores", path: "/lider/conductores" },
+  { label: "conductores", path: "/admin/conductores" },
   { label: "Cargar", path: "/cargar" },
 ];
 

@@ -8,13 +8,13 @@ import { ButtonDownloadTemplateExcel } from "@/components/button-download-templa
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { SheetCollaboratorsLoadErrors } from "./_components/sheet-drivers-load-errors";
-import { DriversTableExcel } from "./_components/drivers-table-excel";
+import { SupervisorsTableExcel } from "./_components/supervisors-table-excel";
 import { Button } from "@/components/ui/button";
 import { useLoading } from "@/components/providers/loading-provider";
 import { cn } from "@/lib/utils";
 
 const bcrumbs = [
-  { label: "conductores", path: "/lider/conductores" },
+  { label: "supervisores", path: "/admin/supervisores" },
   { label: "Cargar", path: "/cargar" },
 ];
 
@@ -30,7 +30,7 @@ const UploadDrivers = () => {
     setLoadingApp(true);
     const values = usersLoaded;
     try {
-      const { data } = await axios.post(`/api/drivers/upload-list`, values);
+      const { data } = await axios.post(`/api/users/upload-list`, values);
 
       if (data.failedInserts) {
         setListError(data.failedInserts);
@@ -53,7 +53,7 @@ const UploadDrivers = () => {
 
   const handleDownloadTemplate = () => {
     // URL de la plantilla en el servidor
-    const templateUrl = "/plantilla_colaboradores.xlsx";
+    const templateUrl = "/plantilla_supervisores.xlsx";
 
     // Crear un elemento 'a' para iniciar la descarga
     const link = document.createElement("a");
@@ -67,7 +67,7 @@ const UploadDrivers = () => {
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text={`Agregar conductor`} bcrumb={bcrumbs}>
+        <TitleOnPage text={`Cargar supervisores`} bcrumb={bcrumbs}>
           <ButtonDownloadTemplateExcel name="plantilla_colaboradores" />
         </TitleOnPage>
       }
@@ -96,7 +96,7 @@ const UploadDrivers = () => {
                   </Button>
                 </div>
 
-                <DriversTableExcel
+                <SupervisorsTableExcel
                   setUsersLoaded={setUsersLoaded}
                   usersLoaded={usersLoaded}
                 />

@@ -22,11 +22,7 @@ const DriversPage = async () => {
   const drivers = await db.driver.findMany({
     where: {
       active: true,
-    },
-    include: {
-      city: true,
-      company: true,
-      position: true,
+      companyId: session?.user?.companyId,
     },
     orderBy: {
       createdAt: "desc",
@@ -38,8 +34,8 @@ const DriversPage = async () => {
       pageHeader={
         <TitleOnPage text="Listado de conductores" bcrumb={bcrumb}>
           <Link
-            className={cn(buttonVariants({ variant: "secondary" }))}
-            href={`/lider/conductores/crear`}
+            className={cn(buttonVariants({variant: "secondary"}))}
+            href={`/admin/conductores/crear`}
           >
             Crear
           </Link>
@@ -49,7 +45,7 @@ const DriversPage = async () => {
       <TableDefault
         data={drivers}
         columns={driverTableColumns}
-        editHref={{ btnText: "editar", href: `/lider/conductores` }}
+        editHref={{ btnText: "editar", href: `/admin/conductores` }}
       />
     </CardPage>
   );

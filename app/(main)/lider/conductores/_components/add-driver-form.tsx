@@ -49,7 +49,7 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
   const isEdit = useMemo(() => !!driver, [driver]);
 
   if (isEdit && !driver) {
-    router.replace("/dashboard/conductores/");
+    router.replace("/lider/conductores/");
     toast.error("Colaborador no encontrado, redirigiendo...");
   }
 
@@ -74,7 +74,7 @@ export const AddDriverForm = ({ driver, cities, companies, positions }: AddDrive
         toast.success("Conductor actualizado");
       } else {
         const { data } = await axios.post(`/api/drivers/`, values);
-        router.push(`/dashboard/conductores/`);
+        router.push(`/lider/conductores/`);
         toast.success("Conductor creado");
       }
       // router.push(`/admin/colaboradores`);

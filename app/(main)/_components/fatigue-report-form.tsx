@@ -202,7 +202,7 @@ export const FatigueReportForm = ({
       const { data } = await axios.patch(
         `/api/reports/${fatigueSleepReport?.id}`,
         {
-          state: "SEND",
+          state: "PENDING",
           ...values,
         }
       );
@@ -686,7 +686,7 @@ export const FatigueReportForm = ({
               className="w-full max-w-[500px] gap-3 mt-5"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-              {isEdit ? "Siguiente paso" : "Actualizar reporte" }
+              {isEdit ? "Siguiente paso" : "Actualizar reporte"}
             </Button>
           )}
         </form>

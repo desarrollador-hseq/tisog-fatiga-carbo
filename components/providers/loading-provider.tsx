@@ -1,6 +1,5 @@
 "use client";
 
-import { Roboto } from "next/font/google";
 import React, {
   Dispatch,
   ReactNode,
@@ -10,10 +9,11 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Roboto } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { LoaderFullpage } from "../loader-fullpage";
 import { useSession } from "next-auth/react";
-import { Role, User } from "@prisma/client";
+import { FatigueReportEvent, FatigueSleepReportStatus, RiskLevel, Role } from "@prisma/client";
 import { DateRange } from "react-day-picker";
 
 const roboto = Roboto({
@@ -29,6 +29,10 @@ interface LoadingProps {
   setDateFilter: Dispatch<SetStateAction<DateRange | undefined>>;
   cityFilter: string | undefined;
   setCityFilter: Dispatch<SetStateAction<string | undefined>>;
+  companyFilter: string | undefined;
+  setCompanyFilter: Dispatch<SetStateAction<string | undefined>>;
+  levelFilter: RiskLevel | undefined | null;
+  setLevelFilter: Dispatch<SetStateAction<RiskLevel | undefined | null>>;
 }
 
 interface Props {
@@ -44,6 +48,12 @@ export const LoadingContext = createContext<LoadingProps>({
   // date picker
   dateFilter: undefined,
   setDateFilter: (date) => {},
+  // company id
+  companyFilter: undefined,
+  setCompanyFilter: (date) => {},
+  // Level
+  levelFilter: undefined,
+  setLevelFilter: (date) => {},
   // city id
   cityFilter: undefined,
   setCityFilter: (cityId) => {},
@@ -55,6 +65,8 @@ export const LoadingProvider = ({ children }: Props) => {
     undefined
   );
   const [cityFilter, setCityFilter] = useState<string | undefined>(undefined);
+  const [levelFilter, setLevelFilter] = useState<RiskLevel | undefined | null>(undefined);
+  const [companyFilter, setCompanyFilter] = useState<string | undefined>(undefined);
   const [userRole, setUserRole] = useState<Role | undefined>();
 
   const { data: session, status, update } = useSession();
@@ -95,6 +107,10 @@ export const LoadingProvider = ({ children }: Props) => {
         setDateFilter,
         setCityFilter,
         cityFilter,
+        companyFilter,
+        setCompanyFilter,
+        levelFilter,
+        setLevelFilter,
       }}
     >
       <body

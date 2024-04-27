@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { DefaultValue, FatigueSleepReport } from "@prisma/client";
+import { DefaultValue, FatigueSleepReport, LogisticsCenter } from "@prisma/client";
 import { endOfDay } from "date-fns";
 import { useReactToPrint } from "react-to-print";
 import { TableDefault } from "@/components/table-default";
@@ -11,19 +11,24 @@ import { useLoading } from "@/components/providers/loading-provider";
 
 import { ReportBarFatigue } from "./report-bar-fatigue";
 import { ListCriticalReports } from "./list-critical-reports";
+import { Button } from "@/components/ui/button";
 
 interface valuesWithParameter extends DefaultValue {
   parameters?: { name: string | null } | null;
+}
+
+interface ReportWithLogisticsCenter extends FatigueSleepReport {
+  reports: {logisticsCenter: {companyId: string |  null} | null } 
 }
 
 export const FatigueIndicators = ({
   reports,
   defaultsValues,
 }: {
-  reports: FatigueSleepReport[];
+  reports: ReportWithLogisticsCenter[]
   defaultsValues: valuesWithParameter[];
 }) => {
-  const { dateFilter, cityFilter, userRole } = useLoading();
+  const { userRole, dateFilter, cityFilter, companyFilter, levelFilter } = useLoading();
   const componentRef = useRef<HTMLInputElement>(null);
   const defaultsSymptoms = defaultsValues.filter(
     (def) => def?.parameters?.name === "symptoms"
@@ -61,6 +66,18 @@ export const FatigueIndicators = ({
       (report) => report.cityId === cityFilter
     );
   }
+  if (companyFilter) {
+    filteredReports = filteredReports.filter(
+      (report) => report.logisticsCenter?.companyId === companyFilter
+    );
+  }
+
+
+  if (levelFilter) {
+    filteredReports = filteredReports.filter(
+      (report) => report.riskLevel === levelFilter
+    );
+  }
 
   // print function
   const handlePrint = useReactToPrint({
@@ -73,11 +90,10 @@ export const FatigueIndicators = ({
       id="panel"
       ref={componentRef}
     >
-      <button onClick={handlePrint}>Print</button>
       {/* TODO: MOSTRAR CIUDAD Y FECHA EN EL PRINT */}
-      <div className="info-filter hidden">
+      {/* <div className="info-filter hidden">
         Ciudad: {cityFilter} {dateFilter?.from?.toString()}
-      </div>
+      </div> */}
       <ListCriticalReports reports={filteredReports} />
 
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  mb-3 lg:grid-rows-1 mt-2">
@@ -147,6 +163,7 @@ export const FatigueIndicators = ({
           />
         </CardContent>
       </Card>
+      <Button onClick={handlePrint}>Imprimir reporte</Button>
     </div>
   );
 };
