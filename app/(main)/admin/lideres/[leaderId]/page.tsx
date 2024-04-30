@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 import { AddLeaderForm } from "../_components/add-leader-form";
 
 const bcrumb = [
-  { label: "Conductores", path: "/dashboard/conductores" },
-  { label: "Editar", path: "/dashboard/conductores/editar" },
+  { label: "Líderes", path: "/admin/lideres" },
+  { label: "Editar", path: "/admin/lideres/editar" },
 ];
 
 const EditLeaderPage = async ({ params }: { params: { leaderId: string } }) => {

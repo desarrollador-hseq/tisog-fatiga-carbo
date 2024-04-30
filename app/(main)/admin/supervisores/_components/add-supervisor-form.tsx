@@ -87,10 +87,11 @@ export const AddSupervisorForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (isEdit) {
-        await axios.patch(`/api/user/${supervisor?.id}`, values);
+        await axios.patch(`/api/supervisors/${supervisor?.id}`, values);
         toast.success("Supervisor actualizado");
       } else {
-        const { data } = await axios.post(`/api/user/`, values);
+        const { data } = await axios.post(`/api/supervisors/`, values);
+        await axios.post(`/api/user/first-password`, values);
         router.push(`/admin/supervisores/`);
         toast.success("Supervisor creado correctamente");
       }

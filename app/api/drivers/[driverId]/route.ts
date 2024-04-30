@@ -1,7 +1,7 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
 
 export async function PATCH(req: Request, { params }: { params: { driverId: string } }) {
   const session = await getServerSession(authOptions);
@@ -44,7 +44,7 @@ export async function PATCH(req: Request, { params }: { params: { driverId: stri
 
     return NextResponse.json(driver);
   } catch (error) {
-    console.log("[DRIVER-CREATE]", error);
+    console.log("[DRIVER-PATCH-ID]", error);
     return new NextResponse("Internal Errorr" + error, { status: 500 });
   }
 }

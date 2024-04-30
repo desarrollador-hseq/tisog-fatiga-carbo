@@ -45,13 +45,13 @@ export const SupervisorsTableExcel = ({
       ).filter((row: Record<string, unknown>, index) => {
         if (index === 0) return true; // Mantener la fila de encabezados
         const {
-          "Nombre completo": name,
+          "Nombre completo": fullname,
           "# Documento": numDoc,
           "Correo electrónico": email,
           "Empresa": company,
         } = row;
         // Verificar campos obligatorios
-        if (!email || !name || !company || !numDoc ) {
+        if (!email || !fullname || !company || !numDoc ) {
           return false; // No pasar el filtro si falta un campo obligatorio
         }
         const companynew = (company || "").toString().trim();
@@ -60,10 +60,10 @@ export const SupervisorsTableExcel = ({
         setUsersLoaded((prevUsers) => [
           ...prevUsers,
           {
-            name: (name as string).trim(),
+            name: (fullname as string).trim(),
             numDoc: ("" + numDoc).replace(/[.,]/g, "").trim(),
-            email: emailnew,
             company: companynew,
+            email: emailnew,
           },
         ]);
         return true;
@@ -181,9 +181,10 @@ export const SupervisorsTableExcel = ({
             <TableHeader>
               <TableRow>
                 <TableHead>Nombre completo</TableHead>
+                <TableHead>Tipo de documento</TableHead>
                 <TableHead># Documento</TableHead>
                 <TableHead>Correo Electrónico</TableHead>
-                <TableHead>Empresa</TableHead>
+                <TableHead>Teléfono móvil</TableHead>
                 <TableHead>Acción</TableHead>
               </TableRow>
             </TableHeader>

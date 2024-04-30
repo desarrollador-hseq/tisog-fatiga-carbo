@@ -23,12 +23,17 @@ const leaderRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
   {
     icon: ClipboardCheck,
-    label: "reportes",
+    label: "Reportes",
     href: "/reportes",
   },
   {
     icon: ScrollText,
-    label: "conductores",
+    label: "Supervisores",
+    href: "/supervisores",
+  },
+  {
+    icon: ScrollText,
+    label: "Conductores",
     href: "/conductores",
   },
 ];
@@ -60,11 +65,11 @@ const adminRoutes = [
     label: "Líderes",
     href: "/lideres",
   },
-  {
-    icon: ScrollText,
-    label: "Centros",
-    href: "/centros",
-  },
+  // {
+  //   icon: ScrollText,
+  //   label: "Centros",
+  //   href: "/centros",
+  // },
 ];
 
 export const Navbar = ({

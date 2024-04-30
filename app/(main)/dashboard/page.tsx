@@ -42,7 +42,7 @@ const DashboardHomePage = async () => {
         pageHeader={
           <TitleOnPage text="Listado de reportes" bcrumb={bcrumb}>
             <Link
-              className={cn(buttonVariants())}
+              className={cn(buttonVariants({variant: "secondary"}))}
               href={`/dashboard/reportes/crear`}
             >
               Crear

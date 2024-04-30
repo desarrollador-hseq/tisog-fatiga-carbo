@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 import { AddSupervisorForm } from "../_components/add-supervisor-form";
 
 const bcrumb = [
-  { label: "Conductores", path: "/dashboard/conductores" },
-  { label: "Editar", path: "/dashboard/conductores/editar" },
+  { label: "Supervisor", path: "/admin/supervisores" },
+  { label: "Editar", path: "/admin/supervisores/editar" },
 ];
 
 const EditSupervisorPage = async ({ params }: { params: { supervisorId: string } }) => {

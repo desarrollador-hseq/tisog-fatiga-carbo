@@ -1,5 +1,3 @@
-"use client"
-
 import { Dispatch, SetStateAction } from "react";
 import { ArrowBigDownDash } from "lucide-react";
 import {
@@ -24,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 //   import { useReactToPrint } from "react-to-print";
 
-export const SheetSupervisorsLoadErrors = ({
+export const SheetCollaboratorsLoadErrors = ({
   failedInserts,
   wasError,
   setWasError,

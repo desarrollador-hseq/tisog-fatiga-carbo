@@ -159,7 +159,7 @@ export const AddCompanyForm = ({ company, cities }: AddCompanyFormProps) => {
       } else {
         const { data } = await axios.post(`/api/companies/`, {
           ...otherValues,
-          imgSignatureUrl: urlImage,
+          logoImgUrl: urlImage,
         });
         router.push(`/admin/empresas/`);
         toast.success("Empresa agregada");

@@ -4,6 +4,7 @@ import { Driver, User } from "@prisma/client";
 import { authOptions } from "@/lib/authOptions";
 
 import { db } from "@/lib/db";
+import axios from "axios";
 
 export async function POST(
     req: Request,
@@ -15,6 +16,8 @@ export async function POST(
             return new NextResponse("Unauthorized", { status: 401 });
         }
         const values = await req.json();
+
+        console.log({values})
 
         if (!session.user.id) return new NextResponse("Unauthorized", { status: 401 });
 
@@ -56,6 +59,7 @@ export async function POST(
                         email: true
                     }
                 });
+
                 if (existingEmail) {
                     throw new Error(`Ya existe un usuario con correo electrónico: ${existingEmail.email} `);
                 }
@@ -81,18 +85,19 @@ export async function POST(
                     role: "USER",
                 };
 
+                
                 // Inserta el empleado con el companyId.
                 const insertedUser = await db.user.create({ data: userData });
                 successfulInserts.push(insertedUser);
+                // await axios.post(`/api/user/first-password`, {...userData});
             } catch (error: any) {
                 // Captura objetos que generaron errores.
                 failedInserts.push({ data: user, error: error?.message || error });
-                console.error(error);
+                console.error({caperror: error});
             }
         }
-
         // Devuelve los resultados al componente.
-        return NextResponse.json({ successfulInserts, failedInserts }, { status: 200 });
+        return  NextResponse.json({ successfulInserts, failedInserts }, { status: 200 });
         // return res.status(200).json({ successfulInserts, failedInserts });
     } catch (error) {
         console.log("[DRIVERS_CREATE_MANY]", error);

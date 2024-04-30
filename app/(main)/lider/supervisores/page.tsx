@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { TableDefault } from "@/components/table-default";
@@ -5,12 +6,12 @@ import { db } from "@/lib/db";
 import { buttonVariants } from "@/components/ui/button";
 import { CardPage } from "@/components/card-page";
 import { cn } from "@/lib/utils";
-import { driverTableColumns } from "./_components/driver-table-columns";
+import { supervisorTableColumns } from "./_components/supervisor-table-columns";
 import { TitleOnPage } from "@/components/title-on-page";
 import { authOptions } from "@/lib/authOptions";
 import { NotAuthorized } from "@/components/not-authorized";
 
-const bcrumb = [{ label: "Conductores", path: "/admin/conductores" }];
+const bcrumb = [{ label: "Supervisores", path: "/lider/supervisores" }];
 
 const DriversPage = async () => {
   const session = await getServerSession(authOptions);
@@ -19,22 +20,25 @@ const DriversPage = async () => {
     return <NotAuthorized />;
   }
 
-  const drivers = await db.driver.findMany({
+  const supervisors = await db.user.findMany({
     where: {
       active: true,
+      role: "USER",
+      companyId: session.user.companyId
     },
     orderBy: {
       createdAt: "desc",
     },
   });
 
+
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text="Listado de conductores" bcrumb={bcrumb}>
+        <TitleOnPage text="Listado de supervisores" bcrumb={bcrumb}>
           <Link
-            className={cn(buttonVariants({variant: "secondary"}))}
-            href={`/admin/conductores/crear`}
+            className={cn(buttonVariants({ variant: "secondary" }))}
+            href={`/lider/supervisores/crear`}
           >
             Crear
           </Link>
@@ -42,9 +46,9 @@ const DriversPage = async () => {
       }
     >
       <TableDefault
-        data={drivers}
-        columns={driverTableColumns}
-        editHref={{ btnText: "editar", href: `/admin/conductores` }}
+        data={supervisors}
+        columns={supervisorTableColumns}
+        editHref={{ btnText: "editar", href: `/lider/supervisores` }}
       />
     </CardPage>
   );

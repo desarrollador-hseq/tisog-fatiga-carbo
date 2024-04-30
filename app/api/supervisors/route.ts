@@ -8,27 +8,38 @@ export async function POST(req: Request) {
   try {
     const values = await req.json();
 
-   if(!session) return new NextResponse("Unauthorized", {status: 401})
+    if (!session || (session.user.role !== "ADMIN" && session.user.role !== "LEADER")) return new NextResponse("Unauthorized", { status: 401 })
 
-    const existingDriver = await db.driver.findFirst({
+    const existingLeader = await db.user.findFirst({
+      where: { email: values.email, active: true },
+    });
+
+
+    if (existingLeader) {
+      return new NextResponse("Correo electrónico ya registrado", {
+        status: 400,
+      });
+    }
+    const existingLeader2 = await db.user.findFirst({
       where: { numDoc: values.numDoc, active: true },
     });
 
-    if (existingDriver) {
+    if (existingLeader2) {
       return new NextResponse("Número de documento ya registrado", {
         status: 400,
       });
     }
 
-    const driver = await db.driver.create({
+    const leader = await db.user.create({
       data: {
+        role: "USER",
         ...values,
       },
     });
 
-    return NextResponse.json(driver);
+    return NextResponse.json(leader);
   } catch (error) {
-    console.log("[DRIVER-CREATE]", error);
+    console.log("[SUPERVISOR-CREATE]", error);
     return new NextResponse("Internal Errorr" + error, { status: 500 });
   }
 }
