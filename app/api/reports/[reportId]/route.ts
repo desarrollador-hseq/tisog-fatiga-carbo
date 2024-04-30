@@ -4,10 +4,10 @@ import { formatInTimeZone } from "date-fns-tz";
 import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
 import { transporter, mailOptions } from "@/lib/nodemailer";
-import { FatigueSleepReport } from "@prisma/client";
+import { Company, FatigueSleepReport, LogisticsCenter } from "@prisma/client";
 
 
-const generateEmailContent = ({report}: {report: FatigueSleepReport}) => {
+const generateEmailContent = ({ report }: { report: FatigueSleepReport & { logisticsCenter: LogisticsCenter & { company: Company | null } | null } }) => {
   const baseUrl = process.env.NEXTAUTH_URL
   // const link = `${baseUrl}/${companyToken.token}`
 
@@ -17,134 +17,134 @@ const generateEmailContent = ({report}: {report: FatigueSleepReport}) => {
   }
 }
 
-  export async function PATCH(
-    req: Request,
-    { params }: { params: { reportId: string } }
-  ) {
-    const session = await getServerSession(authOptions);
-    try {
-      if (!session) return new NextResponse("Unauthorized", { status: 401 })
-      if (!params.reportId) return new NextResponse("Bad request", { status: 400 })
-      const values = await req.json();
+export async function PATCH(
+  req: Request,
+  { params }: { params: { reportId: string } }
+) {
+  const session = await getServerSession(authOptions);
+  try {
+    if (!session) return new NextResponse("Unauthorized", { status: 401 })
+    if (!params.reportId) return new NextResponse("Bad request", { status: 400 })
+    const values = await req.json();
 
-      const date = new Date()
-      const colombiaTime = formatInTimeZone(date, 'America/Bogota', 'yyyy-MM-dd HH:mm:ssXXX');
-      const newDate = new Date(colombiaTime)
+    const date = new Date()
+    const colombiaTime = formatInTimeZone(date, 'America/Bogota', 'yyyy-MM-dd HH:mm:ssXXX');
+    const newDate = new Date(colombiaTime)
 
-      const report = await db.fatigueSleepReport.findUnique({
-        where: {
-          id: params.reportId
-        },
-        include: {
-          city: {
-            select: {
-              realName: true,
-            }
-          },
-          logisticsCenter: {
-            include: {
-              company: true
-            }
-          },
-          driver: {
-            select: {
-              fullname: true,
-              position: {
-                select: {
-                  name: true
-                }
-              },
-            }
-          },
-        }
-      })
-      if (!report) return new NextResponse("Bad request", { status: 400 })
-
-      let totalItems = 0;
-      if (values.appearances && values.appearances.trim() !== "") totalItems += values.appearances.split(",").length;
-      if (values.moods && values.moods.trim() !== "") totalItems += values.moods.split(",").length;
-      if (values.performances && values.performances.trim() !== "") totalItems += values.performances.split(",").length;
-      if (values.drivingModes && values.drivingModes.trim() !== "") totalItems += values.drivingModes.split(",").length;
-
-
-      let riskLevel = "LOW";
-      if (totalItems >= 5 && totalItems <= 10) {
-        riskLevel = "MEDIUM";
-      } else if (totalItems > 10) {
-        riskLevel = "HIGH";
-      }
-
-      const admins = await db.user.findMany({
-        where: {
-          role: "ADMIN",
-          active: true
-        }
-      })
-
-
-      if (riskLevel === "HIGH") {
-        try {
-          for (const admin of admins) {
-            await transporter.sendMail({
-              ...mailOptions,
-              to: admin.email,
-              ...generateEmailContent({report}),
-              text: "Correo de reporte de fatiga nivel crítico",
-              subject: `Correo de reporte de fatiga nivel crítico`,
-            });
+    const report = await db.fatigueSleepReport.findUnique({
+      where: {
+        id: params.reportId
+      },
+      include: {
+        city: {
+          select: {
+            realName: true,
           }
-          //  NextResponse.json({ message: "ok", status: 200 });
-        } catch (error) {
-          console.log("[SEND-EMAIL-CRITICAL-REPORT", error);
-          //  new NextResponse("Internal Errorr", { status: 500 });
-        }
+        },
+        logisticsCenter: {
+          include: {
+            company: true
+          }
+        },
+        driver: {
+          select: {
+            fullname: true,
+            position: {
+              select: {
+                name: true
+              }
+            },
+          }
+        },
       }
+    })
+    if (!report) return new NextResponse("Bad request", { status: 400 })
+
+    let totalItems = 0;
+    if (values.appearances && values.appearances.trim() !== "") totalItems += values.appearances.split(",").length;
+    if (values.moods && values.moods.trim() !== "") totalItems += values.moods.split(",").length;
+    if (values.performances && values.performances.trim() !== "") totalItems += values.performances.split(",").length;
+    if (values.drivingModes && values.drivingModes.trim() !== "") totalItems += values.drivingModes.split(",").length;
 
 
-      if (report.state === "PENDING") {
-        const reportUpdated = await db.fatigueSleepReport.update({
-          where: { id: params.reportId },
-          data: {
-            date: newDate,
-            riskLevel: riskLevel,
-            ...values,
-            state: "SEND"
-          },
-        });
-
-        return NextResponse.json(reportUpdated);
-      } else {
-        const reportUpdated = await db.fatigueSleepReport.update({
-          where: { id: params.reportId },
-          data: { riskLevel: riskLevel, ...values },
-        });
-
-        // values.state == "SEND" ? (
-
-        //   await db.fatigueReportEvent.create({
-        //     data: {
-        //       eventType: "SENT",
-        //       userId: session.user.id!,
-        //       fatigueReportId: report.id,
-        //       reportData: JSON.stringify(report),
-        //     }
-        //   })) : (
-        //   await db.fatigueReportEvent.create({
-        //     data: {
-        //       eventType: "UPDATED",
-        //       userId: session.user.id!,
-        //       fatigueReportId: report.id,
-        //       reportData: JSON.stringify(report),
-        //     }
-        //   })
-        // )
-
-
-        return NextResponse.json(reportUpdated);
-      }
-
-    } catch (error) {
-      console.log("[FATIGUE-SLEEP-REPORT-EDIT]", error);
-      return new NextResponse("Internal Errorr " + error, { status: 500 });
+    let riskLevel = "LOW";
+    if (totalItems >= 5 && totalItems <= 10) {
+      riskLevel = "MEDIUM";
+    } else if (totalItems > 10) {
+      riskLevel = "HIGH";
     }
+
+    const admins = await db.user.findMany({
+      where: {
+        role: "ADMIN",
+        active: true
+      }
+    })
+
+
+    if (riskLevel === "HIGH") {
+      try {
+        for (const admin of admins) {
+          await transporter.sendMail({
+            ...mailOptions,
+            to: admin.email,
+            ...generateEmailContent({ report }),
+            text: "Correo de reporte de fatiga nivel crítico",
+            subject: `Correo de reporte de fatiga nivel crítico`,
+          });
+        }
+        //  NextResponse.json({ message: "ok", status: 200 });
+      } catch (error) {
+        console.log("[SEND-EMAIL-CRITICAL-REPORT", error);
+        //  new NextResponse("Internal Errorr", { status: 500 });
+      }
+    }
+
+
+    if (report.state === "PENDING") {
+      const reportUpdated = await db.fatigueSleepReport.update({
+        where: { id: params.reportId },
+        data: {
+          date: newDate,
+          riskLevel: riskLevel,
+          ...values,
+          state: "SEND"
+        },
+      });
+
+      return NextResponse.json(reportUpdated);
+    } else {
+      const reportUpdated = await db.fatigueSleepReport.update({
+        where: { id: params.reportId },
+        data: { riskLevel: riskLevel, ...values },
+      });
+
+      // values.state == "SEND" ? (
+
+      //   await db.fatigueReportEvent.create({
+      //     data: {
+      //       eventType: "SENT",
+      //       userId: session.user.id!,
+      //       fatigueReportId: report.id,
+      //       reportData: JSON.stringify(report),
+      //     }
+      //   })) : (
+      //   await db.fatigueReportEvent.create({
+      //     data: {
+      //       eventType: "UPDATED",
+      //       userId: session.user.id!,
+      //       fatigueReportId: report.id,
+      //       reportData: JSON.stringify(report),
+      //     }
+      //   })
+      // )
+
+
+      return NextResponse.json(reportUpdated);
+    }
+
+  } catch (error) {
+    console.log("[FATIGUE-SLEEP-REPORT-EDIT]", error);
+    return new NextResponse("Internal Errorr " + error, { status: 500 });
   }
+}

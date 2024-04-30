@@ -4,10 +4,9 @@ const email = process.env.EMAILSENDER;
 const pass = process.env.TOKENEMAILSENDER;
 
 export const transporter = nodemailer.createTransport({
-  host: "smtpout.secureserver.net",  
-  secureConnection: false, 
+  host: "smtpout.secureserver.net",
   secure: true,
-  requireTLS:true,
+  requireTLS: true,
   port: 465,
   debug: true,
   auth: {
@@ -25,6 +24,8 @@ export const transporter = nodemailer.createTransport({
 //     pass,
 //   },
 // });
+
+
 // export const transporter = nodemailer.createTransport({
 //   service: "gmail",
 //   auth: {

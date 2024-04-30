@@ -36,6 +36,7 @@ const LeaderHomePage = async () => {
       logisticsCenter: {
         select: {
           name: true,
+          companyId: true,
           company: {
             select: {
               name: true,
@@ -68,9 +69,15 @@ const LeaderHomePage = async () => {
     },
   });
 
+  const companies = await db.company.findMany({
+    where: {
+      active: true,
+    },
+  });
+
   return (
     <div className="">
-      <HeaderDateFilter cities={cities} />
+      <HeaderDateFilter companies={companies} cities={cities} />
       <FatigueIndicators reports={reports} defaultsValues={defaultsValues} />
     </div>
   );

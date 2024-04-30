@@ -17,7 +17,7 @@ export const FatigueReportTimelineItem = ({
   event,
 }: CertificateItemTimelineProps) => {
   const [certificateData] = useState<FatigueSleepReport | null | undefined>(
-    event.certificateData && JSON.parse(event.certificateData)
+    event?.reportData && JSON.parse(event.reportData)
   );
 
   return (

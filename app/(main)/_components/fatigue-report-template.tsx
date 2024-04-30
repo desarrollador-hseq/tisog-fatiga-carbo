@@ -291,9 +291,9 @@ export const FatigueReportTemplate = ({
                   padding: 8,
                 }}
               >
-                {symptomsArray.map((item) => {
+                {symptomsArray.map((item, index) => {
                   if (!item || item === "") return;
-                  return <Text style={styles.itemRow}>{item}</Text>;
+                  return <Text key={item + index} style={styles.itemRow}>{item}</Text>;
                 })}
               </View>
             </View>
@@ -316,9 +316,9 @@ export const FatigueReportTemplate = ({
                   padding: 8,
                 }}
               >
-                {medicines.map((item) => {
+                {medicines.map((item, index) => {
                   if (!item || item === "") return;
-                  return <Text style={styles.itemRow}>{item}</Text>;
+                  return <Text key={item + index} style={styles.itemRow}>{item}</Text>;
                 })}
               </View>
             </View>
@@ -374,9 +374,9 @@ export const FatigueReportTemplate = ({
                   padding: 8,
                 }}
               >
-                {behaviorsArray.map((item) => {
+                {behaviorsArray.map((item, index) => {
                   if (!item || item === "") return;
-                  return <Text style={styles.itemRow}>{item}</Text>;
+                  return <Text key={item + index} style={styles.itemRow}>{item}</Text>;
                 })}
               </View>
             </View>

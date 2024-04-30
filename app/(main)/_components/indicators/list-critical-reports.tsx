@@ -8,10 +8,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, formatDate } from "@/lib/utils";
-import { FatigueSleepReport } from "@prisma/client";
+import { City, Company, Driver, FatigueSleepReport, LogisticsCenter, User } from "@prisma/client";
+
+
+interface reportWithDriverSupervisor extends FatigueSleepReport {
+  driver: Driver | null;
+  supervisor: {name: string | null} | null;
+  logisticsCenter: {name: string | null; companyId: string | null;} & {company: {name: string | null} | null} | null;
+  city: {realName: string | null} | null;
+}
 
 interface ListCollaboratorsRequestProps {
-  reports: FatigueSleepReport[];
+  reports: reportWithDriverSupervisor[]
 }
 
 export const ListCriticalReports = ({

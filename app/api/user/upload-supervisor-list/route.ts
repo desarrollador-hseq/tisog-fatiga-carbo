@@ -73,12 +73,12 @@ export async function POST(
                 }
 
                 // Agrega el companyId al objeto de cada empleado antes de insertarlo.
-                const userData = {
+                const userData: any = {
                     name: user.name,
                     numDoc: user.numDoc,
                     email: user.email,
-                    companyId: companydb?.id,
-                    role: "USER"
+                    companyId: companydb?.id || null,
+                    role: "USER",
                 };
 
                 // Inserta el empleado con el companyId.

@@ -1,6 +1,14 @@
 "use client";
 import React, { useRef } from "react";
-import { DefaultValue, FatigueSleepReport, LogisticsCenter } from "@prisma/client";
+import {
+  City,
+  Company,
+  DefaultValue,
+  Driver,
+  FatigueSleepReport,
+  LogisticsCenter,
+  User,
+} from "@prisma/client";
 import { endOfDay } from "date-fns";
 import { useReactToPrint } from "react-to-print";
 import { TableDefault } from "@/components/table-default";
@@ -16,19 +24,26 @@ import { Button } from "@/components/ui/button";
 interface valuesWithParameter extends DefaultValue {
   parameters?: { name: string | null } | null;
 }
-
-interface ReportWithLogisticsCenter extends FatigueSleepReport {
-  reports: {logisticsCenter: {companyId: string |  null} | null } 
+interface reportWithDriverSupervisor extends FatigueSleepReport {
+  driver: Driver | null;
+  supervisor: { name: string | null } | null;
+  logisticsCenter:
+    | ({ name: string | null; companyId: string | null } & {
+        company: { name: string | null } | null;
+      })
+    | null;
+  city: { realName: string | null } | null;
 }
 
 export const FatigueIndicators = ({
   reports,
   defaultsValues,
 }: {
-  reports: ReportWithLogisticsCenter[]
+  reports: reportWithDriverSupervisor[];
   defaultsValues: valuesWithParameter[];
 }) => {
-  const { userRole, dateFilter, cityFilter, companyFilter, levelFilter } = useLoading();
+  const { userRole, dateFilter, cityFilter, companyFilter, levelFilter } =
+    useLoading();
   const componentRef = useRef<HTMLInputElement>(null);
   const defaultsSymptoms = defaultsValues.filter(
     (def) => def?.parameters?.name === "symptoms"
@@ -71,7 +86,6 @@ export const FatigueIndicators = ({
       (report) => report.logisticsCenter?.companyId === companyFilter
     );
   }
-
 
   if (levelFilter) {
     filteredReports = filteredReports.filter(
