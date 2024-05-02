@@ -3,38 +3,52 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { Loader2, UploadCloud } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
-import { SheetCollaboratorsLoadErrors } from "./_components/sheet-drivers-load-errors";
-import { DriversTableExcel } from "./_components/drivers-table-excel";
+import { SheetSupervisorsLoadErrors } from "./_components/sheet-supervisors-load-errors";
+import { SupervisorsTableExcel } from "./_components/supervisors-table-excel";
 import { Button } from "@/components/ui/button";
 import { useLoading } from "@/components/providers/loading-provider";
 import { cn } from "@/lib/utils";
 import { Banner } from "@/components/banner";
 
 const bcrumbs = [
-  { label: "conductores", path: "/lider/conductores" },
+  { label: "lideres", path: "/admin/lideres" },
   { label: "Cargar", path: "/cargar" },
 ];
 
-const UploadDrivers = () => {
+const UploadSupervisors = () => {
   const [usersLoaded, setUsersLoaded] = useState<unknown[]>([]);
-  const [listError, setListError] = useState([]);
+  const [listErrors, setListErrors] = useState<unknown[]>([]);
   const [wasError, setWasError] = useState(false);
-  const [isSubmitting, setisSubmitting] = useState(false);
   const { setLoadingApp } = useLoading();
 
   const onClick = async () => {
-    setisSubmitting(true);
     setLoadingApp(true);
     const values = usersLoaded;
-    try {
-      const { data } = await axios.post(`/api/drivers/upload-list`, values);
 
-      if (data.failedInserts) {
-        setListError(data.failedInserts);
+    try {
+      const { data } = await axios.post(
+        `/api/user/upload-leaders-list`,
+        values
+      );
+
+      if (data && data.failedInserts && data.failedInserts.length > 0) {
+        console.log({
+          failedInserts: data.failedInserts.map((item: any) => ({
+            data: item.data,
+            error: item.error,
+          })),
+        });
+        setListErrors(
+          data.failedInserts.map((item: any) => ({
+            data: item.data,
+            error: item.error,
+          }))
+        );
+
         setWasError(true);
       }
 
@@ -46,7 +60,6 @@ const UploadDrivers = () => {
     } catch (error) {
       console.log({ error: error });
     } finally {
-      setisSubmitting(false);
       setLoadingApp(false);
       setUsersLoaded([]);
     }
@@ -55,18 +68,17 @@ const UploadDrivers = () => {
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text={`Agregar conductor`} bcrumb={bcrumbs}>
+        <TitleOnPage text={`Cargar líderes`} bcrumb={bcrumbs}>
           <ButtonDownloadTemplateExcel name="plantilla_colaboradores" />
         </TitleOnPage>
       }
     >
-      <Banner
-        variant="info"
-        label="El proceso puede llevar varios minutos según la cantidad de colaboradores que se estén registrando. Por favor, evite recargar la página o cerrarla mientras se lleva a cabo el proceso"
-        className="mb-5"
-      />
+        <Banner
+          variant="info"
+          label="El proceso puede llevar varios minutos según la cantidad de colaboradores que se estén registrando. Por favor, evite recargar la página o cerrarla mientras se lleva a cabo el proceso"
+          className="mb-5"
+        />
       <div>
-        <h3></h3>
         <div className="min-h-fit">
           <div className="p-0 overflow-hidden rounded-md">
             <div className="w-full">
@@ -84,16 +96,16 @@ const UploadDrivers = () => {
                 </Button>
               </div>
 
-              <DriversTableExcel
+              <SupervisorsTableExcel
                 setUsersLoaded={setUsersLoaded}
                 usersLoaded={usersLoaded}
               />
 
               {/* <AddEmployee /> */}
 
-              {listError.length > 0 && (
-                <SheetCollaboratorsLoadErrors
-                  failedInserts={listError}
+              {listErrors && listErrors.length > 0 && (
+                <SheetSupervisorsLoadErrors
+                  failedInserts={listErrors}
                   wasError={wasError}
                   setWasError={setWasError}
                 />
@@ -106,4 +118,4 @@ const UploadDrivers = () => {
   );
 };
 
-export default UploadDrivers;
+export default UploadSupervisors;

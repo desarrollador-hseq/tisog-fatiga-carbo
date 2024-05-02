@@ -6,6 +6,7 @@ import { Cloud, X } from "lucide-react";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -45,13 +46,13 @@ export const SupervisorsTableExcel = ({
       ).filter((row: Record<string, unknown>, index) => {
         if (index === 0) return true; // Mantener la fila de encabezados
         const {
-          "Nombre completo": fullname,
+          "Nombre completo": name,
           "# Documento": numDoc,
           "Correo electrónico": email,
           "Empresa": company,
         } = row;
         // Verificar campos obligatorios
-        if (!email || !fullname || !company || !numDoc ) {
+        if (!email || !name || !company || !numDoc ) {
           return false; // No pasar el filtro si falta un campo obligatorio
         }
         const companynew = (company || "").toString().trim();
@@ -60,10 +61,10 @@ export const SupervisorsTableExcel = ({
         setUsersLoaded((prevUsers) => [
           ...prevUsers,
           {
-            name: (fullname as string).trim(),
+            name: (name as string).trim(),
             numDoc: ("" + numDoc).replace(/[.,]/g, "").trim(),
-            company: companynew,
             email: emailnew,
+            company: companynew,
           },
         ]);
         return true;
@@ -181,10 +182,9 @@ export const SupervisorsTableExcel = ({
             <TableHeader>
               <TableRow>
                 <TableHead>Nombre completo</TableHead>
-                <TableHead>Tipo de documento</TableHead>
                 <TableHead># Documento</TableHead>
                 <TableHead>Correo Electrónico</TableHead>
-                <TableHead>Teléfono móvil</TableHead>
+                <TableHead>Empresa</TableHead>
                 <TableHead>Acción</TableHead>
               </TableRow>
             </TableHeader>
@@ -195,7 +195,7 @@ export const SupervisorsTableExcel = ({
                   <TableRow key={index}>
                     {Object.values(row!).map((value, index) => (
                       <TableCell key={index}>{value}</TableCell>
-                    ))}
+                      ))}
                     <TableCell key={index}>
                       <Button
                         className="p-1 h-fit"
@@ -208,6 +208,7 @@ export const SupervisorsTableExcel = ({
                 );
               })}
             </TableBody>
+              <TableCaption>Total: {usersLoaded.length}</TableCaption>
           </Table>
         )}
       </div>

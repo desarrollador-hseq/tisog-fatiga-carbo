@@ -1,3 +1,5 @@
+"use client"
+
 import { Dispatch, SetStateAction } from "react";
 import { ArrowBigDownDash } from "lucide-react";
 import {
@@ -22,7 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 //   import { useReactToPrint } from "react-to-print";
 
-export const SheetCollaboratorsLoadErrors = ({
+export const SheetSupervisorsLoadErrors = ({
   failedInserts,
   wasError,
   setWasError,
@@ -64,7 +66,7 @@ export const SheetCollaboratorsLoadErrors = ({
               {failedInserts.map(({ data, error }: any, index: number) => (
                 <TableRow className="max-h-6" key={index}>
                   <TableCell className="text-xs max-h-6">
-                    {data.fullname}
+                    {data.name}
                   </TableCell>
                   <TableCell className="text-xs max-h-6">
                     {data.numDoc}
@@ -75,13 +77,15 @@ export const SheetCollaboratorsLoadErrors = ({
                 </TableRow>
               ))}
             </TableBody>
-            <TableFooter></TableFooter>
+            <TableFooter>
+            </TableFooter>
           </Table>
+              <p className="font-bold ml-3">Total: {failedInserts.length}</p>
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <div className="flex gap-2">
-              <Button type="submit">cerrar</Button>
+            <div className="flex gap-2 justify-start w-full">
+              <Button type="submit">Cerrar</Button>
             </div>
           </SheetClose>
         </SheetFooter>

@@ -57,6 +57,7 @@ export const DriversTableExcel = ({
         }
         const companynew = (company || "").toString().trim();
         const positionnew = (position || "").toString().trim();
+        const citynnew = (city || "").toString().trim();
         // Guardar datos filtrados
         setUsersLoaded((prevUsers) => [
           ...prevUsers,
@@ -65,7 +66,7 @@ export const DriversTableExcel = ({
             numDoc: ("" + numDoc).replace(/[.,]/g, "").trim(),
             company: companynew,
             position: positionnew,
-            city: city,
+            city: citynnew,
           },
         ]);
         return true;
@@ -183,11 +184,10 @@ export const DriversTableExcel = ({
             <TableHeader>
               <TableRow>
                 <TableHead>Nombre completo</TableHead>
-                <TableHead>Tipo de documento</TableHead>
                 <TableHead># Documento</TableHead>
-                <TableHead>Correo Electrónico</TableHead>
-                <TableHead>Teléfono móvil</TableHead>
-                <TableHead>Acción</TableHead>
+                <TableHead>Empresa</TableHead>
+                <TableHead>Cargo</TableHead>
+                <TableHead>Ciudad</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { Loader2, UploadCloud } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
-import { SheetSupervisorsLoadErrors } from "./_components/sheet-drivers-load-errors";
+import { SheetSupervisorsLoadErrors } from "./_components/sheet-supervisors-load-errors";
 import { SupervisorsTableExcel } from "./_components/supervisors-table-excel";
 import { Button } from "@/components/ui/button";
 import { useLoading } from "@/components/providers/loading-provider";
 import { cn } from "@/lib/utils";
+import { Banner } from "@/components/banner";
 
 const bcrumbs = [
   { label: "supervisores", path: "/admin/supervisores" },
@@ -22,15 +23,11 @@ const UploadSupervisors = () => {
   const [usersLoaded, setUsersLoaded] = useState<unknown[]>([]);
   const [listErrors, setListErrors] = useState<unknown[]>([]);
   const [wasError, setWasError] = useState(false);
-  const [isSubmitting, setisSubmitting] = useState(false);
   const { setLoadingApp } = useLoading();
 
   const onClick = async () => {
-    setisSubmitting(true);
     setLoadingApp(true);
     const values = usersLoaded;
-    console.log({ usersLoaded });
-    console.log({ values });
 
     try {
       const { data } = await axios.post(
@@ -63,15 +60,10 @@ const UploadSupervisors = () => {
     } catch (error) {
       console.log({ error: error });
     } finally {
-      setisSubmitting(false);
       setLoadingApp(false);
       setUsersLoaded([]);
     }
   };
-
-  useEffect(() => {
-    console.log({ listErrors });
-  }, [listErrors]);
 
   return (
     <CardPage
@@ -81,46 +73,44 @@ const UploadSupervisors = () => {
         </TitleOnPage>
       }
     >
+        <Banner
+          variant="info"
+          label="El proceso puede llevar varios minutos según la cantidad de colaboradores que se estén registrando. Por favor, evite recargar la página o cerrarla mientras se lleva a cabo el proceso"
+          className="mb-5"
+        />
       <div>
-        <h3></h3>
         <div className="min-h-fit">
           <div className="p-0 overflow-hidden rounded-md">
-            {isSubmitting ? (
-              <div className="w-full h-fit flex justify-center items-center">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <div className="w-full">
+              <div className="w-full flex justify-center items-center my-3">
+                <Button
+                  variant="secondary"
+                  disabled={usersLoaded.length == 0}
+                  onClick={onClick}
+                  className={cn(
+                    "gap-2 p-8 text-xl",
+                    usersLoaded.length == 0 && "hidden"
+                  )}
+                >
+                  <UploadCloud /> Cargar
+                </Button>
               </div>
-            ) : (
-              <div className="w-full">
-                <div className="w-full flex justify-center items-center my-3">
-                  <Button
-                    variant="secondary"
-                    disabled={usersLoaded.length == 0}
-                    onClick={onClick}
-                    className={cn(
-                      "gap-2 p-8 text-xl",
-                      usersLoaded.length == 0 && "hidden"
-                    )}
-                  >
-                    <UploadCloud /> Cargar
-                  </Button>
-                </div>
 
-                <SupervisorsTableExcel
-                  setUsersLoaded={setUsersLoaded}
-                  usersLoaded={usersLoaded}
+              <SupervisorsTableExcel
+                setUsersLoaded={setUsersLoaded}
+                usersLoaded={usersLoaded}
+              />
+
+              {/* <AddEmployee /> */}
+
+              {listErrors && listErrors.length > 0 && (
+                <SheetSupervisorsLoadErrors
+                  failedInserts={listErrors}
+                  wasError={wasError}
+                  setWasError={setWasError}
                 />
-
-                {/* <AddEmployee /> */}
-
-                {listErrors && listErrors.length > 0 && (
-                  <SheetSupervisorsLoadErrors
-                    failedInserts={listErrors}
-                    wasError={wasError}
-                    setWasError={setWasError}
-                  />
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

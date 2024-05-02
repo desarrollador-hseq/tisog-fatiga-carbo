@@ -41,7 +41,7 @@ export async function POST(
                         }
                     })
                     if (!companydb) {
-                        throw new Error(`Empresa no encontrada`);
+                        throw new Error(`Empresa no encontrada: [${driver.company}]`);
 
                     }
                 }
@@ -54,7 +54,7 @@ export async function POST(
                         }
                     })
                     if (!citydb) {
-                        throw new Error(`Ciudad no encontrada`);
+                        throw new Error(`Ciudad no encontrada: [${driver.city}]`);
 
                     }
                 }
@@ -67,7 +67,7 @@ export async function POST(
                         }
                     })
                     if (!positiondb) {
-                        throw new Error(`Cargo no encontrado`);
+                        throw new Error(`Cargo no encontrado: [${driver.position}]`);
 
                     }
                 }

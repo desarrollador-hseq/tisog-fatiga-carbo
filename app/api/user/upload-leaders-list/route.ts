@@ -82,7 +82,7 @@ export async function POST(
                     numDoc: user.numDoc,
                     email: user.email,
                     companyId: companydb?.id || null,
-                    role: "USER",
+                    role: "LEADER",
                 };
 
                 

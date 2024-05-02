@@ -3,39 +3,52 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { Loader2, UploadCloud } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
-import { SheetCollaboratorsLoadErrors } from "./_components/sheet-drivers-load-errors";
+import { SheetSupervisorsLoadErrors } from "./_components/sheet-supervisors-load-errors";
 import { SupervisorsTableExcel } from "./_components/supervisors-table-excel";
 import { Button } from "@/components/ui/button";
 import { useLoading } from "@/components/providers/loading-provider";
 import { cn } from "@/lib/utils";
+import { Banner } from "@/components/banner";
 
 const bcrumbs = [
-  { label: "supervisores", path: "/lider/supervisores" },
+  { label: "supervisores", path: "/admin/supervisores" },
   { label: "Cargar", path: "/cargar" },
 ];
 
-const UploadDrivers = () => {
+const UploadSupervisors = () => {
   const [usersLoaded, setUsersLoaded] = useState<unknown[]>([]);
-  const [listError, setListError] = useState([]);
+  const [listErrors, setListErrors] = useState<unknown[]>([]);
   const [wasError, setWasError] = useState(false);
-  const [isSubmitting, setisSubmitting] = useState(false);
   const { setLoadingApp } = useLoading();
 
   const onClick = async () => {
-    setisSubmitting(true);
     setLoadingApp(true);
     const values = usersLoaded;
+
     try {
-      const { data } = await axios.post(`/api/user/upload-supervisor-list`, values);
+      const { data } = await axios.post(
+        `/api/user/upload-supervisor-list`,
+        values
+      );
 
-      console.log({data})
+      if (data && data.failedInserts && data.failedInserts.length > 0) {
+        console.log({
+          failedInserts: data.failedInserts.map((item: any) => ({
+            data: item.data,
+            error: item.error,
+          })),
+        });
+        setListErrors(
+          data.failedInserts.map((item: any) => ({
+            data: item.data,
+            error: item.error,
+          }))
+        );
 
-      if (data.failedInserts) {
-        setListError(data.failedInserts);
         setWasError(true);
       }
 
@@ -47,23 +60,9 @@ const UploadDrivers = () => {
     } catch (error) {
       console.log({ error: error });
     } finally {
-      setisSubmitting(false);
       setLoadingApp(false);
       setUsersLoaded([]);
     }
-  };
-
-  const handleDownloadTemplate = () => {
-    // URL de la plantilla en el servidor
-    const templateUrl = "/plantilla_supervisores.xlsx";
-
-    // Crear un elemento 'a' para iniciar la descarga
-    const link = document.createElement("a");
-    link.href = templateUrl;
-    link.download = "plantilla_colaboradores.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -74,46 +73,44 @@ const UploadDrivers = () => {
         </TitleOnPage>
       }
     >
+        <Banner
+          variant="info"
+          label="El proceso puede llevar varios minutos según la cantidad de colaboradores que se estén registrando. Por favor, evite recargar la página o cerrarla mientras se lleva a cabo el proceso"
+          className="mb-5"
+        />
       <div>
-        <h3></h3>
         <div className="min-h-fit">
           <div className="p-0 overflow-hidden rounded-md">
-            {isSubmitting ? (
-              <div className="w-full h-fit flex justify-center items-center">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <div className="w-full">
+              <div className="w-full flex justify-center items-center my-3">
+                <Button
+                  variant="secondary"
+                  disabled={usersLoaded.length == 0}
+                  onClick={onClick}
+                  className={cn(
+                    "gap-2 p-8 text-xl",
+                    usersLoaded.length == 0 && "hidden"
+                  )}
+                >
+                  <UploadCloud /> Cargar
+                </Button>
               </div>
-            ) : (
-              <div className="w-full">
-                <div className="w-full flex justify-center items-center my-3">
-                  <Button
-                    variant="secondary"
-                    disabled={usersLoaded.length == 0}
-                    onClick={onClick}
-                    className={cn(
-                      "gap-2 p-8 text-xl",
-                      usersLoaded.length == 0 && "hidden"
-                    )}
-                  >
-                    <UploadCloud /> Cargar
-                  </Button>
-                </div>
 
-                <SupervisorsTableExcel
-                  setUsersLoaded={setUsersLoaded}
-                  usersLoaded={usersLoaded}
+              <SupervisorsTableExcel
+                setUsersLoaded={setUsersLoaded}
+                usersLoaded={usersLoaded}
+              />
+
+              {/* <AddEmployee /> */}
+
+              {listErrors && listErrors.length > 0 && (
+                <SheetSupervisorsLoadErrors
+                  failedInserts={listErrors}
+                  wasError={wasError}
+                  setWasError={setWasError}
                 />
-
-                {/* <AddEmployee /> */}
-
-                {listError.length > 0 && (
-                  <SheetCollaboratorsLoadErrors
-                    failedInserts={listError}
-                    wasError={wasError}
-                    setWasError={setWasError}
-                  />
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -121,4 +118,4 @@ const UploadDrivers = () => {
   );
 };
 
-export default UploadDrivers;
+export default UploadSupervisors;

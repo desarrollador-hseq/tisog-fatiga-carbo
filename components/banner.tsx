@@ -60,7 +60,7 @@ export const Banner = ({
           onClick={() => setHide(false)}
         >
           <Icon className="w-5 h-5 " />
-          <span className={cn("font-bold", hide && "hidden")}> {label}</span>
+          <span className={cn("font-bold text-left", hide && "hidden")}> {label}</span>
         </span>
         <div className="flex">
           {children}

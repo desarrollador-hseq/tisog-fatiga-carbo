@@ -3,6 +3,9 @@ import { TitleOnPage } from "@/components/title-on-page";
 import { AddLeaderForm } from "../_components/add-leader-form";
 import { db } from "@/lib/db";
 import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 // import { ButtonDownloadTemplateExcel } from "@/components/button-download-template-excel";
 
 const bcrumb = [
@@ -36,7 +39,12 @@ const CreateSupervisorPage = async () => {
     <CardPage
       pageHeader={
         <TitleOnPage text={`Agregar Líder`} bcrumb={bcrumb}>
-          {/* <ButtonDownloadTemplateExcel name="plantilla-subir-conductores" /> */}
+         <Link
+            className={cn(buttonVariants({variant: "secondary"}))}
+            href={`/admin/lideres/cargar`}
+          >
+            Cargar
+          </Link>
         </TitleOnPage>
       }
     >

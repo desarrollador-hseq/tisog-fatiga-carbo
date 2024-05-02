@@ -66,7 +66,7 @@ export const SheetSupervisorsLoadErrors = ({
               {failedInserts.map(({ data, error }: any, index: number) => (
                 <TableRow className="max-h-6" key={index}>
                   <TableCell className="text-xs max-h-6">
-                    {data.fullname}
+                    {data.name}
                   </TableCell>
                   <TableCell className="text-xs max-h-6">
                     {data.numDoc}
@@ -77,13 +77,15 @@ export const SheetSupervisorsLoadErrors = ({
                 </TableRow>
               ))}
             </TableBody>
-            <TableFooter></TableFooter>
+            <TableFooter>
+            </TableFooter>
           </Table>
+              <p className="font-bold ml-3">Total: {failedInserts.length}</p>
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <div className="flex gap-2">
-              <Button type="submit">cerrar</Button>
+            <div className="flex gap-2 justify-start w-full">
+              <Button type="submit">Cerrar</Button>
             </div>
           </SheetClose>
         </SheetFooter>

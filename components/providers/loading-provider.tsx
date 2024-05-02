@@ -13,7 +13,12 @@ import { Roboto } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { LoaderFullpage } from "../loader-fullpage";
 import { useSession } from "next-auth/react";
-import { FatigueReportEvent, FatigueSleepReportStatus, RiskLevel, Role } from "@prisma/client";
+import {
+  FatigueReportEvent,
+  FatigueSleepReportStatus,
+  RiskLevel,
+  Role,
+} from "@prisma/client";
 import { DateRange } from "react-day-picker";
 
 const roboto = Roboto({
@@ -65,8 +70,12 @@ export const LoadingProvider = ({ children }: Props) => {
     undefined
   );
   const [cityFilter, setCityFilter] = useState<string | undefined>(undefined);
-  const [levelFilter, setLevelFilter] = useState<RiskLevel | undefined | null>(undefined);
-  const [companyFilter, setCompanyFilter] = useState<string | undefined>(undefined);
+  const [levelFilter, setLevelFilter] = useState<RiskLevel | undefined | null>(
+    undefined
+  );
+  const [companyFilter, setCompanyFilter] = useState<string | undefined>(
+    undefined
+  );
   const [userRole, setUserRole] = useState<Role | undefined>();
 
   const { data: session, status, update } = useSession();
@@ -123,11 +132,11 @@ export const LoadingProvider = ({ children }: Props) => {
           overflow: loadingApp ? "hidden" : "auto",
         }}
       >
-        {loadingApp ? (
-          <LoaderFullpage />
-        ) : (
-          <div className="fadeIn">{children}</div>
-        )}
+        <div className="fadeIn">
+          {children}
+          {loadingApp && (
+          <LoaderFullpage />)}
+        </div>
       </body>
     </LoadingContext.Provider>
   );

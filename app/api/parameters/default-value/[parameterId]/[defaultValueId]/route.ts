@@ -13,8 +13,6 @@ export async function PATCH(
     const { defaultValueId } = params;
     const values = await req.json();
 
-    console.log({defaultValueId})
-
     if (!session) return new NextResponse("Unauthorized", { status: 401 });
 
     const defaultValueUpdated = await db.defaultValue.update({

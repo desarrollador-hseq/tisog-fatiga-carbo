@@ -9,7 +9,6 @@ export async function POST(req: Request,  { params }: { params: { parameterId: s
     if (!session) return new NextResponse("Unauthorized", { status: 401 });
     const values = await req.json();
 
-    console.log({par: params.parameterId});
 
     const defaultValue = await db.defaultValue.create({
       data: {
