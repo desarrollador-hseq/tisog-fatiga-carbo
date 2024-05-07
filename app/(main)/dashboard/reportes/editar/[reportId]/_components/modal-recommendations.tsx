@@ -95,7 +95,7 @@ export const ModalRecommendations = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/reports/${fatigueSleepReport.id}`, {
+      await axios.patch(`/api/reports/${fatigueSleepReport.id}/send`, {
         ...values,
         state: "SEND",
       });

@@ -93,7 +93,7 @@ export const CreateReportForm = ({
       const { data } = await axios.post("/api/reports", values);
       router.push(`/dashboard/reportes/editar/${data.id}`);
 
-      toast.success("Solicitud creada");
+      toast.success("Reporte creado");
     } catch {
       console.log(
         "Ocurrió un error inesperado, por favor intentelo nuevamente"

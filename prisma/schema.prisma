@@ -69,9 +69,12 @@ model User {
 
   isMaster Boolean @default(false)
 
+  receiveNotifications Boolean @default(true)
+
   passwordResetTokens PasswordResetToken[]
 
   fatigueReportEvents FatigueReportEvent[]
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

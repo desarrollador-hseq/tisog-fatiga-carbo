@@ -57,7 +57,7 @@ const ReportsPage = async () => {
         <TitleOnPage text="Listado de reportes" bcrumb={bcrumb}>
           <Link
             className={cn(buttonVariants({variant: "secondary"}))}
-            href={`/lider/reportes/crear`}
+            href={`/admin/reportes/crear`}
           >
             Crear
           </Link>
@@ -67,7 +67,7 @@ const ReportsPage = async () => {
       <TableDefault
         data={reports}
         columns={reportsTableColumns}
-        editHref={{ btnText: "Editar", href: `/lider/reportes/editar` }}
+        editHref={{ btnText: "Editar", href: `/admin/reportes/editar` }}
       />
     </CardPage>
   );

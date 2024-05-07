@@ -126,7 +126,9 @@ export const FatigueReportForm = ({
   );
 
   const wasSent = useMemo(
-    () => fatigueSleepReport.state == "SEND" || fatigueSleepReport.state == "CANCELLED" ,
+    () =>
+      fatigueSleepReport.state == "SEND" ||
+      fatigueSleepReport.state == "CANCELLED",
     [isEdit, isAdmin]
   );
 
@@ -202,7 +204,6 @@ export const FatigueReportForm = ({
       const { data } = await axios.patch(
         `/api/reports/${fatigueSleepReport?.id}`,
         {
-          state: "PENDING",
           ...values,
         }
       );
@@ -325,7 +326,7 @@ export const FatigueReportForm = ({
                           currents={currentsSymptoms}
                           setCurrents={setCurrentsSymptoms}
                           defaults={defaultsSymptoms}
-                          disabled={wasSent}
+                          disabled={wasSent && !isAdmin}
                         />
                       </div>
                       <FormMessage />
@@ -354,14 +355,14 @@ export const FatigueReportForm = ({
                               setInputValue={setInputMedicineValue}
                               placeholder="Nombre del medicamento"
                               className="bg-slate-100 border border-primary"
-                              disabled={wasSent}
+                              disabled={wasSent && !isAdmin}
                             />
                             <Button
                               type="button"
                               onClick={() =>
                                 handleAddMedicineItem(inputMedicineValue)
                               }
-                              disabled={wasSent}
+                              disabled={wasSent && !isAdmin}
                             >
                               Agregar
                             </Button>
@@ -378,7 +379,7 @@ export const FatigueReportForm = ({
                                     key={index}
                                   >
                                     {item}
-                                    {!wasSent && (
+                                    {(!wasSent || isAdmin) && (
                                       <Button
                                         type="button"
                                         onClick={() =>
@@ -416,7 +417,7 @@ export const FatigueReportForm = ({
                     name="sleepingHours"
                     type="number"
                     className="w-[100px] text-lg bg-slate-100 border border-primary"
-                    disabled={wasSent}
+                    disabled={wasSent && !isAdmin}
                   />
                   <InputForm
                     control={form.control}
@@ -424,7 +425,7 @@ export const FatigueReportForm = ({
                     name="sleepingHours48"
                     type="number"
                     className="w-[100px] text-lg bg-slate-100 border border-primary"
-                    disabled={wasSent}
+                    disabled={wasSent && !isAdmin}
                   />
                 </div>
               </div>
@@ -455,7 +456,7 @@ export const FatigueReportForm = ({
                             currents={currentsSigns}
                             setCurrents={setCurrentsSigns}
                             defaults={defaultsSigns}
-                            disabled={wasSent}
+                            disabled={wasSent && !isAdmin}
                           />
                         </div>
                         <FormMessage />
@@ -495,7 +496,7 @@ export const FatigueReportForm = ({
                                 currents={currentsAppearances}
                                 setCurrents={setCurrentsAppearances}
                                 defaults={defaultsAppearances}
-                                disabled={wasSent}
+                                disabled={wasSent && !isAdmin}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -525,7 +526,7 @@ export const FatigueReportForm = ({
                                 currents={currentsMoods}
                                 setCurrents={setCurrentsMoods}
                                 defaults={defaultsMoods}
-                                disabled={wasSent}
+                                disabled={wasSent && !isAdmin}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -558,7 +559,7 @@ export const FatigueReportForm = ({
                                 currents={currentsPerformances}
                                 setCurrents={setCurrentsPerformances}
                                 defaults={defaultsPerformances}
-                                disabled={wasSent}
+                                disabled={wasSent && !isAdmin}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -588,7 +589,7 @@ export const FatigueReportForm = ({
                                 currents={currentsDrivingModes}
                                 setCurrents={setCurrentsDrivingModes}
                                 defaults={defaultsDrivingModes}
-                                disabled={wasSent}
+                                disabled={wasSent && !isAdmin}
                                 isCheck={true}
                               />
                               <FormMessage />
@@ -623,7 +624,7 @@ export const FatigueReportForm = ({
                           placeholder="Escriba aquí"
                           className="bg-slate-50 border border-primary"
                           {...field}
-                          disabled={wasSent}
+                          disabled={wasSent && !isAdmin}
                         />
                       </FormControl>
                       <FormDescription>
@@ -659,7 +660,7 @@ export const FatigueReportForm = ({
                           currents={currentsStrategies}
                           setCurrents={setCurrentsStrategies}
                           defaults={defaultsStrategies}
-                          disabled={wasSent}
+                          disabled={wasSent && !isAdmin}
                         />
                       </div>
                       <FormMessage />
@@ -670,19 +671,9 @@ export const FatigueReportForm = ({
             </div>
           )}
 
-          {!isAdmin && (
-            <ModalRecommendations
-              open={openRecommendations}
-              defaultsStrategies={defaultsStrategies}
-              fatigueLevel={reportData.riskLevel || "LOW"}
-              fatigueSleepReport={fatigueSleepReport}
-              strategy={fatigueSleepReport.strategy || ""}
-            />
-          )}
-
-          {!wasSent && (
+          {(!wasSent || isAdmin) && (
             <Button
-              disabled={isSubmitting || !isValid || wasSent}
+              disabled={isSubmitting || !isValid || (wasSent && !isAdmin)}
               className="w-full max-w-[500px] gap-3 mt-5"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -691,6 +682,15 @@ export const FatigueReportForm = ({
           )}
         </form>
       </Form>
+      {!isAdmin && (
+        <ModalRecommendations
+          open={openRecommendations}
+          defaultsStrategies={defaultsStrategies}
+          fatigueLevel={reportData.riskLevel || "LOW"}
+          fatigueSleepReport={fatigueSleepReport}
+          strategy={fatigueSleepReport.strategy || ""}
+        />
+      )}
     </div>
   );
 };
