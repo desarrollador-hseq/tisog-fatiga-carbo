@@ -2,18 +2,10 @@
 
 import React, { Dispatch, SetStateAction } from "react";
 import {
-  Building2,
-  BookOpenText,
-  ClipboardCheck,
-  UsersRound,
-  ScrollText,
-  Home,
-  Contact2,
   LucideIcon,
 } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "./sidebar-content";
-
 
 
 interface SidebarProps {
@@ -24,7 +16,6 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({
-
   openSidebar,
   routes,
   setOpenSidebar,

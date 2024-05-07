@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { db } from "@/lib/db";
 
-import { Card } from "@/components/ui/card";
 import { TitleOnPage } from "@/components/title-on-page";
 
 import { authOptions } from "@/lib/authOptions";
@@ -22,8 +21,10 @@ const CreateReportPage = async () => {
   }
 
   const drivers = await db.driver.findMany({
-    where: { active: true, companyId: session.user.companyId },
-
+    where: {
+      active: true,
+      // companyId: session.user.companyId
+    },
   });
   const logisticsCenters = await db.logisticsCenter.findMany({
     where: { active: true, companyId: session.user.companyId },
@@ -32,14 +33,17 @@ const CreateReportPage = async () => {
     where: { active: true },
   });
 
-
   return (
     <CardPage
       pageHeader={
         <TitleOnPage text="Crear Reporte de fatiga y sueño" bcrumb={bcrumb} />
       }
     >
-      <CreateReportForm drivers={drivers} logisticsCenters={logisticsCenters} cities={cities} />
+      <CreateReportForm
+        drivers={drivers}
+        logisticsCenters={logisticsCenters}
+        cities={cities}
+      />
     </CardPage>
   );
 };

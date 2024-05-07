@@ -62,3 +62,31 @@ export async function PATCH(req: Request, { params }: { params: { supervisorId: 
         return new NextResponse("Internal Errorr" + error, { status: 500 })
     }
 }
+
+export async function DELETE(req: Request, { params }: { params: { supervisorId: string } }) {
+
+    try {
+        const session = await getServerSession(authOptions)
+        const { supervisorId } = params;
+  
+        if (!session) return new NextResponse("Unauthorized", { status: 401 })
+        if (!supervisorId) return new NextResponse("Not Found", { status: 404 })
+  
+        const supervisorDeleted = await db.user.update({
+            where: {
+                id: supervisorId,
+                role: "USER"
+            },
+            data: {
+                active: false
+            }
+        })
+  
+        return NextResponse.json(supervisorDeleted)
+  
+    } catch (error) {
+        console.log("[DELETED_ID_SUPERVISOR]", error)
+        return new NextResponse("Internal Errorr " + error, { status: 500 })
+    }
+  }
+  

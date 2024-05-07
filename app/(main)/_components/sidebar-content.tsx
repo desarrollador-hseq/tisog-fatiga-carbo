@@ -1,7 +1,5 @@
 import { LucideIcon } from "lucide-react";
 import { SidebarItems } from "./sidebar-items";
-import { LogoMain } from "@/components/logo-main";
-import { useMemo } from "react";
 import { useLoading } from "@/components/providers/loading-provider";
 
 interface SidebarContentProps {
@@ -15,7 +13,7 @@ export const SidebarContent = ({ routes }: SidebarContentProps) => {
     <div className="h-full w-full  flex flex-col overflow-y-auto bg-white ">
       <div className="flex flex-col w-full h-full max-h-[calc(100vh-60px)] md:max-h-[calc(100vh-140px)]">
         <div className="md:hidden flex justify-start items-center pl-7 h-14">
-          <LogoMain />
+          {/* <LogoMain /> */}
         </div>
         {routes.map((route) => (
           <SidebarItems
@@ -32,9 +30,9 @@ export const SidebarContent = ({ routes }: SidebarContentProps) => {
           />
         ))}
       </div>
-      <div className="w-full flex justify-center">
+      {/* <div className="w-full flex justify-center">
         <LogoMain />
-      </div>
+      </div> */}
     </div>
   );
 };

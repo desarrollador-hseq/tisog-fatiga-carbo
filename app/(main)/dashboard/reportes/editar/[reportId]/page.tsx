@@ -6,6 +6,8 @@ import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
 import { FatigueReportForm } from "../../../../_components/fatigue-report-form";
 import { getArraySymptomsByIds } from "@/lib/utils";
+import { ModalCancelReport } from "./_components/modal-cancel-report";
+import { GenerateFatigueReportPdf } from "@/app/(main)/_components/generate-fatigue-report-pdf";
 
 const bcrumb = [
   { label: "Reportes", path: "/dashboard/reportes" },
@@ -46,120 +48,77 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
         select: {
           name: true,
           numDoc: true,
-        }
+        },
       },
       city: {
         select: {
-          realName: true
-        }
-      }
-    },
-  });
-
-  const defaultsSymptoms = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "symptoms",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
-        },
-      },
-    },
-  });
-  const defaultsSigns = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "signs",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
-        },
-      },
-    },
-  });
-  const defaultsAppearance = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "appearances",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
-        },
-      },
-    },
-  });
-  const defaultsMoods = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "moods",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
-        },
-      },
-    },
-  });
-  const defaultsPerformances = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "performances",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
-        },
-      },
-    },
-  });
-  const defaultsDrivingModes = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "drivingModes",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
-        },
-      },
-    },
-  });
-  const defaultsStrategies = await db.parameter.findUnique({
-    where: {
-      active: true,
-      name: "strategies",
-    },
-    include: {
-      defaultValues: {
-        where: {
-          active: true,
+          realName: true,
         },
       },
     },
   });
 
   if (!report) {
-    return <div>Sin datos</div>;
+    return (
+      <div className="w-full h-full min-h-[calc(100vh-60px)] flex justify-center items-center ">
+        <h2 className="text-3xl font-bold text-red-600">
+          Reporte no encontrado!
+        </h2>
+      </div>
+    );
   }
 
-  const symptomsArray = await getArraySymptomsByIds(report.symptoms?.split(",") || []);
-  console.log({symptomsArray})
+  const defaults = await db.parameter.findMany({
+    where: {
+      active: true,
+    },
+    include: {
+      defaultValues: {
+        where: {
+          active: true,
+        },
+      },
+    },
+  });
 
   return (
     <CardPage
       pageHeader={
         <>
-          <TitleOnPage text="Reporte de fatiga y sueño" bcrumb={bcrumb} />
+          <TitleOnPage text="Reporte de fatiga y sueño" bcrumb={bcrumb}>
+            {report.state === "PENDING" && (
+              <ModalCancelReport report={report} />
+            )}
+            {report.state === "SEND" && (
+              <GenerateFatigueReportPdf
+                report={report}
+                defaultsSymptoms={
+                  defaults.find((def) => def.name === "symptoms")
+                    ?.defaultValues || []
+                }
+                defaultsSigns={
+                  defaults.find((def) => def.name === "signs")?.defaultValues ||
+                  []
+                }
+                defaultsAppearances={
+                  defaults.find((def) => def.name === "appearances")
+                    ?.defaultValues || []
+                }
+                defaultsMoods={
+                  defaults.find((def) => def.name === "moods")?.defaultValues ||
+                  []
+                }
+                defaultsPerformances={
+                  defaults.find((def) => def.name === "performances")
+                    ?.defaultValues || []
+                }
+                defaultsDrivingModes={
+                  defaults.find((def) => def.name === "drivingModes")
+                    ?.defaultValues || []
+                }
+              />
+            )}
+          </TitleOnPage>
           {/* <div className="p-5 mx-5 text-gray-700 font-normal bg-slate-300 rounded-md">
             Este formulario debe diligenciarlo el Supervisor del colaborador
             cuando sienta una condición de salud que impide desarrollar sus
@@ -173,13 +132,30 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
       <FatigueReportForm
         isAdmin={isAdmin}
         fatigueSleepReport={report}
-        defaultsSymptoms={defaultsSymptoms?.defaultValues || []}
-        defaultsSigns={defaultsSigns?.defaultValues || []}
-        defaultsAppearances={defaultsAppearance?.defaultValues || []}
-        defaultsMoods={defaultsMoods?.defaultValues || []}
-        defaultsPerformances={defaultsPerformances?.defaultValues || []}
-        defaultsDrivingModes={defaultsDrivingModes?.defaultValues || []}
-        defaultsStrategies={defaultsStrategies?.defaultValues || []}
+        defaultsSymptoms={
+          defaults.find((def) => def.name === "symptoms")?.defaultValues || []
+        }
+        defaultsSigns={
+          defaults.find((def) => def.name === "signs")?.defaultValues || []
+        }
+        defaultsAppearances={
+          defaults.find((def) => def.name === "appearances")?.defaultValues ||
+          []
+        }
+        defaultsMoods={
+          defaults.find((def) => def.name === "moods")?.defaultValues || []
+        }
+        defaultsPerformances={
+          defaults.find((def) => def.name === "performances")?.defaultValues ||
+          []
+        }
+        defaultsDrivingModes={
+          defaults.find((def) => def.name === "drivingModes")?.defaultValues ||
+          []
+        }
+        defaultsStrategies={
+          defaults.find((def) => def.name === "strategies")?.defaultValues || []
+        }
       />
     </CardPage>
   );

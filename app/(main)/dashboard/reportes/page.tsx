@@ -32,9 +32,9 @@ const ReportsPage = async () => {
   return (
     <CardPage
       pageHeader={
-        <TitleOnPage text="Listado de reportes" bcrumb={bcrumb}>
+        <TitleOnPage text="Mis reportes" bcrumb={bcrumb}>
           <Link
-            className={cn(buttonVariants())}
+            className={cn(buttonVariants({variant: "secondary", className: "text-xl"}))}
             href={`/dashboard/reportes/crear`}
           >
             Crear

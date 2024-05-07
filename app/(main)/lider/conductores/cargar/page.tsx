@@ -56,7 +56,7 @@ const UploadDrivers = () => {
     <CardPage
       pageHeader={
         <TitleOnPage text={`Agregar conductor`} bcrumb={bcrumbs}>
-          <ButtonDownloadTemplateExcel name="plantilla_colaboradores" />
+          <ButtonDownloadTemplateExcel name="plantilla-conductores" />
         </TitleOnPage>
       }
     >

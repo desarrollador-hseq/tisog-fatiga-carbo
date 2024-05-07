@@ -130,9 +130,11 @@ export const LoadingProvider = ({ children }: Props) => {
           backgroundSize: "cover",
           height: "100vh",
           overflow: loadingApp ? "hidden" : "auto",
+          width: "100%",
+          minWidth: "100%"
         }}
       >
-        <div className="fadeIn">
+        <div className="fadeIn w-full">
           {children}
           {loadingApp && (
           <LoaderFullpage />)}

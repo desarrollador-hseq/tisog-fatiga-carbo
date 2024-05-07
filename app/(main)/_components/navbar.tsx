@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { ClipboardCheck, Home, Menu, ScrollText, Settings } from "lucide-react";
+import { CarFront, ClipboardCheck, Home, Menu, ScrollText, Settings, Users, UsersRound } from "lucide-react";
 import { Role } from "@prisma/client";
 import { Sidebar } from "./sidebar";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,12 @@ const leaderRoutes = [
     href: "/reportes",
   },
   {
-    icon: ScrollText,
+    icon: UsersRound,
     label: "Supervisores",
     href: "/supervisores",
   },
   {
-    icon: ScrollText,
+    icon: CarFront,
     label: "Conductores",
     href: "/conductores",
   },
@@ -45,26 +45,28 @@ const adminRoutes = [
   //   label: "Ciudades",
   //   href: "/ciudades",
   // },
-  // {
-  //   icon: ScrollText,
-  //   label: "Reportes",
-  //   href: "/reportes",
-  // },
+
   {
-    icon: ScrollText,
+    icon: CarFront,
     label: "Conductores",
     href: "/conductores",
   },
   {
-    icon: ScrollText,
-    label: "Supervisores",
-    href: "/supervisores",
-  },
-  {
-    icon: ScrollText,
+    icon: Users,
     label: "Líderes",
     href: "/lideres",
   },
+  {
+    icon: ScrollText,
+    label: "Reportes",
+    href: "/reportes",
+  },
+  {
+    icon: UsersRound,
+    label: "Supervisores",
+    href: "/supervisores",
+  },
+
   // {
   //   icon: ScrollText,
   //   label: "Centros",

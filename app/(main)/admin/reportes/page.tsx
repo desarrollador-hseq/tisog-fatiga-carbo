@@ -24,9 +24,9 @@ const ReportsPage = async () => {
   const reports = await db.fatigueSleepReport.findMany({
     where: {
       active: true,
-      driver: {
-        companyId: session.user.companyId,
-      },
+      NOT: {
+        state: "CANCELLED"
+      }
     },
     include: {
       driver: true,

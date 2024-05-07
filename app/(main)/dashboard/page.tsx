@@ -40,7 +40,7 @@ const DashboardHomePage = async () => {
       <CardPage
         className=""
         pageHeader={
-          <TitleOnPage text="Listado de reportes" bcrumb={bcrumb}>
+          <TitleOnPage text="Mis reportes" bcrumb={bcrumb}>
             <Link
               className={cn(buttonVariants({variant: "secondary"}))}
               href={`/dashboard/reportes/crear`}

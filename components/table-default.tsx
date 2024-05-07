@@ -171,8 +171,9 @@ export function TableDefault<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-1 py-2"></div>
-      <TablePagination table={table} />
+      <div className="flex items-center justify-between space-x-1 py-2">
+        <TablePagination table={table} />
+      </div>
     </div>
   );
 }

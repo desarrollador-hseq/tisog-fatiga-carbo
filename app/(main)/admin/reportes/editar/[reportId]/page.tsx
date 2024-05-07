@@ -60,6 +60,16 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
     },
   });
 
+  if (!report) {
+    return (
+      <div className="w-full h-full min-h-[calc(100vh-60px)] flex justify-center items-center ">
+        <h2 className="text-3xl font-bold text-red-600">
+          Reporte no encontrado!
+        </h2>
+      </div>
+    );
+  }
+
   const defaults = await db.parameter.findMany({
     where: {
       active: true,
@@ -73,9 +83,6 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
     },
   });
 
-  if (!report) {
-    return <div>Sin datos</div>;
-  }
 
   const fatigueReportEvents = await db.fatigueReportEvent.findMany({
     where: {

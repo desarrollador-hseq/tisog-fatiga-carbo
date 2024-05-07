@@ -16,6 +16,16 @@ const EditLeaderPage = async ({ params }: { params: { leaderId: string } }) => {
     },
   });
 
+  if (!leader) {
+    return (
+      <div className="w-full h-full min-h-[calc(100vh-60px)] flex justify-center items-center ">
+        <h2 className="text-3xl font-bold text-red-600">
+          Usuario no encontrado
+        </h2>
+      </div>
+    );
+  }
+
   const cities = await db.city.findMany({
     where: {
       active: true,
@@ -31,7 +41,6 @@ const EditLeaderPage = async ({ params }: { params: { leaderId: string } }) => {
     },
   });
 
-  console.log({leader})
 
   return (
     <CardPage

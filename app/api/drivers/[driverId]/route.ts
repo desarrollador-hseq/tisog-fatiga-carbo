@@ -48,3 +48,29 @@ export async function PATCH(req: Request, { params }: { params: { driverId: stri
     return new NextResponse("Internal Errorr" + error, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request, { params }: { params: { driverId: string } }) {
+
+  try {
+      const session = await getServerSession(authOptions)
+      const { driverId } = params;
+
+      if (!session) return new NextResponse("Unauthorized", { status: 401 })
+      if (!driverId) return new NextResponse("Not Found", { status: 404 })
+
+      const driverDeleted = await db.driver.update({
+          where: {
+              id: driverId,
+          },
+          data: {
+              active: false
+          }
+      })
+
+      return NextResponse.json(driverDeleted)
+
+  } catch (error) {
+      console.log("[DELETED_ID_DRIVER]", error)
+      return new NextResponse("Internal Errorr " + error, { status: 500 })
+  }
+}

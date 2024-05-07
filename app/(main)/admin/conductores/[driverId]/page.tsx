@@ -2,6 +2,7 @@ import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
 import { AddDriverForm } from "../_components/add-driver-form";
+import { DeleteDriver } from "../_components/delete-driver";
 
 const bcrumb = [
   { label: "Conductores", path: "/admin/conductores" },
@@ -15,29 +16,50 @@ const EditDriverPage = async ({ params }: { params: { driverId: string } }) => {
     },
   });
 
+  if (!driver) {
+    return (
+      <div className="w-full h-full min-h-[calc(100vh-60px)] flex justify-center items-center ">
+        <h2 className="text-3xl font-bold text-red-600">
+          Usuario no encontrado
+        </h2>
+      </div>
+    );
+  }
+
   const cities = await db.city.findMany({
     where: {
-      active: true
+      active: true,
     },
     orderBy: {
-      realName: "desc"
-    }
-  })
+      realName: "desc",
+    },
+  });
 
   const companies = await db.company.findMany({
     where: {
-      active: true
-    }
-  })
+      active: true,
+    },
+  });
   const positions = await db.position.findMany({
     where: {
-      active: true
-    }
-  })
+      active: true,
+    },
+  });
 
   return (
-    <CardPage pageHeader={<TitleOnPage text={`Editar conductor`} bcrumb={bcrumb} />}>
-      <AddDriverForm driver={driver} cities={cities} companies={companies} positions={positions} />
+    <CardPage
+      pageHeader={
+        <TitleOnPage text={`Editar conductor`} bcrumb={bcrumb}>
+          <DeleteDriver driver={driver} />
+        </TitleOnPage>
+      }
+    >
+      <AddDriverForm
+        driver={driver}
+        cities={cities}
+        companies={companies}
+        positions={positions}
+      />
     </CardPage>
   );
 };

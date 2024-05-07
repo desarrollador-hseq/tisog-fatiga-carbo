@@ -23,6 +23,23 @@ const DriversPage = async () => {
     where: {
       active: true,
     },
+    include: {
+      company: {
+        select: {
+          name: true
+        }
+      },
+      city: {
+        select: {
+          realName: true
+        }
+      },
+      position: {
+        select: {
+          name: true
+        }
+      }
+    },
     orderBy: {
       createdAt: "desc",
     },

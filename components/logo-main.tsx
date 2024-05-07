@@ -23,7 +23,13 @@ export const LogoMain = ({
   const navigate = () => {
     if (!goRoot) return;
 
-    router.push(!isDashboard ? "/admin" : "/dashboard");
+    router.push(
+      pathname.split("/")[1].includes("admin")
+        ? "/admin"
+        : pathname.split("/")[1].includes("lider")
+        ? "/lider"
+        : "/dashboard"
+    );
   };
   return (
     <Image

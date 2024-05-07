@@ -100,7 +100,7 @@ export const FatigueIndicators = ({
 
   return (
     <div
-      className="w-full flex flex-col justify-center mb-6 gap-2"
+      className="w-full flex flex-col justify-center mb-6 gap-2 min-w-full"
       id="panel"
       ref={componentRef}
     >
@@ -110,7 +110,7 @@ export const FatigueIndicators = ({
       </div> */}
       <ListCriticalReports reports={filteredReports} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-3  mb-3 lg:grid-rows-1 mt-2">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 mb-3 lg:grid-rows-1 mt-2 w-full min-w-full">
         <ReportBarFatigue
           defaultsItems={defaultsSymptoms}
           field="symptoms"
@@ -127,9 +127,9 @@ export const FatigueIndicators = ({
           title="Comportamientos más frecuentes"
         />
 
-        <div className="flex flex-col bg-primary/30 p-3">
+        <div className="flex flex-col bg-primary/30 p-3 w-full overflow-hidden">
           <h3 className="text-center text-3xl font-semibold my-3">Signos</h3>
-          <div className="grid md:grid-cols-2 md:grid-rows-2 gap-2 ">
+          <div className="grid md:grid-cols-2 md:grid-rows- gap-2 w-full">
             <ReportBarFatigue
               defaultsItems={defaultsAppearances}
               field="appearances"

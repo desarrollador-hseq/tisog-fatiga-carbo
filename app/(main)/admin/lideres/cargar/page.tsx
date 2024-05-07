@@ -69,7 +69,7 @@ const UploadSupervisors = () => {
     <CardPage
       pageHeader={
         <TitleOnPage text={`Cargar líderes`} bcrumb={bcrumbs}>
-          <ButtonDownloadTemplateExcel name="plantilla_colaboradores" />
+          <ButtonDownloadTemplateExcel name="plantilla-lideres" />
         </TitleOnPage>
       }
     >

@@ -126,7 +126,7 @@ export const FatigueReportForm = ({
   );
 
   const wasSent = useMemo(
-    () => fatigueSleepReport.state !== "PENDING" && !isAdmin,
+    () => fatigueSleepReport.state == "SEND" || fatigueSleepReport.state == "CANCELLED" ,
     [isEdit, isAdmin]
   );
 
@@ -271,8 +271,8 @@ export const FatigueReportForm = ({
                 ? formatDate(fatigueSleepReport.date)
                 : "No registra"}{" "}
               -{" "}
-              {fatigueSleepReport.createdAt
-                ? format(fatigueSleepReport.createdAt, "HH:mm")
+              {fatigueSleepReport.date
+                ? format(fatigueSleepReport.date, "HH:mm")
                 : "No registra"}
             </>
           ) : (

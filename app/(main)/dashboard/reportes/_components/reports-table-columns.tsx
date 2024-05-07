@@ -53,7 +53,7 @@ export const reportsTableColumns: ColumnDef<
     },
     cell: ({ row }) => {
       const date = row.original?.date;
-      return <div className="">{date ? formatDate(date) : "no"}</div>;
+      return <div className="">{date ? formatDate(date) : " "}</div>;
     },
   },
   {

@@ -72,7 +72,7 @@ export const TitleOnPage = ({
             </nav>
           )}
         </div>
-        <div>{children}</div>
+        <div className="self-end justify-self-end">{children}</div>
       </CardContent>
     </Card>
   );

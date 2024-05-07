@@ -148,3 +148,30 @@ export async function PATCH(
     return new NextResponse("Internal Errorr " + error, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request, { params }: { params: { reportId: string } }) {
+
+  try {
+      const session = await getServerSession(authOptions)
+      const { reportId } = params;
+
+      if (!session) return new NextResponse("Unauthorized", { status: 401 })
+      if (!reportId) return new NextResponse("Not Found", { status: 404 })
+
+      const reportCanceled = await db.fatigueSleepReport.update({
+          where: {
+              id: reportId,
+              active: true
+          },
+          data: {
+            state: "CANCELLED"
+          }
+      })
+
+      return NextResponse.json(reportCanceled)
+
+  } catch (error) {
+      console.log("[CANCEL_ID_REPORT]", error)
+      return new NextResponse("Internal Errorr " + error, { status: 500 })
+  }
+}
