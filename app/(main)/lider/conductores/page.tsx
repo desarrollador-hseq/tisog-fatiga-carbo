@@ -22,7 +22,23 @@ const DriversPage = async () => {
   const drivers = await db.driver.findMany({
     where: {
       active: true,
-      companyId: session?.user?.companyId,
+    },
+    include: {
+      company: {
+        select: {
+          name: true
+        }
+      },
+      city: {
+        select: {
+          realName: true
+        }
+      },
+      position: {
+        select: {
+          name: true
+        }
+      }
     },
     orderBy: {
       createdAt: "desc",
