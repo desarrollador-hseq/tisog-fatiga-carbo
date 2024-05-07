@@ -89,7 +89,7 @@ export const CreateReportForm = ({
     console.log({ values });
     try {
       const { data } = await axios.post("/api/reports", values);
-      router.push(`/dashboard/reportes/editar/${data.id}`);
+      router.push(`/lider/reportes/editar/${data.id}`);
 
       toast.success("Solicitud creada");
     } catch {

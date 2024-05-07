@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { LogoMain } from "@/components/logo-main";
 import { cn } from "@/lib/utils";
 import { ModalLogout } from "@/app/(auth)/_components/modal-logout";
+import { useLoading } from "@/components/providers/loading-provider";
 
 const dashRoutes = [
   { icon: Home, label: "Inicio", href: "/" },
@@ -77,12 +78,14 @@ const adminRoutes = [
 export const Navbar = ({
   isMaster,
   role,
+  company
 }: {
   isMaster: boolean;
+  company?: String;
   role: Role;
 }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
-  // const { userRole } = useLoading();
+  
 
   const { data: session } = useSession();
 
@@ -129,9 +132,9 @@ export const Navbar = ({
             {role === "ADMIN" ? (
               <span className="font-bold uppercase">Administrador</span>
             ) : role === "LEADER" ? (
-              <span className="font-bold uppercase">Lider</span>
+              <span className="font-bold uppercase">Líder - {company}</span>
             ) : (
-              <span className="font-bold uppercase">Supervisor</span>
+              <span className="font-bold uppercase">Supervisor - {company}</span>
             )}
           </div>
 

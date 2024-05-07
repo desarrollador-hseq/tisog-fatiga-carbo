@@ -29,6 +29,7 @@ import AutocompleteInput from "@/components/autocomplete-input";
 import { ListToggleItems } from "@/components/list-toggle-items";
 import { ModalRecommendations } from "../dashboard/reportes/editar/[reportId]/_components/modal-recommendations";
 import { Textarea } from "@/components/ui/textarea";
+import { useLoading } from "@/components/providers/loading-provider";
 
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
@@ -77,6 +78,7 @@ export const FatigueReportForm = ({
   isAdmin,
 }: FatigueReportFormProps) => {
   const router = useRouter();
+  const { userRole } = useLoading();
   const [isClient, setIsClient] = useState(false);
   const [openRecommendations, setOpenRecommendations] = useState(false);
   const [reportData, setReportData] = useState(fatigueSleepReport);
@@ -682,7 +684,7 @@ export const FatigueReportForm = ({
           )}
         </form>
       </Form>
-      {!isAdmin && (
+      {userRole !== "ADMIN" && (
         <ModalRecommendations
           open={openRecommendations}
           defaultsStrategies={defaultsStrategies}
