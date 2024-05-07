@@ -1,3 +1,4 @@
+import { buttonVariants } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,6 +10,8 @@ import {
 } from "@/components/ui/table";
 import { cn, formatDate } from "@/lib/utils";
 import { City, Company, Driver, FatigueSleepReport, LogisticsCenter, User } from "@prisma/client";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 
 
 interface reportWithDriverSupervisor extends FatigueSleepReport {
@@ -41,6 +44,7 @@ export const ListCriticalReports = ({
             <TableHead className="text-white">Empresa</TableHead>
             <TableHead className="text-white">Fecha</TableHead>
             <TableHead className="text-white">Nivel riesgo</TableHead>
+            <TableHead className="text-white">ver</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="space-y-3">
@@ -66,6 +70,11 @@ export const ListCriticalReports = ({
               </TableCell>
               <TableCell className="font-medium ">
                 {report.riskLevel === "HIGH" ? "Alto" : "no"}
+              </TableCell>
+              <TableCell className="font-medium ">
+               <Link className={cn(buttonVariants())} href={`/admin/reportes/editar/${report.id}`}>
+                <Eye className="" />
+               </Link>
               </TableCell>
             </TableRow>
           ))}

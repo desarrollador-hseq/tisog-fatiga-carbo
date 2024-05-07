@@ -12,7 +12,7 @@ import { GanttChartSquare } from "lucide-react";
 import { FatigueReportTimelineItem } from "@/app/(main)/_components/fatigue-report-timeline-item";
 
 const bcrumb = [
-  { label: "Reportes", path: "/lider/reportes" },
+  { label: "Reportes", path: "/admin/reportes" },
   { label: "Editar", path: "editar" },
 ];
 
@@ -20,7 +20,7 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user?.role) {
-    return redirect("/lider");
+    return redirect("/admin");
   }
 
   const isAdmin = session.user?.role === "ADMIN";
