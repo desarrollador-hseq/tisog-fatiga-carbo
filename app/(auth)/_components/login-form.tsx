@@ -30,12 +30,12 @@ const formSchema = z.object({
 
 export const LoginForm = () => {
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
   const [isEditing, setIsEditing] = useState(false);
   const [viewPass, setViewPass] = useState(false);
- 
-  const redirect = searchParams.get('redirect')
+
+  const redirect = searchParams.get("redirect");
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -53,6 +53,7 @@ export const LoginForm = () => {
         email: values.email,
         password: values.password,
         redirect: false,
+        callbackUrl: !!redirect ? `${redirect}` : "/",
       });
 
       if (!signInResponse || signInResponse.ok !== true) {
@@ -65,7 +66,7 @@ export const LoginForm = () => {
       if (redirect) {
         router.push(redirect.toString());
       } else {
-        router.push('/'); // Si no hay redirección específica, ir a la página principal
+        router.push("/"); // Si no hay redirección específica, ir a la página principal
       }
 
       router.refresh();
@@ -80,7 +81,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm flex ">
+    <div className=" relative mt-7 bg-white border border-gray-200 rounded-xl shadow-sm flex ">
       <div className="p-4 sm:p-7 min-w-[400px] min-h-[400px] flex flex-col justify-center">
         <div className="text-center">
           <h1 className="block text-2xl font-bold text-gray-800 ">
@@ -120,7 +121,7 @@ export const LoginForm = () => {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <Link
-                       href="/recuperar-contrasena"
+                        href="/recuperar-contrasena"
                         className="w-full block text-sm text-blue-600 decoration-2 hover:underline font-medium text-end"
                       >
                         Olvidé la contraseña

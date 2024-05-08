@@ -7,7 +7,9 @@ import { ScrollUp } from "@/components/scroll-up";
 import { NotAuthorized } from "@/components/not-authorized";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import querystring from 'querystring';
+import querystring from "querystring";
+import { headers } from "next/headers";
+import { Redirectt } from "./redirect";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -21,31 +23,24 @@ export default async function MainLayout({
 }>) {
   const session = await getServerSession(authOptions);
 
-  if (!session || !session.user?.role) {
-    // const queryParams = {
-    //   red: 'Texto del mensaje que quieres pasar en el query',
-    //   // Otros parámetros de la consulta si es necesario
-    // };
   
-    // const queryString = querystring.stringify(queryParams);
-    // return redirect(`/?${queryString}`);
+  if (!session || !session.user?.role) {
+    return <Redirectt />
   }
 
-  const {user} = await session
+  const { user } = await session;
 
   let company;
-
-  if(user.companyId) {
-     company = await db.company.findUnique({
+  if (user.companyId) {
+    company = await db.company.findUnique({
       where: {
-        id: user.companyId
+        id: user.companyId,
       },
       select: {
-        name: true
-      }
-    })
+        name: true,
+      },
+    });
   }
-
 
   return (
     <div>
@@ -55,7 +50,11 @@ export default async function MainLayout({
           roboto.className
         )}
       >
-        <Navbar company={company?.name} isMaster={user.isMaster || false} role={user.role || "USER"} />
+        <Navbar
+          company={company?.name}
+          isMaster={user.isMaster || false}
+          role={user.role || "USER"}
+        />
         {/* <div className="mt-1 md:pl-[223px] min-h-screen xl:flex justify-center items-start xl:w-full relative"> */}
         <div className="mt-1 min-h-screen justify-center items-start xl:w-full relative">
           <div className=" min-h-full mt-[60px] max-w-[1200px] w-full mx-auto">
