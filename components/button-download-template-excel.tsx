@@ -24,7 +24,7 @@ export const ButtonDownloadTemplateExcel = ({ name }: { name: string }) => {
       <Button
         variant="secondary"
         onClick={handleDownloadTemplate}
-        className="gap-2  py-7 px-6"
+        className="gap-2 py-7 px-6 border-2 border-white"
       >
         <FileDown />
         Descargar plantilla de excel

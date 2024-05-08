@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListToggleItems } from "@/components/list-toggle-items";
+import { useLoading } from "@/components/providers/loading-provider";
 
 interface ModalRecommendationsProps {
   open: boolean;
@@ -46,6 +47,7 @@ export const ModalRecommendations = ({
   defaultsStrategies,
 }: ModalRecommendationsProps) => {
   const router = useRouter();
+  const {userRole} = useLoading()
   const [isClient, setIsClient] = useState(false);
   const [openModal, setOpenModal] = useState(open);
 
@@ -101,7 +103,7 @@ export const ModalRecommendations = ({
       });
       toast.success("Reporte enviado correctamente");
 
-      router.push(`/dashboard/reportes`);
+      router.push(`/${userRole == "LEADER" ? "lider" : "dashboard"}/reportes`);
       router.refresh();
     } catch (error) {
       console.error(error);

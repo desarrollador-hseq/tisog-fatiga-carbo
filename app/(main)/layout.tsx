@@ -6,6 +6,8 @@ import { authOptions } from "@/lib/authOptions";
 import { ScrollUp } from "@/components/scroll-up";
 import { NotAuthorized } from "@/components/not-authorized";
 import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import querystring from 'querystring';
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -20,7 +22,13 @@ export default async function MainLayout({
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user?.role) {
-    return <NotAuthorized />
+    // const queryParams = {
+    //   red: 'Texto del mensaje que quieres pasar en el query',
+    //   // Otros parámetros de la consulta si es necesario
+    // };
+  
+    // const queryString = querystring.stringify(queryParams);
+    // return redirect(`/?${queryString}`);
   }
 
   const {user} = await session

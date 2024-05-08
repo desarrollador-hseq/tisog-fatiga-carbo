@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -29,10 +29,14 @@ const formSchema = z.object({
 });
 
 export const LoginForm = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams()
+
   const [isEditing, setIsEditing] = useState(false);
   const [viewPass, setViewPass] = useState(false);
+ 
+  const redirect = searchParams.get('redirect')
 
-  const router = useRouter();
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,6 +60,12 @@ export const LoginForm = () => {
           description: "Por favor revisa los datos ingresados",
           position: "bottom-center",
         });
+      }
+
+      if (redirect) {
+        router.push(redirect.toString());
+      } else {
+        router.push('/'); // Si no hay redirección específica, ir a la página principal
       }
 
       router.refresh();

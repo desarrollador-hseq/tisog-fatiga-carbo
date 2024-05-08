@@ -53,7 +53,7 @@ const DriversPage = async () => {
             className={cn(buttonVariants({variant: "secondary"}))}
             href={`/lider/conductores/crear`}
           >
-            Crear
+            Agregar
           </Link>
         </TitleOnPage>
       }

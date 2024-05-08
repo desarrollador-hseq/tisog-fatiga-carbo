@@ -25,6 +25,9 @@ const DriversPage = async () => {
       active: true,
       role: "LEADER",
     },
+    include: {
+      company: true
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -38,7 +41,7 @@ const DriversPage = async () => {
             className={cn(buttonVariants({variant: "secondary"}))}
             href={`/admin/lideres/crear`}
           >
-            Crear
+            Agregar
           </Link>
         </TitleOnPage>
       }

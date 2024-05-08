@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { CarFront, ClipboardCheck, Home, Menu, ScrollText, Settings, Users, UsersRound } from "lucide-react";
+import { CarFront, ClipboardCheck, Home, Menu, ScrollText, Settings, User, Users, UsersRound } from "lucide-react";
 import { Role } from "@prisma/client";
 import { Sidebar } from "./sidebar";
 import { Button } from "@/components/ui/button";
@@ -138,6 +138,8 @@ export const Navbar = ({
             )}
           </div>
 
+         
+
           <div className="flex gap-4 items-center">
             <div className="hidden lg:flex gap-3">
               {routes.map((route) => (
@@ -166,6 +168,15 @@ export const Navbar = ({
                 <Settings className="w-5 h-5" />
               </Link>
             )}
+             <div className="flex gap-5 items-center text-slate-500">
+            {role === "ADMIN" ? (
+              <Link href={`/admin/perfil`}><User /></Link>
+            ) : role === "LEADER" ? (
+              <Link href={`/lider/perfil`}><User /></Link>
+            ) : (
+              <Link href={`/dashboard/perfil`}><User /></Link>
+            )}
+          </div>
             <ModalLogout />
           </div>
         </div>

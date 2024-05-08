@@ -32,12 +32,12 @@ export const ListCriticalReports = ({
     (report) => report.riskLevel === "HIGH"
   );
   return (
-    <div className="bg-orange-600 p-3 mt-2 rounded-md">
+    <div className="p-3 mt-2 rounded-md bg-[#bf0000]">
       <h4 className="text-2xl font-bold text-center my-2 text-white">Alertas de reportes criticos</h4>
       <Table className="text-white border">
         {/* <TableCaption>A list of</TableCaption> */}
         <TableHeader className="text-white">
-          <TableRow className="text-white bg-orange-700">
+          <TableRow className="text-white bg-orange-500">
             <TableHead className="text-white ">Conductor</TableHead>
             <TableHead className="text-white">Supervisor</TableHead>
             <TableHead className="text-white">Ciudad</TableHead>
@@ -51,7 +51,7 @@ export const ListCriticalReports = ({
           {reportsCriticals.map((report) => (
             <TableRow
               key={report.id}
-              className="border-none my-4 bg-orange-400"
+              className="border-none my-4 bg-orange-600"
             >
               <TableCell className="font-medium mb-2 my-3">
                 {report.driver?.fullname}

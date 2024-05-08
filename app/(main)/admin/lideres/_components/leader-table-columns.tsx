@@ -1,7 +1,7 @@
 
 "use client";
 
-import { User } from "@prisma/client";
+import { Company, User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 
 
-export const leaderTableColumns: ColumnDef<User>[] =
+export const leaderTableColumns: ColumnDef<User & {company: Company | null}>[] =
   [
     {
       accessorKey: "name",
@@ -32,6 +32,26 @@ export const leaderTableColumns: ColumnDef<User>[] =
       },
     },
     {
+      accessorKey: "numDoc",
+      accessorFn: (value) => value.numDoc,
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
+          >
+            N° documento
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const numDoc = row.original?.numDoc;
+        return <div className="">{numDoc}</div>;
+      },
+    },
+    {
       accessorKey: "email",
       accessorFn: (value) => value.email,
       header: ({ column }) => {
@@ -51,30 +71,25 @@ export const leaderTableColumns: ColumnDef<User>[] =
         return <div className="">{numDoc}</div>;
       },
     },
-    // {
-    //   accessorKey: "date",
-    //   accessorFn: (value) =>
-    //     value.created && formatDate(value.date),
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         className="font-semibold"
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //       >
-    //         Fecha
-    //         <ArrowUpDown className="ml-2 h-3 w-3" />
-    //       </Button>
-    //     );
-    //   },
-    //   cell: ({ row }) => {
-    //     const date = row.original?.date;
-    //     return (
-    //       <div className="capitalize">
-    //         {date ? formatDate(date) : "sin datos"}
-    //       </div>
-    //     );
-    //   },
-    // },
+    {
+      accessorKey: "company",
+      accessorFn: (value) => value.company?.name,
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="hover:bg-secondary/30 hover:text-secondary-foreground text-xs"
+          >
+            Empresa
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const name = row.original.company?.name;
+        return <div className="">{name}</div>;
+      },
+    },
   ];
 

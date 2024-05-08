@@ -1,14 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+
 import { User } from "@prisma/client";
 import { FieldUpdateForm } from "@/components/field-update-form";
 import { UpdatePasswordForm } from "./update-password-form";
+import { CheckReceiveNotifications } from "../admin/_components/check-receive-notifications";
 
-export const ProfileForm = ({
-  user,
-}: {user: User | null}) => {
-  const router = useRouter();
+export const ProfileForm = ({ user }: { user: User | null }) => {
+  if (!user) {
+    return <div>Sin información del usuario</div>;
+  }
 
   return (
     <div className="max-w-[1500px] w-full h-full mx-auto bg-white rounded-md shadow-sm overflow-y-hidden p-3">
@@ -31,10 +32,15 @@ export const ProfileForm = ({
             value={user?.email}
           />
 
+          {user.role !== "USER" && (
+            <CheckReceiveNotifications
+              id={user?.id}
+              check={!!user?.receiveNotifications || false}
+            />
+          )}
         </div>
-        <div>
+
         <UpdatePasswordForm />
-        </div>
       </div>
     </div>
   );

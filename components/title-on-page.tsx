@@ -20,7 +20,7 @@ export const TitleOnPage = ({
   return (
     <Card
       className={cn(
-        "w-full min-h-20 h-fit flex items-center justify-between my-2 bg-primary rounded-sm opacity-100",
+        "w-full min-h-20 h-fit flex items-center justify-between my-2 bg-gradient-to-b from-[#1E868A] to-teal-800 rounded-sm opacity-100 m-0",
         className
       )}
     >
@@ -39,6 +39,7 @@ export const TitleOnPage = ({
                     Inicio
                   </Link>
                 </li>
+               
 
                 {bcrumb.length > 0 &&
                   bcrumb?.map((crumb, index) => {

@@ -18,9 +18,9 @@ export const CardPage = ({
   className
 }: CardPageProps) => {
   return (
-    <Card className={cn("w-full h-full rounded-sm min-h-[calc(100vh-62px)] overflow-hidden min-w-full max-w-max opacity-85 mb-2", className)}>
-      <CardHeader>{pageHeader}</CardHeader>
-      <CardContent>{children}</CardContent>
+    <Card className={cn("w-full h-full rounded-sm min-h-[calc(100vh-62px)] overflow-hidden min-w-full max-w-max opacity-85 mb-2 bg-gray-100", className)}>
+      <CardHeader className="pt-0 m-0 px-0 ">{pageHeader}</CardHeader>
+      <CardContent className="">{children}</CardContent>
       <CardFooter>{pageFooter}</CardFooter>
     </Card>
   );
