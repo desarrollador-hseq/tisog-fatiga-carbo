@@ -29,6 +29,7 @@ const ParametersPage = async () => {
       <div>
         <div className="flex w-full justify-center mb-4">
           <Link className={cn(buttonVariants())} href="/admin/empresas">Empresas</Link>
+          <Link className={cn(buttonVariants())} href="/admin/cargos">Cargos</Link>
         </div>
       </div>
       <div className="p-2 w-full h-full border border-slate-400 flex flex-col rounded-sm gap-3 bg-slate-300 mb-3">

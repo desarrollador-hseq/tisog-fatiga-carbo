@@ -72,8 +72,8 @@ export const ListCriticalReports = ({
                 {report.riskLevel === "HIGH" ? "Alto" : "no"}
               </TableCell>
               <TableCell className="font-medium ">
-               <Link className={cn(buttonVariants())} href={`/admin/reportes/editar/${report.id}`}>
-                <Eye className="" />
+               <Link className={cn(buttonVariants({className: "h-5"}))} href={`/admin/reportes/editar/${report.id}`}>
+                <Eye className="w-4 h-4" />
                </Link>
               </TableCell>
             </TableRow>

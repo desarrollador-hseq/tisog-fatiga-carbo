@@ -8,7 +8,7 @@ const AutocompleteInput = ({
   label,
   placeholder,
   className,
-  disabled
+  disabled,
 }: {
   options?: any;
   setInputValue: any;
@@ -18,13 +18,10 @@ const AutocompleteInput = ({
   className?: string;
   disabled?: boolean;
 }) => {
-  // component state
-
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  // handle input changes
-  const handleInputChange = (event: any) => {
-    const inputText:string = event.target.value;
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputText: string = event.target.value;
     setInputValue(inputText);
 
     if (!options) return;
@@ -38,12 +35,17 @@ const AutocompleteInput = ({
   const handleInputBlur = () => {
     if (!suggestions.includes(inputValue) && inputValue !== "") {
       setInputValue(inputValue);
-      // setInputValue('');
       setSuggestions([]);
     }
   };
 
-  const handleOptionClick = (option: any) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
+  const handleOptionClick = (option: string) => {
     setInputValue(option);
     setSuggestions([]);
   };
@@ -58,10 +60,11 @@ const AutocompleteInput = ({
         placeholder={placeholder}
         className={className}
         disabled={disabled}
-        // onBlur={handleInputBlur}
+        onBlur={handleInputBlur}
+        onKeyDown={handleKeyDown}
       />
-      {suggestions && (
-        <ul className=" bg-slate-100 gap-1">
+      {suggestions.length > 0 && (
+        <ul className="bg-slate-100 gap-1">
           {suggestions.map((suggestion) => (
             <li
               className="flex items-center p-4 cursor-pointer h-10 rounded-sm border border-slate-500"
@@ -76,5 +79,4 @@ const AutocompleteInput = ({
     </div>
   );
 };
-
 export default AutocompleteInput;

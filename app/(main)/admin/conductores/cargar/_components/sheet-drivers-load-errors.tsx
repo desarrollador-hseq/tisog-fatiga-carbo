@@ -38,7 +38,7 @@ export const SheetCollaboratorsLoadErrors = ({
         <Button variant="outline">Open</Button>
       </SheetTrigger> */}
       <Button
-        className="absolute top-1/2  right-0 z-30 p-0 w-[40px] h-[20px] bg-red-500 rotate-90 "
+        className="absolute top-1/2 right-0 z-30 p-0 w-[40px] h-[20px] bg-red-500 rotate-90 "
         onClick={() => setWasError(true)}
         variant="outline"
       >

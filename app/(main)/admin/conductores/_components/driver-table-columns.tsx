@@ -31,7 +31,7 @@ export const driverTableColumns: ColumnDef<
     },
     cell: ({ row }) => {
       const name = row.original?.fullname;
-      return <div className="capitalize">{name}</div>;
+      return <div className="">{name}</div>;
     },
   },
   {

@@ -60,7 +60,6 @@ const formSchema = z.object({
 
 export const AddSupervisorForm = ({
   supervisor,
-  cities,
   companies,
 }: AddSupervisorFormProps) => {
   const router = useRouter();

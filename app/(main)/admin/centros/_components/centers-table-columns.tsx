@@ -29,7 +29,7 @@ export const centersTableColumns: ColumnDef<LogisticsCenter>[] =
       },
       cell: ({ row }) => {
         const name = row.original?.name;
-        return <div className="capitalize">{name}</div>;
+        return <div className="">{name}</div>;
       },
     },
     // {
