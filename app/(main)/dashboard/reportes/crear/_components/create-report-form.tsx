@@ -54,9 +54,9 @@ const formSchema = z.object({
   driverId: z.string().min(1, {
     message: "Conductor es requerido",
   }),
-  logisticsCenterId: z.string().min(1, {
-    message: "centro logístico es requerido",
-  }),
+  // logisticsCenterId: z.string().min(1, {
+  //   message: "centro logístico es requerido",
+  // }),
   cityId: z.string().min(1, {
     message: "ciudad es requerido",
   }),
@@ -72,7 +72,7 @@ export const CreateReportForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       driverId: "",
-      logisticsCenterId: "",
+      // logisticsCenterId: "",
       cityId: "",
       // todo
       // supervisorId in api
@@ -186,7 +186,7 @@ export const CreateReportForm = ({
                 )}
               />
             </div>
-            <div>
+            {/* <div>
               <FormField
                 control={form.control}
                 name="logisticsCenterId"
@@ -217,7 +217,7 @@ export const CreateReportForm = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
             <div>
               <FormField
                 control={form.control}

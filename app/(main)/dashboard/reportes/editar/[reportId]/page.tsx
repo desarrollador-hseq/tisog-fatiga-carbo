@@ -119,13 +119,6 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
               />
             )}
           </TitleOnPage>
-          {/* <div className="p-5 mx-5 text-gray-700 font-normal bg-slate-300 rounded-md">
-            Este formulario debe diligenciarlo el Supervisor del colaborador
-            cuando sienta una condición de salud que impide desarrollar sus
-            labores y lo expone a riesgos. El supervisor es el responsable de
-            implementar las acciones inmediatas para reducir el riesgo de Fatiga
-            en la operación.
-          </div> */}
         </>
       }
     >
