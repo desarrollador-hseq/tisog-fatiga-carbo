@@ -52,9 +52,9 @@ const formSchema = z.object({
   driverId: z.string().min(1, {
     message: "Conductor es requerido",
   }),
-  logisticsCenterId: z.string().min(1, {
-    message: "Curso es requerido",
-  }),
+  // logisticsCenterId: z.string().min(1, {
+  //   message: "Curso es requerido",
+  // }),
   cityId: z.string().min(1, {
     message: "Curso es requerido",
   }),
@@ -70,7 +70,7 @@ export const CreateReportForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       driverId: "",
-      logisticsCenterId: "",
+      // logisticsCenterId: "",
       cityId: "",
       // todo
       // supervisorId in api
@@ -89,9 +89,9 @@ export const CreateReportForm = ({
     console.log({ values });
     try {
       const { data } = await axios.post("/api/reports", values);
-      router.push(`/dashboard/reportes/editar/${data.id}`);
+      router.push(`/admin/reportes/editar/${data.id}`);
 
-      toast.success("Solicitud creada");
+      toast.success("Reporte creado, listo para ser diligenciado");
     } catch {
       console.log(
         "Ocurrió un error inesperado, por favor intentelo nuevamente"
@@ -240,7 +240,7 @@ export const CreateReportForm = ({
                 </FormItem>
               )}
             />
-            <div>
+            {/* <div>
               <FormField
                 control={form.control}
                 name="logisticsCenterId"
@@ -271,10 +271,10 @@ export const CreateReportForm = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-x-2 w-full">
-              <Link href="/dashboard/">
+              <Link href="/admin/">
                 <Button type="button" variant="outline">
                   Cancelar
                 </Button>

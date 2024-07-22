@@ -62,3 +62,30 @@ export async function PATCH(req: Request, { params }: { params: { leaderId: stri
         return new NextResponse("Internal Errorr" + error, { status: 500 })
     }
 }
+
+export async function DELETE(req: Request, { params }: { params: { leaderId: string } }) {
+    try {
+        const session = await getServerSession(authOptions)
+        const { leaderId } = params;
+
+        if (!session || session.user.role !== "ADMIN") return new NextResponse("Unauthorized", { status: 401 })
+        if (!leaderId) return new NextResponse("Not Found", { status: 404 })
+
+        const leaderDeleted = await db.user.update({
+            where: {
+                id: leaderId,
+                role: "LEADER"
+            },
+            data: {
+                active: false
+            }
+
+        })
+
+        return NextResponse.json(leaderDeleted)
+
+    } catch (error) {
+        console.log("[DELETED_ID_LEADER]", error)
+        return new NextResponse("Internal Errorr " + error, { status: 500 })
+    }
+}

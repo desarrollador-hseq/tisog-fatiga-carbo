@@ -2,6 +2,7 @@ import { CardPage } from "@/components/card-page";
 import { TitleOnPage } from "@/components/title-on-page";
 import { db } from "@/lib/db";
 import { AddLeaderForm } from "../_components/add-leader-form";
+import { DeleteLeader } from "../_components/delete-leader";
 
 const bcrumb = [
   { label: "Líderes", path: "/admin/lideres" },
@@ -41,10 +42,13 @@ const EditLeaderPage = async ({ params }: { params: { leaderId: string } }) => {
     },
   });
 
-
   return (
     <CardPage
-      pageHeader={<TitleOnPage text={`Editar líder`} bcrumb={bcrumb} />}
+      pageHeader={
+        <TitleOnPage text={`Editar líder`} bcrumb={bcrumb}>
+          <DeleteLeader leader={leader} />
+        </TitleOnPage>
+      }
     >
       <AddLeaderForm leader={leader} cities={cities} companies={companies} />
     </CardPage>

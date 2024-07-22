@@ -17,7 +17,7 @@ const bcrumb = [
 const CreateReportPage = async () => {
   const session = await getServerSession(authOptions);
 
-  if (!session || session?.user?.role !== "USER") {
+  if (!session || session?.user?.role !== "ADMIN") {
     return <NotAuthorized />;
   }
 
