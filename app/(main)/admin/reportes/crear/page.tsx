@@ -22,7 +22,7 @@ const CreateReportPage = async () => {
   }
 
   const drivers = await db.driver.findMany({
-    where: { active: true, companyId: session.user.companyId },
+    where: { active: true},
   });
 
   const logisticsCenters = await db.logisticsCenter.findMany({
