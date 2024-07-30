@@ -11,8 +11,8 @@ export async function POST(req: Request, { params }: { params: { token: string }
             where: {
                 token: params.token,
                 // createdAt:  { gt: new Date(Date.now() - 1000 * 60 * 60 * 4) }
-                createdAt: { gt: new Date(Date.now() - 1000 * 60 * 60 * 4) },
-                resetAt: null
+                // createdAt: { gt: new Date(Date.now() - 1000 * 60 * 60 * 4) },
+                // resetAt: null
             }
         })
 
