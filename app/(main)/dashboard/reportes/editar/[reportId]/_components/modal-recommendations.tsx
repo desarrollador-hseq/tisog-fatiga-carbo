@@ -47,7 +47,7 @@ export const ModalRecommendations = ({
   defaultsStrategies,
 }: ModalRecommendationsProps) => {
   const router = useRouter();
-  const {userRole} = useLoading()
+  const { userRole } = useLoading();
   const [isClient, setIsClient] = useState(false);
   const [openModal, setOpenModal] = useState(open);
 
@@ -71,7 +71,11 @@ export const ModalRecommendations = ({
   const defaultsStrategyByLevel = useMemo(
     () =>
       defaultsStrategies.filter((def) =>
-      fatigueLevel === "HIGH" ? def.desc === "alto" : fatigueLevel === "MEDIUM" ? def.desc === "medio" : def.desc === "bajo"
+        fatigueLevel === "HIGH"
+          ? def.desc === "alto"
+          : fatigueLevel === "MEDIUM"
+          ? def.desc === "medio"
+          : def.desc === "bajo"
       ),
     [defaultsStrategies]
   );
@@ -82,7 +86,7 @@ export const ModalRecommendations = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      strategy:  undefined,
+      strategy: undefined,
     },
   });
 
@@ -96,6 +100,13 @@ export const ModalRecommendations = ({
   }, [currentStrategy]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (fatigueSleepReport.state === "SEND") {
+      toast.info("El reporte ya fue enviado anteriormente");
+      return;
+    } else if (fatigueSleepReport.state === "CANCELLED") {
+      toast.info("El reporte fue cancelado");
+      return;
+    }
     try {
       await axios.patch(`/api/reports/${fatigueSleepReport.id}/send`, {
         ...values,
@@ -103,7 +114,15 @@ export const ModalRecommendations = ({
       });
       toast.success("Reporte enviado correctamente");
 
-      router.push(`/${userRole == "LEADER" ? "lider" : "dashboard"}/reportes`);
+      router.push(
+        `/${
+          userRole == "ADMIN"
+            ? "admin"
+            : userRole == "LEADER"
+            ? "lider"
+            : "dashboard"
+        }/reportes`
+      );
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -163,50 +182,48 @@ export const ModalRecommendations = ({
               </div>
               <div className="flex items-center justify-center mt-5 bg-accent text-white gap-4 p-2 rounded-md border ">
                 <div>
-                 
-                    <Form {...form}>
-                      <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="flex flex-col items-center mt-2 p-2 justify-center"
-                      >
-                        <FormField
-                          control={form.control}
-                          name="strategy"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-col">
-                              <div className="flex justify-between">
-                                <div className="flex flex-col gap-2">
-                                  <FormLabel className="text-slate-500 text-lg">
-                                    Estrategias a tomar:
-                                  </FormLabel>
-                                </div>
-                                <TooltipInfo text="Seleccione una o varias de las estrategias a tomar">
-                                  <Info className="text-blue-600" />
-                                </TooltipInfo>
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="flex flex-col items-center mt-2 p-2 justify-center"
+                    >
+                      <FormField
+                        control={form.control}
+                        name="strategy"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <div className="flex justify-between">
+                              <div className="flex flex-col gap-2">
+                                <FormLabel className="text-slate-500 text-lg">
+                                  Estrategias a tomar:
+                                </FormLabel>
                               </div>
-                              <ListToggleItems
-                                isCheck
-                                currents={currentStrategy}
-                                setCurrents={setCurrentStrategy}
-                                defaults={defaultsStrategyByLevel}
-                                //   disabled={disabled}
-                              />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          disabled={isSubmitting || !isValid}
-                          className="w-full max-w-[500px] gap-3"
-                        >
-                          {isSubmitting && (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          )}
-                          {"Enviar reporte"}
-                        </Button>
-                      </form>
-                    </Form>
-                  
+                              <TooltipInfo text="Seleccione una o varias de las estrategias a tomar">
+                                <Info className="text-blue-600" />
+                              </TooltipInfo>
+                            </div>
+                            <ListToggleItems
+                              isCheck
+                              currents={currentStrategy}
+                              setCurrents={setCurrentStrategy}
+                              defaults={defaultsStrategyByLevel}
+                              //   disabled={disabled}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button
+                        disabled={isSubmitting || !isValid}
+                        className="w-full max-w-[500px] gap-3"
+                      >
+                        {isSubmitting && (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        )}
+                        {"Enviar reporte"}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
               </div>
             </AlertDialogHeader>

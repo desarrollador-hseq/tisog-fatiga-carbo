@@ -30,7 +30,7 @@ import { ListToggleItems } from "@/components/list-toggle-items";
 
 import { Textarea } from "@/components/ui/textarea";
 import { useLoading } from "@/components/providers/loading-provider";
-import { ModalRecommendations } from "../admin/reportes/editar/[reportId]/_components/modal-recommendations";
+import { ModalRecommendations } from "../dashboard/reportes/editar/[reportId]/_components/modal-recommendations";
 
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
