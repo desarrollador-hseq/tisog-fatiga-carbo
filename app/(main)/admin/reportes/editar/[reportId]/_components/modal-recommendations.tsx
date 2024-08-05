@@ -101,7 +101,7 @@ export const ModalRecommendations = ({
       });
       toast.success("Reporte enviado correctamente");
 
-      // router.push(`/dashboard/reportes`);
+      router.push(`/admin/reportes`);
       router.refresh();
     } catch (error) {
       console.error(error);

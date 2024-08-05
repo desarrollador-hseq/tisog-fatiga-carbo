@@ -27,9 +27,10 @@ import { formatDate } from "@/lib/utils";
 import { TooltipInfo } from "@/components/tooltip-info";
 import AutocompleteInput from "@/components/autocomplete-input";
 import { ListToggleItems } from "@/components/list-toggle-items";
-import { ModalRecommendations } from "../dashboard/reportes/editar/[reportId]/_components/modal-recommendations";
+
 import { Textarea } from "@/components/ui/textarea";
 import { useLoading } from "@/components/providers/loading-provider";
+import { ModalRecommendations } from "../admin/reportes/editar/[reportId]/_components/modal-recommendations";
 
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
@@ -684,7 +685,7 @@ export const FatigueReportForm = ({
           )}
         </form>
       </Form>
-      {userRole !== "ADMIN" && (
+      {(
         <ModalRecommendations
           open={openRecommendations}
           defaultsStrategies={defaultsStrategies}
