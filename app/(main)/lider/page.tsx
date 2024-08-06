@@ -17,12 +17,20 @@ const LeaderHomePage = async () => {
     where: {
       active: true,
       state: "SEND",
-      logisticsCenter: {
+      driver: {
         companyId: session.user.companyId,
       },
     },
     include: {
-      driver: true,
+      driver: {
+        include: {
+          company: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       supervisor: {
         select: {
           name: true,

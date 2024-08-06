@@ -9,20 +9,30 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, formatDate } from "@/lib/utils";
-import { City, Company, Driver, FatigueSleepReport, LogisticsCenter, User } from "@prisma/client";
+import {
+  City,
+  Company,
+  Driver,
+  FatigueSleepReport,
+  LogisticsCenter,
+  User,
+} from "@prisma/client";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 
-
 interface reportWithDriverSupervisor extends FatigueSleepReport {
-  driver: Driver | null;
-  supervisor: {name: string | null} | null;
-  logisticsCenter: {name: string | null; companyId: string | null;} & {company: {name: string | null} | null} | null;
-  city: {realName: string | null} | null;
+  driver: Driver & { company: { name: string | null } | null } | null ;
+  supervisor: { name: string | null } | null;
+  logisticsCenter:
+    | ({ name: string | null; companyId: string | null } & {
+        company: { name: string | null } | null;
+      })
+    | null;
+  city: { realName: string | null } | null;
 }
 
 interface ListCollaboratorsRequestProps {
-  reports: reportWithDriverSupervisor[]
+  reports: reportWithDriverSupervisor[];
 }
 
 export const ListCriticalReports = ({
@@ -33,7 +43,9 @@ export const ListCriticalReports = ({
   );
   return (
     <div className="p-3 mt-2 rounded-md bg-[#bf0000]">
-      <h4 className="text-2xl font-bold text-center my-2 text-white">Alertas de reportes criticos</h4>
+      <h4 className="text-2xl font-bold text-center my-2 text-white">
+        Alertas de reportes criticos
+      </h4>
       <Table className="text-white border">
         {/* <TableCaption>A list of</TableCaption> */}
         <TableHeader className="text-white">
@@ -63,7 +75,7 @@ export const ListCriticalReports = ({
                 {report.city?.realName}
               </TableCell>
               <TableCell className="font-medium ">
-                {report.logisticsCenter?.company?.name}
+                {report.driver?.company?.name}
               </TableCell>
               <TableCell className="font-medium ">
                 {report.date ? formatDate(report.date) : "No registrado"}
@@ -72,9 +84,12 @@ export const ListCriticalReports = ({
                 {report.riskLevel === "HIGH" ? "Alto" : "no"}
               </TableCell>
               <TableCell className="font-medium ">
-               <Link className={cn(buttonVariants({className: "h-5"}))} href={`/admin/reportes/editar/${report.id}`}>
-                <Eye className="w-4 h-4" />
-               </Link>
+                <Link
+                  className={cn(buttonVariants({ className: "h-5" }))}
+                  href={`/admin/reportes/editar/${report.id}`}
+                >
+                  <Eye className="w-4 h-4" />
+                </Link>
               </TableCell>
             </TableRow>
           ))}

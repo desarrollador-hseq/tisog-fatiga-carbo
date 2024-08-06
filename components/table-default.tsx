@@ -35,17 +35,20 @@ import {
 
 import TableColumnFiltering from "@/components/table-column-filtering";
 import { TablePagination } from "./table-pagination";
+import { TableToExcel } from "./table-to-excel";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   editHref?: { btnText: string; href: string };
+  nameDocument?: string;
 }
 
 export function TableDefault<TData, TValue>({
   data,
   columns,
   editHref,
+  nameDocument,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -174,6 +177,7 @@ export function TableDefault<TData, TValue>({
       <div className="flex items-center justify-between space-x-1 py-2">
         <TablePagination table={table} />
       </div>
+      {!!nameDocument && <TableToExcel table={table} name={nameDocument} />}
     </div>
   );
 }

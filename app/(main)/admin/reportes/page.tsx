@@ -25,11 +25,19 @@ const ReportsPage = async () => {
     where: {
       active: true,
       NOT: {
-        state: "CANCELLED"
-      }
+        state: "CANCELLED",
+      },
     },
     include: {
-      driver: true,
+      driver: {
+        include: {
+          company: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       logisticsCenter: {
         select: {
           name: true,
@@ -38,13 +46,13 @@ const ReportsPage = async () => {
       city: {
         select: {
           realName: true,
-        }
+        },
       },
       supervisor: {
         select: {
-          name: true
-        }
-      }
+          name: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -56,7 +64,7 @@ const ReportsPage = async () => {
       pageHeader={
         <TitleOnPage text="Listado de reportes" bcrumb={bcrumb}>
           <Link
-            className={cn(buttonVariants({variant: "secondary"}))}
+            className={cn(buttonVariants({ variant: "secondary" }))}
             href={`/admin/reportes/crear`}
           >
             Crear
@@ -68,6 +76,7 @@ const ReportsPage = async () => {
         data={reports}
         columns={reportsTableColumns}
         editHref={{ btnText: "Editar", href: `/admin/reportes/editar` }}
+        nameDocument="reportes-fatiga"
       />
     </CardPage>
   );

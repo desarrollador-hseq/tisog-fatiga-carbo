@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
 
 interface fatigueWithDriver extends FatigueSleepReport {
-  driver?: Driver | null;
+  driver?: (Driver & { company: { name: string | null } | null }) | null;
   logisticsCenter?: { name: string | null | undefined } | null;
   supervisor?: { name: string | null | undefined } | null;
   city?: { realName: string | null | undefined } | null;
@@ -77,6 +77,26 @@ export const reportsTableColumns: ColumnDef<fatigueWithDriver>[] = [
     },
   },
   {
+    accessorKey: "company",
+    accessorFn: (value) => value.driver?.company?.name || "No Registrado",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-secondary/30 hover:text-secondary-foreground p-0"
+        >
+          Empresa
+          <ArrowUpDown className="ml-2 h-3 w-3" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const name = row.original?.driver?.company?.name || "No Registrado";
+      return <div className="">{name}</div>;
+    },
+  },
+  {
     accessorKey: "level",
     accessorFn: (value) =>
       value.riskLevel === "HIGH"
@@ -103,11 +123,19 @@ export const reportsTableColumns: ColumnDef<fatigueWithDriver>[] = [
           : row.original.riskLevel === "MEDIUM"
           ? "MEDIO"
           : "BAJO";
-      return <div className={`${row.original.riskLevel === "HIGH"
-      ? "bg-red-600 text-white"
-      : row.original.riskLevel === "MEDIUM"
-      ? "bg-yellow-600 text-white"
-      : "bg-slate-300"} text-center rounded-sm`}>{fullname}</div>;
+      return (
+        <div
+          className={`${
+            row.original.riskLevel === "HIGH"
+              ? "bg-red-600 text-white"
+              : row.original.riskLevel === "MEDIUM"
+              ? "bg-yellow-600 text-white"
+              : "bg-slate-300"
+          } text-center rounded-sm`}
+        >
+          {fullname}
+        </div>
+      );
     },
   },
   {
@@ -127,7 +155,7 @@ export const reportsTableColumns: ColumnDef<fatigueWithDriver>[] = [
     },
     cell: ({ row }) => {
       const date = row.original?.date;
-      return <div className="">{date ? formatDate(date) : "no"}</div>;
+      return <div className="">{date ? formatDate(date) : "--"}</div>;
     },
   },
 ];

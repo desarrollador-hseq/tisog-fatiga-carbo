@@ -8,6 +8,8 @@ import { FatigueReportForm } from "../../../../_components/fatigue-report-form";
 import { getArraySymptomsByIds } from "@/lib/utils";
 import { ModalCancelReport } from "./_components/modal-cancel-report";
 import { GenerateFatigueReportPdf } from "@/app/(main)/_components/generate-fatigue-report-pdf";
+import { ModalDeleteConfirm } from "@/components/modal-delete-confirm";
+import { ModalDeleteReport } from "./_components/modal-delete-report";
 
 const bcrumb = [
   { label: "Reportes", path: "/dashboard/reportes" },
@@ -27,6 +29,7 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
     where: {
       id: params.reportId,
       active: true,
+      supervisorId: session.user.id,
     },
     include: {
       logisticsCenter: {
@@ -42,6 +45,11 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
         select: {
           fullname: true,
           numDoc: true,
+          company: {
+            select: {
+              logoImgUrl: true
+            }
+          }
         },
       },
       supervisor: {
@@ -62,7 +70,7 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
     return (
       <div className="w-full h-full min-h-[calc(100vh-60px)] flex justify-center items-center ">
         <h2 className="text-3xl font-bold text-red-600">
-          Reporte no encontrado!
+          Reporte no encontrado o no cuenta con permisos para acceder
         </h2>
       </div>
     );
@@ -90,33 +98,36 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
               <ModalCancelReport report={report} />
             )}
             {report.state === "SEND" && (
-              <GenerateFatigueReportPdf
-                report={report}
-                defaultsSymptoms={
-                  defaults.find((def) => def.name === "symptoms")
-                    ?.defaultValues || []
-                }
-                defaultsSigns={
-                  defaults.find((def) => def.name === "signs")?.defaultValues ||
-                  []
-                }
-                defaultsAppearances={
-                  defaults.find((def) => def.name === "appearances")
-                    ?.defaultValues || []
-                }
-                defaultsMoods={
-                  defaults.find((def) => def.name === "moods")?.defaultValues ||
-                  []
-                }
-                defaultsPerformances={
-                  defaults.find((def) => def.name === "performances")
-                    ?.defaultValues || []
-                }
-                defaultsDrivingModes={
-                  defaults.find((def) => def.name === "drivingModes")
-                    ?.defaultValues || []
-                }
-              />
+              <div className="flex gap-2">
+                <GenerateFatigueReportPdf
+                  report={report}
+                  defaultsSymptoms={
+                    defaults.find((def) => def.name === "symptoms")
+                      ?.defaultValues || []
+                  }
+                  defaultsSigns={
+                    defaults.find((def) => def.name === "signs")
+                      ?.defaultValues || []
+                  }
+                  defaultsAppearances={
+                    defaults.find((def) => def.name === "appearances")
+                      ?.defaultValues || []
+                  }
+                  defaultsMoods={
+                    defaults.find((def) => def.name === "moods")
+                      ?.defaultValues || []
+                  }
+                  defaultsPerformances={
+                    defaults.find((def) => def.name === "performances")
+                      ?.defaultValues || []
+                  }
+                  defaultsDrivingModes={
+                    defaults.find((def) => def.name === "drivingModes")
+                      ?.defaultValues || []
+                  }
+                />
+                <ModalDeleteReport report={report} />
+              </div>
             )}
           </TitleOnPage>
         </>

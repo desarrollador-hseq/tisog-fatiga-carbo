@@ -46,7 +46,11 @@ Font.register({
 interface FatigueReportTemplateProps {
   report: FatigueSleepReport & {
     logisticsCenter: { company: { logoImgUrl: string | null } | null } | null;
-    driver: { fullname: string | null; numDoc: string | null } | null;
+    driver: {
+      fullname: string | null;
+      numDoc: string | null;
+      company: { logoImgUrl: string | null } | null;
+    } | null;
     supervisor: { name: string | null; numDoc: string | null } | null;
     city: { realName: string } | null;
   };
@@ -98,7 +102,7 @@ export const FatigueReportTemplate = ({
                   }}
                 >
                   <Image
-                    src={`${logisticsCenter?.company?.logoImgUrl}`}
+                    src={`${driver?.company?.logoImgUrl}`}
                     style={{ width: "130px", height: "auto" }}
                   />
                 </View>{" "}
@@ -293,7 +297,11 @@ export const FatigueReportTemplate = ({
               >
                 {symptomsArray.map((item, index) => {
                   if (!item || item === "") return;
-                  return <Text key={item + index} style={styles.itemRow}>{item}</Text>;
+                  return (
+                    <Text key={item + index} style={styles.itemRow}>
+                      {item}
+                    </Text>
+                  );
                 })}
               </View>
             </View>
@@ -318,7 +326,11 @@ export const FatigueReportTemplate = ({
               >
                 {medicines.map((item, index) => {
                   if (!item || item === "") return;
-                  return <Text key={item + index} style={styles.itemRow}>{item}</Text>;
+                  return (
+                    <Text key={item + index} style={styles.itemRow}>
+                      {item}
+                    </Text>
+                  );
                 })}
               </View>
             </View>
@@ -376,7 +388,11 @@ export const FatigueReportTemplate = ({
               >
                 {behaviorsArray.map((item, index) => {
                   if (!item || item === "") return;
-                  return <Text key={item + index} style={styles.itemRow}>{item}</Text>;
+                  return (
+                    <Text key={item + index} style={styles.itemRow}>
+                      {item}
+                    </Text>
+                  );
                 })}
               </View>
             </View>

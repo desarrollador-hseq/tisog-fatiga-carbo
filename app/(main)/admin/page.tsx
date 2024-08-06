@@ -7,10 +7,18 @@ const AdminHomePage = async () => {
   const reports = await db.fatigueSleepReport.findMany({
     where: {
       active: true,
-      state: "SEND"
+      state: "SEND",
     },
     include: {
-      driver: true,
+      driver: {
+        include: {
+          company: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       supervisor: {
         select: {
           name: true,
@@ -27,11 +35,11 @@ const AdminHomePage = async () => {
           companyId: true,
           company: {
             select: {
-              name: true
-            }
-          }
-        }
-      }
+              name: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -41,7 +49,6 @@ const AdminHomePage = async () => {
   const defaultsValues = await db.defaultValue.findMany({
     where: {
       active: true,
-      
     },
     include: {
       parameters: {

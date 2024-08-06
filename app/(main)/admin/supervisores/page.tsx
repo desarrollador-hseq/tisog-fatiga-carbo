@@ -25,6 +25,9 @@ const DriversPage = async () => {
       active: true,
       role: "USER",
     },
+    include: {
+      company: true
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -47,6 +50,7 @@ const DriversPage = async () => {
         data={supervisors}
         columns={supervisorTableColumns}
         editHref={{ btnText: "editar", href: `/admin/supervisores` }}
+        nameDocument="supervisores"
       />
     </CardPage>
   );

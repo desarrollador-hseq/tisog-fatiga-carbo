@@ -21,7 +21,7 @@ export const GenerateFatigueReportPdf = ({
 }: {
   report: FatigueSleepReport & {
     logisticsCenter: { company: { logoImgUrl: string | null } | null } | null;
-    driver: { fullname: string | null; numDoc: string | null } | null;
+    driver: { fullname: string | null; numDoc: string | null; company: { logoImgUrl: string | null } | null  } | null;
     supervisor: { name: string | null; numDoc: string | null } | null;
     city: { realName: string } | null;
   };

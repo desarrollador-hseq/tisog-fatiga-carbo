@@ -25,7 +25,7 @@ interface valuesWithParameter extends DefaultValue {
   parameters?: { name: string | null } | null;
 }
 interface reportWithDriverSupervisor extends FatigueSleepReport {
-  driver: Driver | null;
+  driver: Driver & { company: { name: string | null } | null } | null;
   supervisor: { name: string | null } | null;
   logisticsCenter:
     | ({ name: string | null; companyId: string | null } & {
@@ -174,6 +174,7 @@ export const FatigueIndicators = ({
                 userRole === "ADMIN" ? "admin" : "lider"
               }/reportes/editar`,
             }}
+            nameDocument="reportes-fatiga"
           />
         </CardContent>
       </Card>

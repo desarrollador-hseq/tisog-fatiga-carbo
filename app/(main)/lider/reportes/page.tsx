@@ -29,7 +29,15 @@ const ReportsPage = async () => {
       },
     },
     include: {
-      driver: true,
+      driver: {
+        include: {
+          company: {
+            select: {
+              name: true
+            }
+          },
+        }
+      },
       logisticsCenter: {
         select: {
           name: true,
@@ -68,6 +76,7 @@ const ReportsPage = async () => {
         data={reports}
         columns={reportsTableColumns}
         editHref={{ btnText: "Editar", href: `/lider/reportes/editar` }}
+        nameDocument="reportes-fatiga"
       />
     </CardPage>
   );

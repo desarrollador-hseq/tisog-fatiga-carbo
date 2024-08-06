@@ -49,6 +49,7 @@ const DriversPage = async () => {
         data={supervisors}
         columns={supervisorTableColumns}
         editHref={{ btnText: "editar", href: `/lider/supervisores` }}
+        nameDocument="supervisores"
       />
     </CardPage>
   );

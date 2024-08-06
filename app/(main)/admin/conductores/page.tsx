@@ -62,6 +62,7 @@ const DriversPage = async () => {
         data={drivers}
         columns={driverTableColumns}
         editHref={{ btnText: "editar", href: `/admin/conductores` }}
+        nameDocument="conductores"
       />
     </CardPage>
   );

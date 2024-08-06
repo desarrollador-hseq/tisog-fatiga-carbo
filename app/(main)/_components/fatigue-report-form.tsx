@@ -35,7 +35,11 @@ import { ModalRecommendations } from "../dashboard/reportes/editar/[reportId]/_c
 interface FatigueReportFormProps {
   fatigueSleepReport: FatigueSleepReport & {
     logisticsCenter: { company: { logoImgUrl: string | null } | null } | null;
-    driver: { fullname: string | null; numDoc: string | null } | null;
+    driver: {
+      fullname: string | null;
+      numDoc: string | null;
+      company: { logoImgUrl: string | null } | null;
+    } | null;
     supervisor: { name: string | null; numDoc: string | null } | null;
     city: { realName: string } | null;
   };
@@ -117,9 +121,7 @@ export const FatigueReportForm = ({
   const [inputMedicineValue, setInputMedicineValue] = useState("");
 
   const logo = useMemo(
-    () =>
-      fatigueSleepReport.logisticsCenter?.company?.logoImgUrl ||
-      "/tisog-logo.png",
+    () => fatigueSleepReport.driver?.company?.logoImgUrl || "/tisog-logo.png",
     [fatigueSleepReport]
   );
 
@@ -685,7 +687,7 @@ export const FatigueReportForm = ({
           )}
         </form>
       </Form>
-      {(
+      {
         <ModalRecommendations
           open={openRecommendations}
           defaultsStrategies={defaultsStrategies}
@@ -693,7 +695,7 @@ export const FatigueReportForm = ({
           fatigueSleepReport={fatigueSleepReport}
           strategy={fatigueSleepReport.strategy || ""}
         />
-      )}
+      }
     </div>
   );
 };

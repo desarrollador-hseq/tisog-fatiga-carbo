@@ -22,6 +22,7 @@ const DriversPage = async () => {
   const drivers = await db.driver.findMany({
     where: {
       active: true,
+      companyId: session.user.companyId
     },
     include: {
       company: {
@@ -62,6 +63,7 @@ const DriversPage = async () => {
         data={drivers}
         columns={driverTableColumns}
         editHref={{ btnText: "editar", href: `/lider/conductores` }}
+        nameDocument="conductores"
       />
     </CardPage>
   );

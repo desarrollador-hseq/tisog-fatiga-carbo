@@ -26,6 +26,9 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
     where: {
       id: params.reportId,
       active: true,
+      driver: {
+        companyId: session.user.companyId,
+      },
     },
     include: {
       logisticsCenter: {
@@ -41,6 +44,11 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
         select: {
           fullname: true,
           numDoc: true,
+          company: {
+            select: {
+              logoImgUrl: true,
+            }
+          }
         },
       },
       supervisor: {
@@ -150,7 +158,13 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
   });
 
   if (!report) {
-    return <div>Sin datos</div>;
+    return (
+      <div className="w-full h-full min-h-[calc(100vh-60px)] flex justify-center items-center ">
+        <h2 className="text-3xl font-bold text-red-600">
+          Reporte no encontrado o no cuenta con permisos para acceder
+        </h2>
+      </div>
+    );
   }
 
   return (
