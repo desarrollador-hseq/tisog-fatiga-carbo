@@ -47,9 +47,9 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
           numDoc: true,
           company: {
             select: {
-              logoImgUrl: true
-            }
-          }
+              logoImgUrl: true,
+            },
+          },
         },
       },
       supervisor: {
@@ -126,9 +126,9 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
                       ?.defaultValues || []
                   }
                 />
-                <ModalDeleteReport report={report} />
               </div>
             )}
+            {isAdmin && <ModalDeleteReport report={report} />}
           </TitleOnPage>
         </>
       }

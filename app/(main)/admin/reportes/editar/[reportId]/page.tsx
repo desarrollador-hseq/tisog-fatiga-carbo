@@ -134,9 +134,9 @@ const EditReportPage = async ({ params }: { params: { reportId: string } }) => {
                       ?.defaultValues || []
                   }
                 />
-                <ModalDeleteReport report={report} />
               </div>
             )}
+            <ModalDeleteReport report={report} />
           </TitleOnPage>
         </>
       }
