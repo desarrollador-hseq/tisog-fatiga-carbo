@@ -103,7 +103,7 @@ export const UpdatePasswordForm = () => {
               name="actualPassword"
               render={({ field }) => (
                 <FormItem className="relative">
-                  <FormLabel className="font-semibold" htmlFor="actualPassword">
+                  <FormLabel className="font-semibold text-primary" htmlFor="actualPassword">
                     Contraseña Actual
                   </FormLabel>
 
@@ -139,7 +139,7 @@ export const UpdatePasswordForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem className="relative">
-                  <FormLabel className="font-semibold" htmlFor="password">
+                  <FormLabel className="font-semibold text-primary" htmlFor="password">
                     Nueva contraseña
                   </FormLabel>
 
